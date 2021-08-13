@@ -1,7 +1,8 @@
 <?php
 
+use App\Components\Api;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -14,14 +15,15 @@ class LoginController extends Controller
     /**
      * Get a JWT via given credentials.
      *
-     * @return JsonResponse
+     * @param Request $request
+     * @return Api
      */
-    public function login(): JsonResponse
+    public function login(Request $request): Api
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return api([])->setCode(401)->setError('Unauthorized');
         }
 
         return $this->respondWithToken($token);
@@ -30,33 +32,35 @@ class LoginController extends Controller
     /**
      * Get the authenticated User.
      *
-     * @return JsonResponse
+     * @return Api
      */
-    public function me(): JsonResponse
+    public function user(): Api
     {
-        return response()->json(auth()->user());
+        return api([
+            'user' => auth('api')->user()
+        ]);
     }
 
     /**
      * Log the user out (Invalidate the token).
      *
-     * @return JsonResponse
+     * @return Api
      */
-    public function logout(): JsonResponse
+    public function logout(): Api
     {
-        auth()->logout();
+        auth('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return api()->setMessage('Successfully logged out');
     }
 
     /**
      * Refresh a token.
      *
-     * @return JsonResponse
+     * @return Api
      */
-    public function refresh(): JsonResponse
+    public function refresh(): Api
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth('api')->refresh());
     }
 
     /**
@@ -64,11 +68,11 @@ class LoginController extends Controller
      *
      * @param string $token
      *
-     * @return JsonResponse
+     * @return Api
      */
-    protected function respondWithToken(string $token): JsonResponse
+    protected function respondWithToken(string $token): Api
     {
-        return response()->json([
+        return api([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60

@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Components\Api;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,7 +37,32 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
+            return $this->renderException($e);
         });
+    }
+
+
+    public function render($request, Throwable $e): Api
+    {
+        return $this->renderException($e);
+    }
+
+
+    private function renderException($e): Api
+    {
+        return api([])
+            ->notOk()
+            ->setCode($this->isHttpException($e) ? $e->getStatusCode() : 400)
+            ->setError([
+                'message' => $message = $this->isHttpException($e)
+                    ? (Response::$statusTexts[$e->getStatusCode()] ?? "")
+                    : $e->getMessage(),
+                'line' => $e->getLine(),
+                'code' => $this->isHttpException($e) ? $e->getStatusCode() : 400,
+                'file' => $e->getFile(),
+                'exception' => class_basename($e),
+                'trace' => $e->getTrace(),
+            ])
+            ->setMessage($message);
     }
 }
