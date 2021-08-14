@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers\Auth;
+
 use App\Components\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -22,11 +24,30 @@ class LoginController extends Controller
     {
         $credentials = $request->only(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return api([])->setCode(401)->setError('Unauthorized');
+        if (!$token = auth('api')->attempt($credentials)) {
+            return api([])
+                ->setCode(422)
+                ->notOk()
+                ->setMessage('Email vəya şifrə düzgün deyil');
         }
 
         return $this->respondWithToken($token);
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param string $token
+     *
+     * @return Api
+     */
+    protected function respondWithToken(string $token): Api
+    {
+        return api([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+        ]);
     }
 
     /**
@@ -61,21 +82,5 @@ class LoginController extends Controller
     public function refresh(): Api
     {
         return $this->respondWithToken(auth('api')->refresh());
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param string $token
-     *
-     * @return Api
-     */
-    protected function respondWithToken(string $token): Api
-    {
-        return api([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
     }
 }

@@ -2,13 +2,13 @@
 namespace App\Components;
 
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +26,10 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
     public mixed $error;
 
     public array $extra;
+
+    public Authenticatable $user;
+
+    private bool $debug;
 
 
     public function __construct($data = [], $success = true, $code = 200,array $extra = [])
@@ -50,7 +54,7 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
     }
 
 
-    public function setMessage($message): static
+    public function setMessage($message) : static
     {
         $this->message = $message;
 
@@ -100,24 +104,53 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
         return $this;
     }
 
+    public function setUser($user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function enableDebug(): static
+    {
+        $this->debug = true;
+
+        return $this;
+    }
+
 
     public function toArray(): array
     {
 
-        return [
+        $debug = $this->debug ?? config('app.debug');
+
+        $response =  [
             'success' => $this->success,
             'code' => $this->code,
             'data' => $this->data,
-            'message' => $this->message,
-            'request' => request()->all(),
-            'query' => DB::getQueryLog(),
-            'route' => Route::getCurrentRoute()?->getAction() ? : request()->path(),
-            'error' => $this->error,
+            'message' => $this->message ?? "",
+            'user' => $this->user ?? auth('api')->user(),
+            'error' => $this->error ?? false,
             'extra' => $this->extra
         ];
+
+
+        if ($debug) {
+            $response['debug'] = [
+                'request' => [
+                    'method' => request()->method(),
+                    'params' => request()->all(),
+                    //'headers' => request()->server->getHeaders(),
+                ],
+                'query' => DB::getQueryLog(),
+                'route' => Route::getCurrentRoute()?->getAction() ? : request()->path(),
+            ];
+        }
+
+        return $response;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

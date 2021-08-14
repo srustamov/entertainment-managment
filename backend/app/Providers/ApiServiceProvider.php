@@ -24,6 +24,9 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        DB::enableQueryLog();
+        if (config('app.debug')) {
+            DB::enableQueryLog();
+        }
+
     }
 }

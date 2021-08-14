@@ -1,55 +1,21 @@
 "use strict";
 
 import Vue from 'vue';
-import axios from "axios";
+import http from "../utils/http";
 
-// Full config:  https://github.com/axios/axios#request-config
-axios.defaults.baseURL = process.env.API_URL || process.env.apiUrl || '';
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
-let config = {
-  baseURL: process.env.API_URL || process.env.apiUrl || '',
-  timeout: 60 * 1000, // Timeout
-  withCredentials: true, // Check cross-site Access-Control
-};
-
-const _axios = axios.create(config);
-
-_axios.interceptors.request.use(
-  function(config) {
-
-    return config;
-  },
-  function(error) {
-
-    return Promise.reject(error);
-  }
-);
-
-// Add a response interceptor
-_axios.interceptors.response.use(
-  function(response) {
-
-    return response;
-  },
-  function(error) {
-
-  }
-);
 
 Plugin.install = function(Vue, options) {
-  Vue.axios = _axios;
-  window.axios = _axios;
+  Vue.http = http;
+  window.$http = http;
   Object.defineProperties(Vue.prototype, {
-    axios: {
+    http: {
       get() {
-        return _axios;
+        return http;
       }
     },
-    $axios: {
+    $http: {
       get() {
-        return _axios;
+        return http;
       }
     },
   });

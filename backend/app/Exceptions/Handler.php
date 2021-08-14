@@ -41,28 +41,27 @@ class Handler extends ExceptionHandler
         });
     }
 
-
-    public function render($request, Throwable $e): Api
-    {
-        return $this->renderException($e);
-    }
-
-
     private function renderException($e): Api
     {
         return api([])
             ->notOk()
             ->setCode($this->isHttpException($e) ? $e->getStatusCode() : 400)
             ->setError([
-                'message' => $message = $this->isHttpException($e)
-                    ? (Response::$statusTexts[$e->getStatusCode()] ?? "")
-                    : $e->getMessage(),
-                'line' => $e->getLine(),
-                'code' => $this->isHttpException($e) ? $e->getStatusCode() : 400,
-                'file' => $e->getFile(),
-                'exception' => class_basename($e),
-                'trace' => $e->getTrace(),
-            ])
+                    'message' => $message = $this->isHttpException($e)
+                        ? (Response::$statusTexts[$e->getStatusCode()] ?? "")
+                        : $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'code' => $this->isHttpException($e) ? $e->getStatusCode() : 400,
+                    'exception' => class_basename($e),
+                ] + (config('app.debug') ? [
+                    'trace' => $e->getTrace(),
+                    'file' => $e->getFile(),
+                ] : []))
             ->setMessage($message);
+    }
+
+    public function render($request, Throwable $e): Api
+    {
+        return $this->renderException($e);
     }
 }

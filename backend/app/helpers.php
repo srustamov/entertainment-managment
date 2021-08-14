@@ -2,9 +2,6 @@
 
 
 use App\Components\Api;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use JetBrains\PhpStorm\Pure;
 
 #[Pure]
