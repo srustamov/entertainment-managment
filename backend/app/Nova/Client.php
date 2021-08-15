@@ -51,9 +51,9 @@ class Client extends Resource
 
             //Gravatar::make()->maxWidth(50),
 
-//            BelongsTo::make('Area','area',\App\Models\Area::class)
-//                ->sortable()
-//                ->rules('required', 'numeric'),
+            BelongsTo::make('Location'),
+
+
 
             Text::make('Name')
                 ->sortable()
@@ -73,8 +73,8 @@ class Client extends Resource
             Boolean::make('Active','status')
                 ->trueValue('1')
                 ->falseValue('0')
-                ->creationRules('required', 'number', 'min:0','max:1')
-                ->updateRules('required', 'number', 'min:0','max:1'),
+                ->creationRules('required', 'numeric', 'min:0','max:1')
+                ->updateRules('required', 'numeric', 'min:0','max:1'),
         ];
     }
 

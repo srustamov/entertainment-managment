@@ -23,7 +23,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'area_id' => 1,
+            'location_id' => 1,
             'name' => 'Samir',
             'email' => 'rustemovv96@gmail.com',
             'email_verified_at' => now(),

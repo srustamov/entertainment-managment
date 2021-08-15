@@ -8,6 +8,7 @@ use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use JetBrains\PhpStorm\ArrayShape;
@@ -57,11 +58,17 @@ class User extends Model implements JWTSubject,
         return $this->getKey();
     }
 
-    #[ArrayShape(['area' => "int"])]
+    #[ArrayShape(['location_id' => "int"])]
     public function getJWTCustomClaims(): array
     {
         return [
-            'area' => $this->area_id
+            'location_id' => $this->location_id
         ];
+    }
+
+
+    public function location(): HasOne
+    {
+        return $this->hasOne(Location::class,'id','location_id');
     }
 }

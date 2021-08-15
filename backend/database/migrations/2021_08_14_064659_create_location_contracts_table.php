@@ -24,6 +24,7 @@ class CreateLocationContractsTable extends Migration
             $table->date('expire_date')->index();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

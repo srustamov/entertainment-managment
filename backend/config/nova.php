@@ -19,7 +19,7 @@ return [
     |
     */
 
-    'name' => env('NOVA_APP_NAME', env('APP_NAME')),
+    'name' => 'Management',
 
     /*
     |--------------------------------------------------------------------------
@@ -144,6 +144,6 @@ return [
     |
     */
 
-    'currency' => 'USD',
+    'currency' => 'AZN',
 
 ];

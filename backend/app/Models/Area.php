@@ -20,9 +20,9 @@ class Area extends Model
         return $this->hasMany(Location::class);
     }
 
-    public function users(): HasMany
+    public function users(): HasManyThrough
     {
-        return $this->hasMany(User::class,'area_id');
+        return $this->hasManyThrough(User::class,Location::class);
     }
 
     public function activities(): HasManyThrough
