@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LoginController extends Controller
 {
 
-    public function __construct()
+    public function boot()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
     }

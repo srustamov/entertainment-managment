@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Components\Api;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -60,8 +61,11 @@ class Handler extends ExceptionHandler
             ->setMessage($message);
     }
 
-    public function render($request, Throwable $e): Api
+    public function render($request, Throwable $e): \Illuminate\Http\Response|Api|JsonResponse|Response
     {
-        return $this->renderException($e);
+        if (!$request->is('nova*')) {
+            return $this->renderException($e);
+        }
+        return parent::render($request,$e);
     }
 }

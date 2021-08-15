@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use App\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Activity extends Model
+{
+    use HasFactory;
+
+    protected $table = 'activities';
+
+
+}

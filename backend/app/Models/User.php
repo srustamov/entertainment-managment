@@ -10,12 +10,16 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use JetBrains\PhpStorm\ArrayShape;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 /**
  * @property int area_id
+ * @property string name
+ * @property string email
+ * @property string password
  */
 class User extends Model implements JWTSubject,
     AuthenticatableContract,
@@ -37,21 +41,13 @@ class User extends Model implements JWTSubject,
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
@@ -61,7 +57,8 @@ class User extends Model implements JWTSubject,
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims()
+    #[ArrayShape(['area' => "int"])]
+    public function getJWTCustomClaims(): array
     {
         return [
             'area' => $this->area_id
