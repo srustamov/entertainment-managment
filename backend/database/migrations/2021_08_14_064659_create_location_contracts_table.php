@@ -15,9 +15,9 @@ class CreateLocationContractsTable extends Migration
     {
         Schema::create('location_contracts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('location_id')->index()->index();
-            $table->unsignedBigInteger('description')->index();
+            $table->integer('user_id')->index();
+            $table->integer('location_id')->index();
+            $table->text('description');
             $table->double('price')->nullable();
             $table->json('custom_data')->nullable();
             $table->date('start_date');

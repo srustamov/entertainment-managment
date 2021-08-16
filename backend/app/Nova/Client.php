@@ -49,11 +49,7 @@ class Client extends Resource
         return [
             ID::make()->sortable(),
 
-            //Gravatar::make()->maxWidth(50),
-
-            BelongsTo::make('Location'),
-
-
+            BelongsTo::make('Location','location'),
 
             Text::make('Name')
                 ->sortable()

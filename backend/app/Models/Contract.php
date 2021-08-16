@@ -27,7 +27,9 @@ class Contract extends Model
     protected $casts = [
         'user_id' => 'integer',
         'custom_data' => 'array',
-        'status' => 'integer'
+        'status' => 'integer',
+        'start_date' => 'date',
+        'expire_date' => 'date',
     ];
 
     public function location(): BelongsTo

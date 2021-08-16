@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\AreaFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -52,11 +53,17 @@ class Location extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Price')
+            Text::make('Price',function($location){
+                return $location->price." AZN";
+            })
                 ->sortable()
                 ->rules('required', 'numeric','max:255'),
 
             AttachMany::make('Activities','activities'),
+
+            Text::make('Created At',function ($location){
+                return $location->created_at->format('Y-m-d H:i:s');
+            })->sortable()->readonly()
 
         ];
     }
@@ -80,7 +87,9 @@ class Location extends Resource
      */
     public function filters(Request $request): array
     {
-        return [];
+        return [
+            new AreaFilter
+        ];
     }
 
     /**

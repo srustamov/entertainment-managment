@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -42,7 +43,11 @@ class Area extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name', 'name')->sortable(),
+            Text::make('Name', 'name')
+                ->rules('required','string','min:4')
+                ->creationRules(Rule::unique(\App\Models\Area::class))
+                //->updateRules('unique:areas,name,{{resourceId}}')
+                ->sortable(),
         ];
     }
 
