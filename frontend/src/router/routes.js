@@ -1,7 +1,8 @@
-import Home from "../views/Home";
-import Login from "../views/Login";
 import auth from "./middleware/auth";
 import guest from "./middleware/guest";
+
+
+import Login from "../views/Login";
 
 export default [
     {
@@ -15,7 +16,7 @@ export default [
     {
         path: '/',
         name: 'dashboard',
-        component: Home,
+        component: () => import("../views/Home"),
         meta: { middleware: [auth] }
     },
 ]
