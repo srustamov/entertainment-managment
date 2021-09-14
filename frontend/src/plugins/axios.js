@@ -42,7 +42,6 @@ $axios.interceptors.response.use(
         let data = error?.response?.data
 
         if (data && data?.code === 401) {
-            localStorage.removeItem('token')
             await store.dispatch('logout')
             await router.push({name:'login'})
         }
@@ -51,7 +50,7 @@ $axios.interceptors.response.use(
             Vue.prototype.$message.error(data.message)
         }
 
-       return Promise.reject(error?.response || error);
+       return Promise.reject(data);
     }
 );
 

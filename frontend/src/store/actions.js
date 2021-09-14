@@ -7,6 +7,7 @@ export default {
         }
     },
     logout({state}) {
+        localStorage.removeItem('token')
         state.auth = {
             is:false,
             token:null,
