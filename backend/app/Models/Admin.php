@@ -30,7 +30,6 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
 
 
     protected $fillable = [
-        'area_id',
         'name',
         'email',
         'password',

@@ -1,22 +1,34 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from '../store'
+import routes from './routes'
+import middlewarePipeline from "./middlewarePipeline";
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/pages/login')
-  }
-]
+Vue.use(VueRouter)
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+
+const router = new VueRouter({
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
+})
+
+router.beforeEach((to, from, next) => {
+
+    let middlewareGroup = to?.meta?.middleware;
+
+    if (!middlewareGroup) {
+        return next()
+    } else if(!middlewareGroup.length) {
+        return next()
+    }
+
+    const context = {to, from, next, store}
+
+    return middlewareGroup[0]({
+        ...context,
+        next: middlewarePipeline(context, middlewareGroup, 1)
+    })
 })
 
 export default router

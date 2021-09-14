@@ -7,9 +7,9 @@ import {AUTH_LOGOUT} from "../helpers/auth";
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
-    baseURL: process.env.API_URL || process.env.apiUrl || '',
+    baseURL: 'http://localhost:8000/',
     timeout: 10000,
-    withCredentials: true,
+    //withCredentials: true,
 };
 
 const http = axios.create(config);
