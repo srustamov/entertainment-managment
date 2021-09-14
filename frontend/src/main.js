@@ -1,3 +1,6 @@
+require('dotenv').config({
+  path: '../.env'
+})
 import Vue from 'vue'
 import './plugins/axios'
 import './assets/scss/app.scss'

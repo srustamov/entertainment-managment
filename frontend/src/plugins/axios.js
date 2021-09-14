@@ -3,14 +3,14 @@
 import Vue from 'vue';
 import axios from "axios";
 import store from "../store";
+import router from "../router";
 
 
 let config = {
-    baseURL: process.env.API_URL || process.env.apiUrl || "",
+    baseURL: process.env.VUE_APP_API_URL  || "",
     timeout: 60 * 1000, // Timeout
     // withCredentials: true, // Check cross-site Access-Control
 };
-
 const $axios = axios.create(config);
 
 $axios.interceptors.request.use(
@@ -29,19 +29,29 @@ $axios.interceptors.request.use(
 );
 
 $axios.interceptors.response.use(
-    function ({data}) {
+    function (response) {
 
-        if (data?.data) {
-            return data.data;
+        if (response?.data) {
+            return response.data;
         }
 
-        return data;
+        return response;
     },
-    function (error) {
+    async function (error) {
 
+        let data = error?.response?.data
 
+        if (data && data?.code === 401) {
+            localStorage.removeItem('token')
+            await store.dispatch('logout')
+            await router.push({name:'login'})
+        }
 
-        return Promise.reject(error);
+        if (data?.message) {
+            Vue.prototype.$message.error(data.message)
+        }
+
+       return Promise.reject(error?.response || error);
     }
 );
 
