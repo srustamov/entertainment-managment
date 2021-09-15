@@ -1,6 +1,7 @@
 import {user} from "./routes";
 import http from '../plugins/axios'
 import store from '../store'
+import router from "../router";
 
 export const  ifAuthLoadUser = async() =>  {
     return new Promise((resolve, reject) => {
@@ -25,4 +26,9 @@ export const  ifAuthLoadUser = async() =>  {
                 reject(e)
             });
     })
+}
+
+export const logout = async () => {
+    await store.dispatch('logout')
+    await router.push({name:'login'})
 }

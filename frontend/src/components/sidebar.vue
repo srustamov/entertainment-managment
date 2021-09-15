@@ -2,7 +2,7 @@
   <v-navigation-drawer v-model="drawer" dark floating app>
     <v-list elevation="12" nav>
       <v-list-item-group v-model="listModel">
-        <v-list-item :value="item.route" :key="item.route" v-for="item in list" link>
+        <v-list-item :value="item.route" :key="item.route" v-for="item in list">
           <v-list-item-icon>
             <v-icon v-html="`fa-${item.icon}`"></v-icon>
           </v-list-item-icon>
@@ -15,7 +15,7 @@
 
     <template v-slot:append>
       <div class="pa-2">
-        <v-btn block>
+        <v-btn :loading="loading" @click="logout" block>
           Logout
         </v-btn>
       </div>
@@ -24,6 +24,9 @@
 </template>
 
 <script>
+
+import {logout} from '../utils/auth'
+
 export default {
   props:{
     drawer:{
@@ -32,6 +35,7 @@ export default {
     }
   },
   data:() => ({
+    loading:false,
     listModel:null,
     list:[
       {
@@ -46,12 +50,21 @@ export default {
       }
     ]
   }),
+  mounted() {
+    this.listModel = this.$route.name;
+  },
   methods:{
-
+    async logout() {
+      this.loading = true;
+      await logout()
+      this.loading = false;
+    }
   },
   watch:{
     listModel (v) {
-      this.$router.push({name:v})
+      if (this.$route.name !== v) {
+        this.$router.push({name:v})
+      }
     }
   }
 }
