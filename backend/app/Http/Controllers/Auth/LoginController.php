@@ -11,7 +11,7 @@ class LoginController extends Controller
 
     public function boot()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+       // $this->middleware('auth:api', ['except' => ['login']]);
     }
 
     /**

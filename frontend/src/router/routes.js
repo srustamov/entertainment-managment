@@ -19,4 +19,10 @@ export default [
         component: () => import("../views/Home"),
         meta: { middleware: [auth] }
     },
+    {
+        path: '/queues',
+        name: 'queues',
+        component: () => import("../views/Queues"),
+        meta: { middleware: [auth] }
+    },
 ]

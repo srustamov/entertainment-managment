@@ -1,42 +1,52 @@
 <template>
-  <div class="login">
-    <el-card>
-      <h2>Login</h2>
-      <el-form
-          class="login-form"
-          :model="model"
-          :rules="rules"
-          ref="form"
-          @submit.native.prevent="login"
-      >
-        <el-form-item prop="username">
-          <el-input v-model="model.email" placeholder="Email" prefix-icon="fas fa-user"></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-              v-model="model.password"
-              placeholder="Password"
-              type="password"
-              prefix-icon="fas fa-lock"
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-              :loading="loading"
-              class="login-button"
-              type="primary"
-              native-type="submit"
-              block
-          >Login</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-  </div>
+  <v-app id="inspire">
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+          <v-flex xs12 sm8 md4>
+            <v-card class="elevation-12">
+              <v-toolbar dark color="dark">
+                <v-toolbar-title>Login form</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-form @submit.native.prevent="login" ref="form" :lazy-validation="true">
+                  <v-text-field
+                      :rules="rules.email"
+                      v-model="model.email"
+                      required
+                      prepend-icon="fa-person"
+                      name="login"
+                      label="Email"
+                      type="text"
+                      solo
+                  ></v-text-field>
+                  <v-text-field
+                      :rules="rules.password"
+                      required
+                      v-model="model.password"
+                      prepend-icon="fa-lock"
+                      name="password"
+                      label="Şifrə"
+                      type="password"
+                      solo
+                  ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn @click="login" type="submit" color="primary">Giriş</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 
-import routes from '../utils/routes';
+import {login} from '../utils/routes';
 
 export default {
   name: "login",
@@ -49,24 +59,10 @@ export default {
       loading: false,
       rules: {
         email: [
-          {
-            required: true,
-            message: "Email is required",
-            trigger: "blur"
-          },
-          {
-            min: 4,
-            message: "Email length should be at least 5 characters",
-            trigger: "blur"
-          }
+          v => !!v || 'Email tələb olunur'
         ],
         password: [
-          { required: true, message: "Password is required", trigger: "blur" },
-          {
-            min: 5,
-            message: "Password length should be at least 5 characters",
-            trigger: "blur"
-          }
+          v => !!v || 'Şifrə tələb olunur'
         ]
       }
     };
@@ -80,7 +76,7 @@ export default {
 
       this.loading = true;
 
-      const response = await this.$http.post(routes.login,this.model);
+      const response = await this.$http.post(login,this.model);
 
       this.loading = false;
 
@@ -92,13 +88,13 @@ export default {
 
         await this.$store.dispatch('login',{user,access_token})
 
-        this.$message.success(response.message || 'Login successfully')
+        this.$toast.success(response.message || 'Login successfully')
+
+        await this.$router.push({name:'dashboard'})
+
       } else {
-        this.$message.error(response.message);
+        this.$toast.error(response.message);
       }
-
-
-
     }
   }
 };

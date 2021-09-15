@@ -6,17 +6,14 @@ import store from "../store";
 import router from "../router";
 
 
-let config = {
+const $axios = axios.create({
     baseURL: process.env.VUE_APP_API_URL  || "",
-    timeout: 60 * 1000, // Timeout
-    // withCredentials: true, // Check cross-site Access-Control
-};
-const $axios = axios.create(config);
+    timeout: 60 * 1000
+});
 
 $axios.interceptors.request.use(
     function (config) {
-
-        if (store.getters.isAuthenticated) {
+        if (store.getters.accessToken) {
             config.headers['Authorization'] = `Bearer ${store.getters.accessToken}`
         }
 
@@ -47,7 +44,7 @@ $axios.interceptors.response.use(
         }
 
         if (data?.message) {
-            Vue.prototype.$message.error(data.message)
+            Vue.prototype.$toast.error(data.message)
         }
 
        return Promise.reject(data);
@@ -75,4 +72,4 @@ const Plugin = {
 
 Vue.use(Plugin)
 
-export default Plugin;
+export default $axios;
