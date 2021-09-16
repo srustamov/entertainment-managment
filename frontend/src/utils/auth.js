@@ -18,8 +18,6 @@ export const  ifAuthLoadUser = async() =>  {
             }
 
             resolve(response)
-
-
         })
             .catch(async (e) => {
                 await store.dispatch('logout')

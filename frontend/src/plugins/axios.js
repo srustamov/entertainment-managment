@@ -47,6 +47,9 @@ $axios.interceptors.response.use(
             Vue.prototype.$toast.error(data.message)
         }
 
+        if (data.code && (data.code < 500 && data.code >=400)) {
+            return Promise.resolve(data);
+        }
        return Promise.reject(data);
     }
 );

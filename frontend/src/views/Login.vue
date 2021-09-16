@@ -1,12 +1,12 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" style="background-color: #2d3748">
     <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4>
-            <v-card class="elevation-12">
-              <v-toolbar dark color="dark">
-                <v-toolbar-title>Login form</v-toolbar-title>
+            <v-card elevation="24" :loading="loading">
+              <v-toolbar class="text-center d-flex justify-center" dark color="success">
+                <v-toolbar-title class="text-center">Giriş formu</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form @submit.native.prevent="login" ref="form" :lazy-validation="true">
@@ -14,7 +14,7 @@
                       :rules="rules.email"
                       v-model="model.email"
                       required
-                      prepend-icon="fa-person"
+                      prepend-icon="fa-user"
                       name="login"
                       label="Email"
                       type="text"
@@ -34,7 +34,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn @click="login" type="submit" color="primary">Giriş</v-btn>
+                <v-btn block @click="login" type="submit" color="primary">Giriş</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -93,7 +93,7 @@ export default {
         await this.$router.push({name:'dashboard'})
 
       } else {
-        this.$toast.error(response.message);
+        //this.$toast.error(response.message);
       }
     }
   }
