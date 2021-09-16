@@ -16,4 +16,10 @@ class Activity extends Model
     ];
 
 
+    public function items()
+    {
+        return $this->hasMany(ActivityItem::class,'activity_id');
+    }
+
+
 }

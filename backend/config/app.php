@@ -4,6 +4,8 @@ return [
 
     'api_domain' => env('API_DOMAIN'),
 
+    'api_version' => env('API_VERSION','v1'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

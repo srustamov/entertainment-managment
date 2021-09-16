@@ -34,9 +34,8 @@ class User extends Model implements JWTSubject,
         CanResetPassword,
         MustVerifyEmail;
 
-
     protected $fillable = [
-        'area_id',
+        'location_id',
         'name',
         'email',
         'password',
