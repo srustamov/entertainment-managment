@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ActivityItemCreateRequest;
 use App\Http\Requests\Request;
 use App\Models\ActivityItem;
 
 class ActivityItemController extends Controller
 {
-
 
     public function index(Request $request)
     {
@@ -16,7 +16,7 @@ class ActivityItemController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(ActivityItemCreateRequest $request)
     {
 
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Eloquent\Model;
 use App\Models\Components\SafeLocationDataRegister;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property mixed $id
@@ -36,13 +37,13 @@ class ActivityItem extends Model
     protected $appends = ['period_unit'];
 
 
-    public function activity()
+    public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class,'activity_id');
     }
 
 
-    public function getPeriodUnitAttribute()
+    public function getPeriodUnitAttribute(): string
     {
         return 'dəqiqə';
     }
