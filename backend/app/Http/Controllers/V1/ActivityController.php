@@ -3,38 +3,26 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\ActivityCreateRequest;
+use App\Http\Requests\Request;
+use App\Models\Activity;
 
 class ActivityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        //
+        return Activity::query()->filter($request->getFilters())->paginate($request->get('per_page',10));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store(ActivityCreateRequest $request)
     {
-        //
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function show(Activity $activity)
     {
         //
     }
