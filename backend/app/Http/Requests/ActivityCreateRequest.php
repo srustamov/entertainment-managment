@@ -3,19 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\FormRequest;
+use App\Models\Activity;
+use Illuminate\Validation\Rule;
 
 class ActivityCreateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +16,7 @@ class ActivityCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required','string','min:3',Rule::unique(Activity::class,'name')],
         ];
     }
 }

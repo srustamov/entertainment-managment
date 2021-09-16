@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'name' => 'Samir',
             'email' => 'rustemovv96@gmail.com',
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$2y$10$9HvV4pXxwV/zY00fvU6y4ud6Cc1Nk/48gl5e1CirXpSemMElBf/d2', // password
             'remember_token' => Str::random(10),
         ];
     }

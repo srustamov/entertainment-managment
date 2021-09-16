@@ -10,8 +10,16 @@ class SafeLocationDataScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        if (auth('api')->check() && in_array('location_id',$model->getFillable())) {
-            $builder->where('location_id', '=', auth()->user()->location_id);
+        if (auth('api')->check()) {
+
+            if (in_array('location_id',$model->getFillable())) {
+                $builder->where($model->getTable().'location_id', '=', auth()->user()->location_id);
+            } elseif (in_array('activity_id',$model->getFillable())) {
+                $builder->whereIn(
+                    $model->getTable().'activity_id',
+                    auth('api')->user()->locations()
+                );
+            }
         }
     }
 }

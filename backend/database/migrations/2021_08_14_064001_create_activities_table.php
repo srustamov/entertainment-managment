@@ -15,6 +15,7 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('location_id')->index();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

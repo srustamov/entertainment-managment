@@ -5,6 +5,11 @@ namespace {{ namespace }};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Eloquent\Model;
 
+/**
+ * @property mixed $id
+ * @method static {{ class }} find($id)
+ * @method static {{ class }} findOrFail($id)
+ */
 class {{ class }} extends Model
 {
     use HasFactory;
