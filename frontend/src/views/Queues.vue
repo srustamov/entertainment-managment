@@ -10,10 +10,13 @@
     data:() => ({
 
     }),
-    mounted() {
+    async mounted() {
+      await this.$store.dispatch('queue/fetch')
     },
     components: {
-      ...mapGetters()
+      ...mapGetters({
+        queues: 'queue/list'
+      })
     },
   }
 </script>
