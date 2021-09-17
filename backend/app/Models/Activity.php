@@ -25,10 +25,21 @@ class Activity extends Model
     ];
 
 
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+
     public function items()
     {
         return $this->hasMany(ActivityItem::class,'activity_id');
     }
 
+
+    public function queues()
+    {
+        return $this->morphMany(Queue::class,'queueable');
+    }
 
 }

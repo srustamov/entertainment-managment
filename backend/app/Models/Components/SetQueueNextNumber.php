@@ -8,7 +8,7 @@ trait SetQueueNextNumber
     public static function bootSetQueueNextNumber()
     {
         static::creating(function ($queue) {
-            $queue->number = static::getNextNumber($queue->activity_id,$queue->type);
+            $queue->number = static::getNextNumber($queue->queueable_type);
         });
     }
 }

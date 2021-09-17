@@ -3,6 +3,7 @@ import {queues} from "../../utils/routes";
 import Vue from "vue";
 
 export default {
+    namespaced:true,
     namespace:true,
     state:{
         list:{
@@ -14,8 +15,9 @@ export default {
     },
     actions:{
         async fetch({state},params) {
-            const response = await $axios.get(queues,params);
-
+            const response = await $axios.get(queues,{
+                params
+            });
             if (response?.success) {
                 return state.list = response.data
             }

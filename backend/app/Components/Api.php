@@ -70,7 +70,7 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
 
     public function ok($bool = true): static
     {
-        $this->success = $bool;
+        $this->success = (bool) $bool;
 
         return $this;
     }

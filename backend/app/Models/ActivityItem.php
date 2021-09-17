@@ -6,6 +6,7 @@ use App\Eloquent\Model;
 use App\Models\Components\SafeLocationDataRegister;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property mixed $id
@@ -30,7 +31,7 @@ class ActivityItem extends Model
     ];
 
     protected $casts = [
-        'price' => 'double',
+        'period_price' => 'double',
         'period' => 'double',
     ];
 
@@ -40,6 +41,12 @@ class ActivityItem extends Model
     public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class,'activity_id');
+    }
+
+
+    public function queues(): MorphMany
+    {
+        return $this->morphMany(Queue::class,'queueable');
     }
 
 

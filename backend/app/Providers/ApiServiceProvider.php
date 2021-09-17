@@ -41,6 +41,8 @@ class ApiServiceProvider extends ServiceProvider
             if (Arr::accessible($filters) && Arr::isAssoc($filters)) {
                 return $filters;
             }
+
+            return [];
         });
 
     }

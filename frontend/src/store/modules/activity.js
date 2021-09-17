@@ -2,6 +2,7 @@ import Vue from "vue";
 import $axios from "../../plugins/axios";
 import {activities} from "../../utils/routes";
 export default {
+    namespaced:true,
     namespace:true,
     state:{
         list:{
@@ -13,7 +14,7 @@ export default {
     },
     actions:{
         async fetch({state},params) {
-            const response = await $axios.get(activities,params);
+            const response = await $axios.get(activities, {params});
 
             if (response?.success) {
                 return state.list = response.data

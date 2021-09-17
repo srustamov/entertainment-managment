@@ -7,24 +7,25 @@ use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Activity extends Resource
+class Queue extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Activity::class;
+    public static $model = \App\Models\Queue::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static string $title = 'name';
+    public static string $title = 'number';
 
     /**
      * The columns that should be searched.
@@ -32,7 +33,7 @@ class Activity extends Resource
      * @var array
      */
     public static array $search = [
-        'id','name'
+        'id','number'
     ];
 
     /**
@@ -44,12 +45,14 @@ class Activity extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
+            //ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('location'),
+            MorphTo::make('Tip','queueable')->display('name'),
 
-            Text::make('Name','name')->sortable()
-                ->rules('required', 'max:255'),
+            Text::make('Növbə','number')->sortable()->readonly(),
+            Text::make('Tarix','created_at')->sortable()->readonly(),
+            Text::make('Başlama tarixi','started_at')->sortable()->readonly(),
+            Text::make('Bitmə tarixi','end_at')->sortable()->readonly(),
         ];
     }
 

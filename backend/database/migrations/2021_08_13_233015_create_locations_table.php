@@ -15,7 +15,7 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->integer('location_id')->index();
+            $table->integer('area_id')->index();
             $table->string('name');
             $table->double('price')->default(0);
             $table->timestamps();

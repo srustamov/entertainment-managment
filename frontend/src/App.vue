@@ -25,7 +25,6 @@
 <script>
 import {mapGetters} from 'vuex'
 import sidebar from './components/sidebar'
-
 export default {
   data: () => ({
     contentLoading: false,
@@ -35,10 +34,8 @@ export default {
     sidebar
   },
   async mounted() {
-
   },
   methods: {
-
   },
   computed: {
     ...mapGetters([

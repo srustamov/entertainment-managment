@@ -21,6 +21,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
  * @property string name
  * @property string email
  * @property string password
+ * @method static User find(int $int)
  */
 class User extends Model implements JWTSubject,
     AuthenticatableContract,

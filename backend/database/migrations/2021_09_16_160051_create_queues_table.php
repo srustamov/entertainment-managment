@@ -17,13 +17,14 @@ class CreateQueuesTable extends Migration
         Schema::create('queues', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('location_id')->index();
-            $table->unsignedInteger('activity_id')->index();
+            $table->morphs('queueable',true);
             $table->integer('number');
             $table->tinyInteger('type');
             $table->timestamp(Queue::STARTED_AT)->nullable();
             $table->timestamp(Queue::END_AT)->nullable();
             $table->timestamp(Queue::MISSING_AT)->nullable();
-            $table->timestamps();
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
             $table->softDeletes();
         });
     }

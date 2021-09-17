@@ -2,7 +2,7 @@ export default {
     login({state}, {user,access_token}) {
         state.auth = {
             is:true,
-            token:access_token || state.token,
+            token:access_token || state.auth.token,
             user:user,
         }
     },

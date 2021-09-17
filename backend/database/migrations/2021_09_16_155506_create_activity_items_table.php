@@ -20,7 +20,7 @@ class CreateActivityItemsTable extends Migration
             $table->string('color')->nullable();
             $table->string('number')->nullable();
             $table->string('size')->nullable();
-            $table->double('price',8,2);
+            $table->double('period_price',8,2);
             $table->double('period',8,2)->comment('dəqiqə ilə');
             $table->timestamps();
             $table->softDeletes();

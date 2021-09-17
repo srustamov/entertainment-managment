@@ -5,6 +5,7 @@ use App\Http\Controllers\V1\ActivityController;
 use App\Http\Controllers\V1\ActivityItemController;
 use App\Http\Controllers\V1\Auth\LoginController;
 use App\Http\Controllers\V1\QueueController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -12,7 +13,11 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/login',[LoginController::class,'login']);
 
     Route::get('/',function (){
-        return api(collect(rand(1,20)));
+
+        auth('api')->setUser($user = User::find(1));
+
+        return $user;
+
     });
 
     Route::middleware('auth:api')->group(function () {
