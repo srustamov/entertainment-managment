@@ -11,7 +11,7 @@ trait SafeLocationDataRegister
     /** @noinspection PhpUndefinedFieldInspection */
     public static function bootSafeLocationDataRegister()
     {
-        static::addGlobalScope(SafeLocationDataScope::class);
+        static::addGlobalScope(new SafeLocationDataScope);
 
         static::creating(function ($model) {
 

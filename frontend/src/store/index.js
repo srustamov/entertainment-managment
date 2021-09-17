@@ -5,6 +5,10 @@ import mutations from "./mutations";
 import actions from "./actions";
 import getters from "./getters";
 
+//modules
+import queue from "./modules/queue";
+import activity from "./modules/activity";
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -13,5 +17,7 @@ export default new Vuex.Store({
   mutations: mutations,
   actions: actions,
   modules: {
+    queue,
+    activity,
   }
 })

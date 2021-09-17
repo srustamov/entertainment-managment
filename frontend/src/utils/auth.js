@@ -11,7 +11,7 @@ export const  ifAuthLoadUser = async() =>  {
         }
 
         http.get(user).then(async (response) => {
-            if (response.success) {
+            if (response?.success) {
                 await store.dispatch('login',response.data)
             } else {
                 await store.dispatch('logout')
