@@ -27,11 +27,11 @@ export default {
     },
     minutes() {
       let minutes = Math.trunc((this.endDate - this.now)  / 60) % 60;
-      return minutes > 9 ? minutes : '0' + minutes;
+      return minutes > 9 ? minutes : '0' + (minutes < 0 ? 0 : minutes);
     },
     seconds() {
       let seconds = Math.trunc((this.endDate - this.now) ) % 60
-      return seconds > 9 ? seconds : '0' + seconds;
+      return seconds > 9 ? seconds : '0' + (seconds < 0 ? "0" : seconds);
     }
   },
   watch: {
@@ -42,7 +42,7 @@ export default {
           clearInterval(this.timer)
         }
 
-        if(this.queue.status_id == 3) {
+        if(this.queue.status_id !== 2) {
           return;
         }
 
