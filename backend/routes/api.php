@@ -5,6 +5,7 @@ use App\Http\Controllers\V1\ActivityController;
 use App\Http\Controllers\V1\ActivityItemController;
 use App\Http\Controllers\V1\Auth\LoginController;
 use App\Http\Controllers\V1\QueueController;
+use App\Http\Requests\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -12,9 +13,17 @@ Route::prefix('v1')->group(function () {
 
     Route::post('auth/login',[LoginController::class,'login']);
 
+    Route::get('/time',function (Request $request){
+        return now()->format($request->get('format','Y-m-d H:i:s'));
+    });
+
     Route::get('/',function (){
 
         auth('api')->setUser($user = User::find(1));
+
+        $activity = \App\Models\ActivityItem::query()->inRandomOrder()->first();
+
+        return $activity->queues()->create();
 
         return $user;
 
@@ -27,7 +36,9 @@ Route::prefix('v1')->group(function () {
 
         Route::apiResource('activities', ActivityController::class);
         Route::apiResource('activity-items', ActivityItemController::class);
-        Route::apiResource('queues', QueueController::class);
+
+        Route::apiResource('queues', QueueController::class)->except(['show']);
+        Route::get('queues/statuses', [QueueController::class,'statuses']);
     });
 
 });

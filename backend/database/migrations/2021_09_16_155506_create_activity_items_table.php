@@ -17,11 +17,6 @@ class CreateActivityItemsTable extends Migration
             $table->id();
             $table->unsignedInteger('activity_id')->index();
             $table->string('name');
-            $table->string('color')->nullable();
-            $table->string('number')->nullable();
-            $table->string('size')->nullable();
-            $table->double('period_price',8,2);
-            $table->double('period',8,2)->comment('dəqiqə ilə');
             $table->timestamps();
             $table->softDeletes();
         });

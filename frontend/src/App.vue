@@ -9,7 +9,7 @@
     <sidebar :drawer="drawer"/>
 
     <v-main class="grey lighten-2">
-      <v-container>
+      <v-container fluid>
         <router-view></router-view>
       </v-container>
     </v-main>

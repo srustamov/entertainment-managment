@@ -7,8 +7,11 @@ use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Yassi\NestedForm\NestedForm;
 
 class ActivityItem extends Resource
 {
@@ -32,7 +35,7 @@ class ActivityItem extends Resource
      * @var array
      */
     public static array $search = [
-        'id','name','color','price','size','period'
+        'id','name',
     ];
 
     /**
@@ -45,17 +48,10 @@ class ActivityItem extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-
-            BelongsTo::make('Activity'),
-
-            Text::make('Name','name')->sortable()
-                ->rules('required', 'max:255'),
-            Text::make('Color','color')->sortable()
-                ->rules( 'max:255'),
-            Text::make('Price','price')->sortable()
-                ->rules( 'required', 'max:255'),
-            Text::make('Period','period')->sortable()
-                ->rules( 'required', 'max:255'),
+            MorphOne::make('Detal','detail',ActivityDetail::class),
+            BelongsTo::make('Activity')->sortable(),
+            MorphMany::make('Queues','queues',Queue::class),
+            Text::make('Name','name')->sortable()->rules('required', 'max:255'),
         ];
     }
 

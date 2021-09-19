@@ -1,5 +1,5 @@
 import $axios from "../../plugins/axios";
-import {queues} from "../../utils/routes";
+import {queues, queuesStatuses} from "../../utils/routes";
 import Vue from "vue";
 
 export default {
@@ -8,10 +8,12 @@ export default {
     state:{
         list:{
             data:[]
-        }
+        },
+        statuses:[]
     },
     getters:{
-        list: state => state.list
+        list: state => state.list,
+        statuses: state => state.statuses
     },
     actions:{
         async fetch({state},params) {
@@ -20,6 +22,16 @@ export default {
             });
             if (response?.success) {
                 return state.list = response.data
+            }
+
+            if (response?.message) {
+                Vue.$toast.warning(response.message)
+            }
+        },
+        async fetchStatuses({state}) {
+            const response = await $axios.get(queuesStatuses);
+            if (response?.success) {
+                return state.statuses = response.data
             }
 
             if (response?.message) {

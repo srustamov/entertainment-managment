@@ -3,16 +3,10 @@ namespace App\Http\Requests;
 
 /**
  * @method getFilters()
+ * @property mixed $queueable_type
+ * @property mixed $queueable_id
  */
-class FormRequest extends \Illuminate\Foundation\Http\FormRequest
+class Request extends \Illuminate\Http\Request
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+
 }

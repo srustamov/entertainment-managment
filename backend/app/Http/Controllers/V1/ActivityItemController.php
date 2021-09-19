@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Components\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ActivityItemCreateRequest;
 use App\Http\Requests\Request;
@@ -10,9 +11,9 @@ use App\Models\ActivityItem;
 class ActivityItemController extends Controller
 {
 
-    public function index(Request $request)
+    public function index(Request $request): Api
     {
-        return api(ActivityItem::query()->filter($request->getFilters())->paginate($request->get('per_page', 10)));
+        return api(ActivityItem::query()->filter($request->getFilters())->paginate($request->get('itemsPerPage', 10)));
     }
 
 

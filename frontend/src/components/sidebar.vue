@@ -15,8 +15,8 @@
 
     <template v-slot:append>
       <div class="pa-2">
-        <v-btn :loading="loading" @click="logout" block>
-          Logout
+        <v-btn color="red" :loading="loading" @click="logout" block>
+          <v-icon>mdi-logout</v-icon> Çıxış
         </v-btn>
       </div>
     </template>

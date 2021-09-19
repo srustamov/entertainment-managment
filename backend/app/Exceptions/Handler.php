@@ -3,10 +3,12 @@
 namespace App\Exceptions;
 
 use App\Components\Api;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -47,13 +49,13 @@ class Handler extends ExceptionHandler
     {
         return api([])
             ->notOk()
-            ->setCode($this->isHttpException($e) ? $e->getStatusCode() : 400)
+            ->setCode($this->getCode($e))
             ->setError([
                     'message' => $message = $this->isHttpException($e)
                         ? (Response::$statusTexts[$e->getStatusCode()] ?? "")
                         : $e->getMessage(),
                     'line' => $e->getLine(),
-                    'code' => $this->isHttpException($e) ? $e->getStatusCode() : 400,
+                    'code' => $this->getCode($e),
                     'exception' => class_basename($e),
                 ] + (config('app.debug') ? [
                     'trace' => $e->getTrace(),
@@ -68,5 +70,23 @@ class Handler extends ExceptionHandler
             return $this->renderException($e);
         }
         return parent::render($request,$e);
+    }
+
+
+    public function getCode($e)
+    {
+        if ($this->isHttpException($e)) {
+            return $e->getStatusCode();
+        }
+
+        if ($e instanceof UnauthorizedHttpException) {
+            return 403;
+        }
+
+        if ($e instanceof AuthenticationException) {
+            return 401;
+        }
+
+        return 400;
     }
 }

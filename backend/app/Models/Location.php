@@ -42,14 +42,9 @@ class Location extends Model
     }
 
 
-    public function activities(): BelongsToMany
+    public function activities(): HasMany
     {
-        return $this->belongsToMany(
-            related: Activity::class,
-            table: 'location_activity',
-            foreignPivotKey: 'location_id',
-            relatedPivotKey: 'activity_id'
-        );
+        return $this->hasMany(Activity::class,'location_id');
     }
 
     public function user(): HasOne

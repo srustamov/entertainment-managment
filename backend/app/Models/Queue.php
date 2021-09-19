@@ -5,12 +5,17 @@ namespace App\Models;
 use App\Eloquent\Model;
 use App\Models\Components\SafeLocationDataRegister;
 use App\Models\Components\SetQueueNextNumber;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static Queue create(array $array)
+ * @property null|Carbon $started_at
+ * @property null|Carbon $end_at
+ * @property null|Carbon $missing_at
+ * @property int $status_id
  */
 class Queue extends Model
 {
@@ -19,6 +24,17 @@ class Queue extends Model
     use SafeLocationDataRegister;
     use SetQueueNextNumber;
 
+    const STATUS_NEW = 0;
+    const STATUS_NOW = 1;
+    const STATUS_ENDED = 2;
+    const STATUS_MISSING = 3;
+    const STARTED_AT = 'started_at';
+    const MISSING_AT = 'missing_at';
+    const END_AT = 'end_at';
+    const TYPES = [
+        Activity::class,
+        ActivityItem::class,
+    ];
     protected $fillable = [
         'location_id',
         'queueable_type',
@@ -27,16 +43,13 @@ class Queue extends Model
         'started_at',
         'end_at',
         'missing_at',
-        'type'
+        'status_id'
     ];
-
     protected $dates = [
-        'started_at',
-        'end_at',
-        'missing_at',
+        //'started_at',
+        //'end_at',
+        //'missing_at',
     ];
-
-
     protected $casts = [
         'number' => 'int',
         'created_at' => "datetime:Y-m-d H:i:s",
@@ -45,35 +58,69 @@ class Queue extends Model
         'started_at' => "datetime:Y-m-d H:i:s",
         'end_at' => "datetime:Y-m-d H:i:s",
     ];
-
-    const STARTED_AT = 'started_at';
-    const MISSING_AT = 'missing_at';
-    const END_AT     = 'end_at';
-
-    const TYPES = [
-        Activity::class,
-        ActivityItem::class,
+    protected $appends = [
+        'is_expired',
+        'startable',
+        'endable',
     ];
 
+    protected $with = ['status'];
+
+    public static function getNextNumber($queueable): int
+    {
+        return (int)Queue::query()
+                ->select('number')
+                ->where('queueable_type', $queueable)
+                ->whereNull('missing_at')
+                ->latest()
+                ->whereRaw('DATE(created_at)=DATE(NOW())')
+                ->value('number') + 1;
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(QueueStatus::class,'status_id');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
 
     public function queueable(): MorphTo
     {
         return $this->morphTo();
     }
 
-    public static function getNextNumber($queueable): int
+//    public function getStatusAttribute()
+//    {
+//        if (!$this->started_at && !$this->missing_at) {
+//            return $this->statuses[self::STATUS_NEW];
+//        } elseif ($this->started_at && !$this->end_at && !$this->missing_at) {
+//            return $this->statuses[self::STATUS_NOW];
+//        } elseif (!$this->missing_at) {
+//            return $this->statuses[self::STATUS_ENDED];
+//        } else {
+//            return $this->statuses[self::STATUS_MISSING];
+//        }
+//    }
+
+    public function getIsExpiredAttribute()
     {
-        return (int) Queue::query()
-            ->select('number')
-            ->where('queueable_type',$queueable)
-            ->whereNull('missing_at')
-            ->latest()
-            ->whereRaw('DATE(created_at)=DATE(NOW())')
-            ->value('number') + 1;
+        return (
+            $this->started_at &&
+            !$this->ended_at &&
+            Carbon::make($this->started_at)->addMinutes($this->queueable->detail->period) < now()
+        );
     }
 
-    public static function getTypes(): array
+    public function getStartableAttribute(): bool
     {
-        return self::TYPES;
+        return $this->status_id == 1;
+    }
+
+    public function getEndableAttribute(): bool
+    {
+        return $this->status_id == 2;
     }
 }

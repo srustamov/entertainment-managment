@@ -2,34 +2,34 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\AreaFilter;
-use App\Nova\Filters\LocationFilter;
 use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Yna\NovaSwatches\Swatches;
 
-class Queue extends Resource
+class ActivityDetail extends Resource
 {
+
+    public static $displayInNavigation = false;
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Queue::class;
+    public static $model = \App\Models\ActivityDetail::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static string $title = 'number';
+    public static string $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -37,7 +37,7 @@ class Queue extends Resource
      * @var array
      */
     public static array $search = [
-        'id','number'
+        'id','color','price','size','period'
     ];
 
     /**
@@ -50,20 +50,10 @@ class Queue extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('Location', 'location')->sortable(),
-
-            MorphTo::make('Tip','queueable')->readonly(),
-
-            Number::make('Növbə','number')->sortable()->readonly(),
-            Date::make('Tarix','created_at')->sortable()->readonly(),
-            Date::make('Başlama tarixi','started_at')->sortable(),
-            Date::make('Bitmə tarixi','end_at')->sortable(),
+            Swatches::make('Color','color')->rules(['required'])->required(),
+            Currency::make('Price','period_price')->sortable()->rules( 'required', 'max:255'),
+            Text::make('Period','period')->sortable()->rules( 'required', 'max:255'),
         ];
-    }
-
-    public static function authorizedToCreate(Request $request)
-    {
-        return false;
     }
 
     /**
@@ -88,7 +78,6 @@ class Queue extends Resource
     public function filters(Request $request) : array
     {
         return [
-            new LocationFilter(),
         ];
     }
 

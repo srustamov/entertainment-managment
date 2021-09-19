@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Nova\Filters\AreaFilter;
 use App\Nova\Filters\LocationFilter;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\BelongsTo;
@@ -14,22 +15,23 @@ use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Yna\NovaSwatches\Swatches;
 
-class Queue extends Resource
+class QueueStatus extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Queue::class;
+    public static $model = \App\Models\QueueStatus::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static string $title = 'number';
+    public static string $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -37,7 +39,7 @@ class Queue extends Resource
      * @var array
      */
     public static array $search = [
-        'id','number'
+        'id','name'
     ];
 
     /**
@@ -50,21 +52,15 @@ class Queue extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('Location', 'location')->sortable(),
-
-            MorphTo::make('Tip','queueable')->readonly(),
-
-            Number::make('Növbə','number')->sortable()->readonly(),
-            Date::make('Tarix','created_at')->sortable()->readonly(),
-            Date::make('Başlama tarixi','started_at')->sortable(),
-            Date::make('Bitmə tarixi','end_at')->sortable(),
+            Text::make('Ad','name')->sortable()
+                ->rules([
+                    'required',
+                    'string',
+                ]),
+            Swatches::make('Color','color')->rules(['required']),
         ];
     }
 
-    public static function authorizedToCreate(Request $request)
-    {
-        return false;
-    }
 
     /**
      * Get the cards available for the request.

@@ -4,7 +4,8 @@ namespace App\Http\Controllers\V1;
 
 use App\Components\Api;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Request;
+use App\Models\QueueStatus;
+use Illuminate\Http\Request;
 use App\Models\Queue;
 
 
@@ -12,9 +13,20 @@ class QueueController extends Controller
 {
     public function index()
     {
-        return api(Queue::query()
+        $queues = Queue::query()
+            ->select('queues.*')
+            ->join('queue_statuses','queues.status_id','queue_statuses.id')
+            ->orderBy('queue_statuses.sort','ASC')
             ->filter(request()->getFilters())
-            ->paginate(request()->get('per_page',20)));
+            ->paginate(request()->get('itemsPerPage',20));
+
+        return api($queues);
+    }
+
+
+    public function statuses()
+    {
+        return api(QueueStatus::all());
     }
 
 
@@ -29,7 +41,6 @@ class QueueController extends Controller
             'queueable_type' => $request->post('queueable_type'),
             'queueable_id' => $request->post('queueable_id'),
         ]);
-
 
         if ($queue) {
             $queue->load('queueable');
@@ -47,6 +58,8 @@ class QueueController extends Controller
     public function update(Queue $queue,Request $request)
     {
         $update = $queue->update($request->all());
+
+        $queue->load(['queueable','status']);
 
         return api($queue)->ok($update);
     }

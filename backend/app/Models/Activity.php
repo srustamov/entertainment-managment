@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
+use App\Models\Components\Queueable;
 use App\Models\Components\SafeLocationDataRegister;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 
 /**
@@ -16,6 +18,7 @@ class Activity extends Model
 {
     use HasFactory;
     use SafeLocationDataRegister;
+    use Queueable;
 
     protected $table = 'activities';
 
@@ -24,10 +27,18 @@ class Activity extends Model
         'name',
     ];
 
+    protected $with = ['detail'];
+
+    protected $appends = ['model_type'];
 
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function detail(): MorphOne
+    {
+        return $this->morphOne(ActivityDetail::class,'activitable');
     }
 
 
@@ -36,10 +47,9 @@ class Activity extends Model
         return $this->hasMany(ActivityItem::class,'activity_id');
     }
 
-
-    public function queues()
+    public function getModelTypeAttribute(): string
     {
-        return $this->morphMany(Queue::class,'queueable');
+        return static::class;
     }
 
 }

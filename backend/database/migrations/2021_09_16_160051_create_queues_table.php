@@ -19,7 +19,7 @@ class CreateQueuesTable extends Migration
             $table->unsignedInteger('location_id')->index();
             $table->morphs('queueable',true);
             $table->integer('number');
-            $table->tinyInteger('type');
+            $table->integer('status_id')->default(1);
             $table->timestamp(Queue::STARTED_AT)->nullable();
             $table->timestamp(Queue::END_AT)->nullable();
             $table->timestamp(Queue::MISSING_AT)->nullable();

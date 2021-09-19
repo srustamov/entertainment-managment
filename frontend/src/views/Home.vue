@@ -1,5 +1,7 @@
 <template>
-  <div>Dashboard</div>
+  <div>
+    <v-img src="img/dashboard.png"></v-img>
+  </div>
 </template>
 
 <script>

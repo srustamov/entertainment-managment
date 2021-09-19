@@ -3,6 +3,9 @@ import {ifAuthLoadUser} from "./utils/auth";
 require('dotenv').config({
   path: '../.env'
 })
+
+window._ = require('lodash');
+
 import Vue from 'vue'
 import './plugins/axios'
 import './assets/scss/app.scss'

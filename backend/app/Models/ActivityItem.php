@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
+use App\Models\Components\Queueable;
 use App\Models\Components\SafeLocationDataRegister;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * @property mixed $id
@@ -17,25 +19,18 @@ class ActivityItem extends Model
 {
     use HasFactory;
     use SafeLocationDataRegister;
+    use Queueable;
 
     protected $table = 'activity_items';
 
     protected $fillable = [
         'activity_id',
-        'name',
-        'color',
-        'number',
-        'size',
-        'price',
-        'period',
+        'name'
     ];
 
-    protected $casts = [
-        'period_price' => 'double',
-        'period' => 'double',
-    ];
+    protected $with = ['detail'];
 
-    protected $appends = ['period_unit'];
+    protected $appends = ['model_type'];
 
 
     public function activity(): BelongsTo
@@ -43,15 +38,14 @@ class ActivityItem extends Model
         return $this->belongsTo(Activity::class,'activity_id');
     }
 
-
-    public function queues(): MorphMany
+    public function detail(): MorphOne
     {
-        return $this->morphMany(Queue::class,'queueable');
+        return $this->morphOne(ActivityDetail::class,'activitable');
     }
 
-
-    public function getPeriodUnitAttribute(): string
+    public function getModelTypeAttribute(): string
     {
-        return 'dəqiqə';
+        return static::class;
     }
+
 }

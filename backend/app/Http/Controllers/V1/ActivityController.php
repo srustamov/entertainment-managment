@@ -10,9 +10,9 @@ use App\Models\Activity;
 class ActivityController extends Controller
 {
 
-    public function index(Request $request)
+    public function index()
     {
-        return api(Activity::query()->filter($request->getFilters())->paginate($request->get('per_page',10)));
+        return api(Activity::query()->filter(request()->getFilters())->get());
     }
 
 

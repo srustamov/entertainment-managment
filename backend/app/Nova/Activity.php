@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Yassi\NestedForm\NestedForm;
 
 class Activity extends Resource
 {
@@ -45,11 +49,10 @@ class Activity extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-
             BelongsTo::make('location'),
-
-            Text::make('Name','name')->sortable()
-                ->rules('required', 'max:255'),
+            HasMany::make('Items','items',ActivityItem::class),
+            MorphMany::make('Queues','queues',Queue::class),
+            Text::make('Name','name')->sortable()->rules('required', 'max:255'),
         ];
     }
 
