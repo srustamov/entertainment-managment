@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 
 /**
- * @method Builder filter(array $filters)
+ * @method static Builder|self filter(array $filters)
  */
 trait Filterable
 {

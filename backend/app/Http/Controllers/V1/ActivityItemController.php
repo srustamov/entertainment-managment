@@ -13,7 +13,7 @@ class ActivityItemController extends Controller
 
     public function index(Request $request): Api
     {
-        return api(ActivityItem::query()->filter($request->getFilters())->paginate($request->get('itemsPerPage', 10)));
+        return api(ActivityItem::filter($request->getFilters())->paginate($request->get('itemsPerPage', 10)));
     }
 
 
@@ -25,9 +25,8 @@ class ActivityItemController extends Controller
 
     public function show($id, Request $request)
     {
-        return api(ActivityItem::query()
+        return api(ActivityItem::filter($request->getFilters())
             ->where('id', $id)
-            ->filter($request->getFilters())
             ->firstOrFail());
     }
 

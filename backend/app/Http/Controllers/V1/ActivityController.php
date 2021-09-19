@@ -10,9 +10,9 @@ use App\Models\Activity;
 class ActivityController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return api(Activity::query()->filter(request()->getFilters())->get());
+        return api(Activity::filter($request->getFilters())->get());
     }
 
 
