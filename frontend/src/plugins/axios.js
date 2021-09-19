@@ -43,7 +43,7 @@ $axios.interceptors.response.use(
             await router.push({name:'login'})
         }
 
-        if (data?.message && !data?.success) {
+        if (data?.message && (!data?.success || data?.code >=400)) {
             Vue.prototype.$toast.error(data.message)
         }
 

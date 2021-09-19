@@ -2,7 +2,7 @@
   <v-navigation-drawer  v-model="drawer" dark app>
     <v-list elevation="12" nav>
       <v-list-item-group v-model="listModel">
-        <v-list-item :value="item.route" :key="item.route" v-for="item in list">
+        <v-list-item :disabled="item.disabled" :value="item.route" :key="item.route" v-for="item in list">
           <v-list-item-icon>
             <v-icon v-html="`fa-${item.icon}`"></v-icon>
           </v-list-item-icon>
@@ -47,6 +47,24 @@ export default {
         name : "Növbələr",
         icon:'user-clock',
         route:'queues'
+      },
+      {
+        name : "Fəaliyyətlər",
+        icon:'sitemap',
+        route:'',
+        disabled:true
+      },
+      {
+        name : "Abunəliklər",
+        icon:'clock-outline',
+        route:'',
+        disabled:true
+      },
+      {
+        name : "Tənzimləmələr",
+        icon:'cog',
+        route:'',
+        disabled:true
       }
     ]
   }),
