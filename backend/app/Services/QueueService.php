@@ -10,7 +10,8 @@ use Intervention\Image\Facades\Image;
 use JetBrains\PhpStorm\Pure;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Mike42\Escpos\Printer;
+use App\Services\Printer;
+
 
 class QueueService implements PrinterInterface
 {
@@ -43,31 +44,32 @@ class QueueService implements PrinterInterface
     {
         $printer = $this->getPrinter();
 
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->setContentCenter();
         $printer->setTextSize(1, 3);
         $printer->text($this->queue->number);
-        $printer->text(self::NEW_LINE);
-        $printer->text("------------------------------------------------" . self::NEW_LINE);
+
+        $printer->addLineDashed();
+
         $printer->setTextSize(1, 2);
         $printer->text($this->queue->queueable->name);
-        $printer->text(self::NEW_LINE);
-        $printer->setTextSize(1, 1);
-        $printer->text("------------------------------------------------" . self::NEW_LINE);
-        $printer->setTextSize(1, 2);
 
         $printer->setTextSize(1, 1);
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->addLineDashed();
+        $printer->setTextSize(1, 2);
+
+        $printer->setContentCenter();
+        $printer->setTextSize(1, 1);
         $printer->text("Növbə:" . $this->queue->number);
-        $printer->text(self::NEW_LINE);
+
 
         $printer->qrCode($this->queue->id, 0, 5);
 
         $printer->setTextSize(1, 1);
-        $printer->text("------------------------------------------------" . self::NEW_LINE);
+        $printer->addLineDashed();
         $printer->setTextSize(1, 2);
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
+
+        $printer->setContentCenter();
         $printer->text($this->queue->created_at->toString());
-        $printer->text(self::NEW_LINE);
 
         $printer->feed();
         $printer->cut();
