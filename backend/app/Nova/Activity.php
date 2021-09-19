@@ -50,6 +50,7 @@ class Activity extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('location'),
+            MorphOne::make('Detal','detail',ActivityDetail::class),
             HasMany::make('Items','items',ActivityItem::class),
             MorphMany::make('Queues','queues',Queue::class),
             Text::make('Name','name')->sortable()->rules('required', 'max:255'),

@@ -1,5 +1,5 @@
 <template>
-  <v-btn text>{{ hour }}:{{ minutes }}:{{ seconds }} ({{queue.queueable.detail.period}} dəq) </v-btn>
+  <v-btn text>{{ hour }}:{{ minutes }}:{{ seconds }}  </v-btn>
 </template>
 
 <script>
@@ -42,9 +42,8 @@ export default {
           clearInterval(this.timer)
         }
 
-        if(moment().unix() > newVal) {
-          //console.log(moment().unix(),newVal)
-          //return this.queue.is_expired = true;
+        if(this.queue.status_id == 3) {
+          return;
         }
 
         this.timer = setInterval(() => {
@@ -54,7 +53,7 @@ export default {
             clearInterval(this.timer)
             this.queue.is_expired = true;
             this.$toast.default(`${this.queue.number} sıralı ${this.queue.queueable.name} növbəsi bitdi`,{
-              duration:5000,
+              duration:7000,
               dismissible:true,
               pauseOnHover:true
             })

@@ -25,8 +25,6 @@ trait QueueDetailComponent
 
         static::updated(function (Queue $queue){
 
-            dump($queue->getQueueDetail());
-
             if ($queue->getQueueDetail()->isNotEmpty()) {
                 $queue->detail()->update([
                     'price'  => $queue->getQueueDetail()->get('price',$queue->queueable->detail->period_price),

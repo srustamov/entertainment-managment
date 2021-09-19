@@ -42,9 +42,7 @@ class QueueController extends Controller
             'queueable_id' => $request->post('queueable_id'),
         ]);
 
-        if ($queue) {
-            $queue->load('queueable');
-        }
+        $queue?->load(['queueable', 'status', 'detail']);
 
         return api($queue)->ok($queue);
     }
@@ -59,9 +57,9 @@ class QueueController extends Controller
     {
         $update = $queue->update($request->all());
 
-        $queue->load(['queueable','status','detail']);
+        $queue?->load(['queueable','status','detail']);
 
-        return api($queue)->ok($update);
+        return api($queue)->ok($update)->toArray();
     }
 
 

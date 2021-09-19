@@ -58,6 +58,13 @@
               </v-pagination>
             </v-col>
             <v-col cols="12" xs="12" sm="6" md="2" class="text-right">
+              <v-btn
+                  class="mr-1"
+                  v-if="createActive"
+                  @click="createDialog=true"
+                  color="success" fab>
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
               <v-btn :loading="loading" small @click="fetchQueues(1)" color="primary" fab>
                 <v-icon>mdi-reload</v-icon>
               </v-btn>
@@ -71,6 +78,9 @@
           </v-btn>
           <v-btn small dark  @click="endQueue(item,index)" v-if="item.endable" color="red">
             <v-icon>mdi-stop</v-icon> Bitir
+          </v-btn>
+          <v-btn :loading="loading" small dark @click="deleteQueue(item,index)" v-if="item.deletable" color="red">
+            <v-icon>mdi-remove</v-icon> Sil
           </v-btn>
         </template>
         <template v-slot:item.number="{ item }">
@@ -87,7 +97,7 @@
           <v-btn text :color="item.status.color">{{ item.status.name }}</v-btn>
         </template>
 
-        <template v-slot:expanded-item="{ headers ,item }">
+        <template v-slot:expanded-item="{ headers ,item,index }">
           <td :colspan="headers.length" class="pa-1" bgcolor="#a52a2a">
             <v-card>
               <v-card-text>
@@ -106,16 +116,20 @@
                   </v-col>
                 </v-row>
               </v-card-text>
-              <v-container fluid>
-
-              </v-container>
             </v-card>
-
           </td>
         </template>
 
       </v-data-table>
     </v-card-text>
+
+    <queue-create-dialog
+        v-if="createActive"
+        @close="createDialog = false"
+        :open="createDialog"
+        @success="queue => this.queues.data.unshift(queue)"
+        :activity="selectedActivityItem || selectedActivity">
+    </queue-create-dialog>
   </v-card>
 </template>
 
@@ -123,12 +137,13 @@
 import {mapGetters} from "vuex";
 import {useFilters} from "../utils/hooks";
 import QueueTime from '../components/queue-time';
+import QueueCreateDialog from '../components/queue-create';
 import QueueService from "../services/QueueService";
 
 export default {
   name: 'Home',
   components: {
-    QueueTime
+    QueueTime,QueueCreateDialog
   },
   data: () => ({
     loading: true,
@@ -152,6 +167,7 @@ export default {
     activityItemTabModel: null,
     selectedActivity: null,
     selectedActivityItem: null,
+    createDialog:false
   }),
   async mounted() {
     await this.fetchActivities()
@@ -170,6 +186,9 @@ export default {
       return this.selectedActivity && (
           this.selectedActivity?.detail || this.selectedActivity?.items?.length
       );
+    },
+    createActive() {
+      return this.selectedActivityItem?.detail ||  this.selectedActivity?.detail;
     }
   },
   methods: {
@@ -248,6 +267,16 @@ export default {
       }
 
       this.loading = false;
+    },
+    async deleteQueue(queue,index) {
+      this.loading = true;
+      let response = await QueueService.make(queue).remove()
+      this.loading = false;
+
+      if (response) {
+        this.queues.data.splice(index,1)
+      }
+
     }
   },
   watch: {

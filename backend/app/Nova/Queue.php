@@ -9,6 +9,7 @@ use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
@@ -52,12 +53,14 @@ class Queue extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('Location', 'location')->sortable(),
 
+            BelongsTo::make('Status','status',QueueStatus::class),
+
             MorphTo::make('Tip','queueable')->readonly(),
 
             Number::make('Növbə','number')->sortable()->readonly(),
-            Date::make('Tarix','created_at')->sortable()->readonly(),
-            Date::make('Başlama tarixi','started_at')->sortable(),
-            Date::make('Bitmə tarixi','end_at')->sortable(),
+            DateTime::make('Tarix','created_at')->sortable()->readonly(),
+            DateTime::make('Başlama tarixi','started_at')->sortable()->nullable(),
+            DateTime::make('Bitmə tarixi','end_at')->sortable()->nullable(),
         ];
     }
 

@@ -76,7 +76,8 @@ class Queue extends Model
         'is_expired',
         'startable',
         'endable',
-        'editable'
+        'editable',
+        'deletable'
     ];
 
     protected $with = ['status','detail'];
@@ -141,6 +142,11 @@ class Queue extends Model
     }
 
     public function getStartableAttribute(): bool
+    {
+        return $this->status_id == 1;
+    }
+
+    public function getDeletableAttribute(): bool
     {
         return $this->status_id == 1;
     }

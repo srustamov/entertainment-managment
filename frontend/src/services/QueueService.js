@@ -67,6 +67,22 @@ export default class QueueService {
             return response.data;
         }
     }
+    async remove() {
+
+        if (!this.queue?.deletable) {
+            return false;
+        }
+
+        let response = await $axios.delete(queues + '/' + this.queue.id);
+
+        if (response?.success) {
+            Vue.$toast.success('Növbə silindi')
+        } else {
+            Vue.$toast.error(response?.message || 'Növbə silinmədi')
+        }
+
+        return response?.success
+    }
 
 
 }
