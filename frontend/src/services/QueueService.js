@@ -60,7 +60,7 @@ export default class QueueService {
         if (response?.success) {
             Vue.$toast.success('Növbə məlumatları yeniləndi')
         } else {
-            Vue.$toast.error(response?.message || 'Növbə məlumatları yenilənmədi')
+            //Vue.$toast.error(response?.message || 'Növbə məlumatları yenilənmədi')
         }
 
         if (response?.success) {
@@ -78,7 +78,7 @@ export default class QueueService {
         if (response?.success) {
             Vue.$toast.success('Növbə silindi')
         } else {
-            Vue.$toast.error(response?.message || 'Növbə silinmədi')
+            //Vue.$toast.error(response?.message || 'Növbə silinmədi')
         }
 
         return response?.success

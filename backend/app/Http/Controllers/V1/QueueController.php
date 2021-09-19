@@ -37,10 +37,7 @@ class QueueController extends Controller
             'queueable_id' => ['required','numeric'],
         ]);
 
-        $queue = Queue::create([
-            'queueable_type' => $request->post('queueable_type'),
-            'queueable_id' => $request->post('queueable_id'),
-        ]);
+        $queue = Queue::create($request->all());
 
         $queue?->load(['queueable', 'status', 'detail']);
 

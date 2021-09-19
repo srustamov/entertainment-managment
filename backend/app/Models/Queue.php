@@ -27,6 +27,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property int $location_id
  * @property string $queueable_type
  * @property int $queueable_id
+ * @property mixed $detail
  */
 class Queue extends Model
 {
@@ -135,9 +136,8 @@ class Queue extends Model
     public function getIsExpiredAttribute()
     {
         return (
-            $this->started_at &&
-            !$this->ended_at &&
-            Carbon::make($this->started_at)->addMinutes($this->queueable->detail->period) < now()
+            $this->started_at && !$this->end_at &&
+            Carbon::make($this->started_at)->addMinutes($this->detail->period) < now()
         );
     }
 

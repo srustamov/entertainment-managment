@@ -28,7 +28,7 @@ import sidebar from './components/sidebar'
 export default {
   data: () => ({
     contentLoading: false,
-    drawer:false
+    drawer:true
   }),
   components:{
     sidebar

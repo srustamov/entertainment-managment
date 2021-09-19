@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property mixed $id
@@ -16,9 +18,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static ActivityDetail find($id)
  * @method static ActivityDetail findOrFail($id)
  */
-class ActivityDetail extends Model
+class ActivityDetail extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $table = 'activity_detail';
 
@@ -39,12 +42,28 @@ class ActivityDetail extends Model
         'period' => 'double',
     ];
 
-    protected $appends = ['period_unit'];
+    protected $appends = ['period_unit','images'];
 
+    protected $with = ['media'];
 
     public function activitable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function getImagesAttribute()
+    {
+        $images = [];
+
+        foreach ($this->media ?? [] as $media) {
+            $media->url = $media->getFullUrl();
+
+            $images[] = $media;
+        }
+
+        unset($this->media);
+
+        return empty($images) ? null : $images;
     }
 
     public function getPeriodUnitAttribute(): string

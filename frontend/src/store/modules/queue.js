@@ -23,19 +23,11 @@ export default {
             if (response?.success) {
                 return state.list = response.data
             }
-
-            if (response?.message) {
-                Vue.$toast.warning(response.message)
-            }
         },
         async fetchStatuses({state}) {
             const response = await $axios.get(queuesStatuses);
             if (response?.success) {
                 return state.statuses = response.data
-            }
-
-            if (response?.message) {
-                Vue.$toast.warning(response.message)
             }
         }
     }

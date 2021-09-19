@@ -16,7 +16,7 @@ export default [
     {
         path: '/',
         name: 'dashboard',
-        component: () => import("../views/Home"),
+        component: () => import("../views/Dashboard"),
         meta: { middleware: [auth] }
     },
     {

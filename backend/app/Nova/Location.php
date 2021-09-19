@@ -57,7 +57,7 @@ class Location extends Resource
 
             Currency::make('Price','price')
                 ->sortable()
-                ->rules('required', 'numeric','max:255'),
+                ->rules('required', 'numeric','min:10','max:100000'),
 
             HasMany::make('Activities','activities'),
 

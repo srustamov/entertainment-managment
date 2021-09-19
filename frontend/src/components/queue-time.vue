@@ -15,15 +15,12 @@ export default {
     }
   },
   mounted() {
-    if (this?.queue?.started_at) {
-      this.endDate = moment(this.queue.started_at).add(this.queue?.detail?.period,'minutes').unix()
-
-    }
+    this.start()
   },
   computed: {
     hour() {
       let hours = Math.trunc((this.endDate - this.now)  / 3600);
-      return hours > 9 ? hours : '0' + hours;
+      return hours > 9 ? hours : '0' + (hours < 0 ? "0" : hours);
     },
     minutes() {
       let minutes = Math.trunc((this.endDate - this.now)  / 60) % 60;
@@ -33,6 +30,14 @@ export default {
       let seconds = Math.trunc((this.endDate - this.now) ) % 60
       return seconds > 9 ? seconds : '0' + (seconds < 0 ? "0" : seconds);
     }
+  },
+  methods:{
+    start() {
+      console.log('start')
+      if (this?.queue?.started_at) {
+        this.endDate = moment(this.queue.started_at).add(this.queue?.detail?.period,'minutes').unix()
+      }
+    },
   },
   watch: {
     endDate: {
@@ -62,6 +67,12 @@ export default {
           }
         }, 1000)
       }
+    },
+    queue:{
+      handler(){
+
+      },
+      deep:true
     }
   },
   beforeDestroy() {

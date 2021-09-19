@@ -43,7 +43,7 @@ $axios.interceptors.response.use(
             await router.push({name:'login'})
         }
 
-        if (data?.message) {
+        if (data?.message && !data?.success) {
             Vue.prototype.$toast.error(data.message)
         }
 

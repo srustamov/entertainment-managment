@@ -15,9 +15,9 @@
 
 
     <v-card-title v-if="selectedActivity && selectedActivity.items && selectedActivity.items.length">
-      <v-card style="width: 100%" elevation="12">
-        <v-btn-toggle v-model="activityItemTabModel" tile color="deep-purple accent-3" group>
-          <v-btn @click="selectActivityItem(item)" :value="item.id" v-for="item in selectedActivity.items">
+      <v-card style="width: 100%;text-align: center" dark elevation="24">
+        <v-btn-toggle v-model="activityItemTabModel" color="success">
+          <v-btn class="ma-1" elevation="12" @click="selectActivityItem(item)" dark :value="item.id" v-for="item in selectedActivity.items">
             {{ item.name }}
           </v-btn>
         </v-btn-toggle>
@@ -98,8 +98,8 @@
         </template>
 
         <template v-slot:expanded-item="{ headers ,item,index }">
-          <td :colspan="headers.length" class="pa-1" bgcolor="#a52a2a">
-            <v-card>
+          <td :colspan="headers.length" class="pa-1" style="border:3px solid #546e7a;border-top: 0">
+            <v-card elevation="24">
               <v-card-text>
                 <v-row>
                   <v-col cols="12" md="2">
@@ -163,7 +163,7 @@ export default {
       page: 1,
       with: ['queueable'],
     },
-    activityTabModel: 0,
+    activityTabModel: null,
     activityItemTabModel: null,
     selectedActivity: null,
     selectedActivityItem: null,
@@ -171,6 +171,12 @@ export default {
   }),
   async mounted() {
     await this.fetchActivities()
+    this.activityTabModel = 0;
+
+    if (this.activities.length) {
+      this.selectActivity(this.activities[0])
+    }
+
     await this.$store.dispatch('queue/fetchStatuses');
   },
   computed: {
@@ -294,6 +300,9 @@ export default {
         this.fetchQueues(1)
       },
       deep: true
+    },
+    activityTabModel(v) {
+      console.log(v)
     }
   }
 }

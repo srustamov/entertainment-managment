@@ -34,7 +34,7 @@ class Location extends Model
     public function activeContract(): HasMany
     {
         return $this->contracts()
-            ->whereNotNull('expire_at')
+            ->whereNotNull('expire_date')
             ->whereRaw('expire_date > NOW()')
             ->where('status',1)
             ->latest('expire_date')

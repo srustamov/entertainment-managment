@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog transition v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
           <span class="text-h5">Növbə Yarat</span>
@@ -17,10 +17,12 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field label="Vaxt (dəqiqə ilə)" v-model="queue.detail.period" required></v-text-field>
               </v-col>
+              <v-col cols="12" md="12">
+                <v-textarea rows="2" label="Açıqlama" v-model="queue.detail.description" required></v-textarea>
+              </v-col>
 
             </v-row>
           </v-container>
-          <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -51,8 +53,8 @@ export default {
       detail:{
         price:null,
         period:null,
+        description:''
       },
-      description:''
     }
   }),
   mounted() {

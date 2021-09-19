@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Cards\Help;
@@ -50,6 +51,7 @@ class ActivityDetail extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Images::make('Image', 'main')->rules([]),
             Swatches::make('Color','color')->rules(['required'])->required(),
             Currency::make('Price','period_price')->sortable()->rules( 'required', 'max:255'),
             Text::make('Period','period')->sortable()->rules( 'required', 'max:255'),

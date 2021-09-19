@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="drawer" dark floating app>
+  <v-navigation-drawer  v-model="drawer" dark app>
     <v-list elevation="12" nav>
       <v-list-item-group v-model="listModel">
         <v-list-item :value="item.route" :key="item.route" v-for="item in list">

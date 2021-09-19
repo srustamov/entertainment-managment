@@ -4,6 +4,7 @@
 use App\Http\Controllers\V1\ActivityController;
 use App\Http\Controllers\V1\ActivityItemController;
 use App\Http\Controllers\V1\Auth\LoginController;
+use App\Http\Controllers\V1\DashboardController;
 use App\Http\Controllers\V1\QueueController;
 use App\Http\Requests\Request;
 use App\Models\User;
@@ -18,26 +19,27 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('/',function (){
-
-        auth('api')->setUser($user = User::find(1));
-
-        $activity = \App\Models\ActivityItem::query()->inRandomOrder()->first();
-
-        return $activity->queues()->create();
-
-        return $user;
-
+        \App\Models\Queue::create([
+            'detail' => []
+        ]);
     });
 
     Route::middleware('auth:api')->group(function () {
+
+        Route::get('dashboard',[DashboardController::class,'index']);
+
+
         Route::post('auth/refresh',[LoginController::class,'refresh']);
         Route::get('auth/user',[LoginController::class,'user']);
         Route::post('auth/logout',[LoginController::class,'logout']);
 
+
         Route::apiResource('activities', ActivityController::class);
         Route::apiResource('activity-items', ActivityItemController::class);
 
-        Route::apiResource('queues', QueueController::class)->except(['show']);
+        Route::apiResource('queues', QueueController::class)
+            ->middleware('contract:api')
+            ->except(['show']);
         Route::get('queues/statuses', [QueueController::class,'statuses']);
     });
 
