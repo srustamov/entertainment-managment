@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -67,7 +68,7 @@ class Contract extends Resource
                 ->rules('required', 'string'),
             Textarea::make('Description', 'description')->sortable()
                 ->rules('required', 'string'),
-            Number::make('Price', 'price')->sortable()
+            Currency::make('Price', 'price')->sortable()
                 ->rules('required', 'numeric'),
 
             Boolean::make('Bitib', function ($contract) {

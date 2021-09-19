@@ -6,6 +6,8 @@ use App\Nova\Filters\AreaFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -53,13 +55,11 @@ class Location extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Price',function($location){
-                return $location->price." AZN";
-            })
+            Currency::make('Price','price')
                 ->sortable()
                 ->rules('required', 'numeric','max:255'),
 
-            AttachMany::make('Activities','activities'),
+            HasMany::make('Activities','activities'),
 
             Text::make('Created At',function ($location){
                 return $location->created_at->format('Y-m-d H:i:s');

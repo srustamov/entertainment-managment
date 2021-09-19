@@ -16,7 +16,7 @@ export default {
   },
   mounted() {
     if (this?.queue?.started_at) {
-      this.endDate = moment(this.queue.started_at).add(this.queue?.queueable?.detail?.period,'minutes').unix()
+      this.endDate = moment(this.queue.started_at).add(this.queue?.detail?.period,'minutes').unix()
 
     }
   },

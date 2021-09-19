@@ -4,6 +4,8 @@ namespace App\Eloquent;
 
 
 use App\Models\Components\Filterable;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 
 /**

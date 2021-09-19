@@ -59,7 +59,7 @@ class QueueController extends Controller
     {
         $update = $queue->update($request->all());
 
-        $queue->load(['queueable','status']);
+        $queue->load(['queueable','status','detail']);
 
         return api($queue)->ok($update);
     }
@@ -70,8 +70,4 @@ class QueueController extends Controller
         return api([])->ok(Queue::destroy($queue));
     }
 
-    public function types()
-    {
-        return Queue::getTypes();
-    }
 }

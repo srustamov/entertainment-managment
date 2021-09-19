@@ -2,14 +2,11 @@
   <v-card>
 
     <v-card-subtitle class="text-center d-block">Fəaliyyətlər</v-card-subtitle>
+
     <v-card-title>
       <v-card style="width: 100%" dark elevation="24">
-        <v-tabs v-model="activityTabModel" background-color="deep-purple accent-4"
-                flat
-                centered
-                dark>
-          <v-tab v-for="activity in activities" @click="selectActivity(activity)"
-                 :key="`${activity.model_type}:${activity.id}`">
+        <v-tabs v-model="activityTabModel" background-color="deep-purple accent-4" flat centered dark>
+          <v-tab v-for="activity in activities" @click="selectActivity(activity)" :key="`${activity.model_type}:${activity.id}`">
             {{ activity.name }}
           </v-tab>
         </v-tabs>
@@ -18,7 +15,6 @@
 
 
     <v-card-title v-if="selectedActivity && selectedActivity.items && selectedActivity.items.length">
-      <v-divider inset></v-divider>
       <v-card style="width: 100%" elevation="12">
         <v-btn-toggle v-model="activityItemTabModel" tile color="deep-purple accent-3" group>
           <v-btn @click="selectActivityItem(item)" :value="item.id" v-for="item in selectedActivity.items">
@@ -26,7 +22,6 @@
           </v-btn>
         </v-btn-toggle>
       </v-card>
-      <v-divider inset></v-divider>
     </v-card-title>
 
     <v-card-text>
@@ -37,6 +32,7 @@
           :items="queues.data"
           disable-pagination
           :items-per-page="15"
+          show-expand
           :loading="loading">
         <template v-slot:top>
           <v-row class="flex-wrap">
@@ -49,20 +45,17 @@
                   item-value="id"
                   chips
                   label="Növbə vəziyyəti"
-                  multiple
-              ></v-select>
+                  multiple>
+              </v-select>
             </v-col>
 
             <v-col cols="12" xs="12" sm="6" md="8" class="text-right">
-              <v-pagination
-                  v-if="queues && queues.total"
-                  v-model="query.page"
-                  :length="queues.last_page"
+              <v-pagination v-if="queues && queues.total" v-model="query.page" :length="queues.last_page"
                   circle
                   total-visible="7"
                   next-icon="mdi-menu-right"
-                  prev-icon="mdi-menu-left"
-              ></v-pagination>
+                  prev-icon="mdi-menu-left">
+              </v-pagination>
             </v-col>
             <v-col cols="12" xs="12" sm="6" md="2" class="text-right">
               <v-btn :loading="loading" small @click="fetchQueues(1)" color="primary" fab>
@@ -93,6 +86,34 @@
         <template v-slot:item.status_id="{ item }">
           <v-btn text :color="item.status.color">{{ item.status.name }}</v-btn>
         </template>
+
+        <template v-slot:expanded-item="{ headers ,item }">
+          <td :colspan="headers.length" class="pa-1" bgcolor="#a52a2a">
+            <v-card>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="12" md="2">
+                    <v-text-field flat :readonly="!item.editable" label="Qiymət" v-model="item.detail.price"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="2">
+                    <v-text-field :readonly="!item.editable" label="vaxt" v-model="item.detail.period"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="5">
+                    <v-textarea rows="1" :readonly="!item.editable" v-model="item.detail.description" flat label="Məlumat"></v-textarea>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-btn :disabled="!item.editable" :loading="loading" color="info" @click="updateQueueDetail(item,index)">Yenilə</v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <v-container fluid>
+
+              </v-container>
+            </v-card>
+
+          </td>
+        </template>
+
       </v-data-table>
     </v-card-text>
   </v-card>
@@ -217,6 +238,16 @@ export default {
       } else {
         this.$toast.error('Növbə bitirilmədi')
       }
+    },
+    async updateQueueDetail(queue,index) {
+      this.loading = true;
+      let response = await QueueService.make(queue).updateDetail()
+
+      if (response) {
+        this.$set(this.queues.data,index,response)
+      }
+
+      this.loading = false;
     }
   },
   watch: {

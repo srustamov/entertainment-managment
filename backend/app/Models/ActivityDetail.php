@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @property mixed $id
+ * @property mixed $period_price
+ * @property double $period
+ * @property string $color
+ * @property string $size
+ * @property string $number
  * @method static ActivityDetail find($id)
  * @method static ActivityDetail findOrFail($id)
  */
@@ -23,7 +28,7 @@ class ActivityDetail extends Model
         'color',
         'number',
         'size',
-        'price',
+        'period_price',
         'period',
     ];
 

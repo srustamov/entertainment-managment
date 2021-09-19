@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 /**
  * @property mixed $id
  * @property int $location_id
+ * @property string $name
+ * @property ActivityDetail $detail
  * @method static Activity find($id)
  */
 class Activity extends Model

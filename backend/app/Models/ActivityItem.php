@@ -7,11 +7,12 @@ use App\Models\Components\Queueable;
 use App\Models\Components\SafeLocationDataRegister;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * @property mixed $id
+ * @property ActivityDetail $detail
+ * @property string $name
  * @method static ActivityItem find($id)
  * @method static ActivityItem findOrFail($id)
  */
