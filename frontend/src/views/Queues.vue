@@ -18,7 +18,6 @@
       <v-card dark style="width: 100%;text-align: center;background-color: #333"  elevation="24">
         <v-btn-toggle class="d-flex flex-wrap justify-center" group v-model="activityItemTabModel">
           <v-btn
-
                  small
                  dark
                  class="ma-1"
