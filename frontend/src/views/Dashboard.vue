@@ -41,7 +41,7 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <v-card dark color="primary">
+        <v-card dark elevation="24" color="primary">
           <v-card-title class="text-h5">Məbləğ</v-card-title>
           <v-card-text>
             <v-btn>{{data.amount}} AZN</v-btn>
@@ -50,7 +50,7 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <v-card dark color="purple">
+        <v-card dark color="pink" elevation="24">
           <v-card-title class="text-h5">Ümumi Vaxt</v-card-title>
           <v-card-text>
             <v-btn>{{data.minutes}}</v-btn>

@@ -15,9 +15,21 @@
 
 
     <v-card-title v-if="selectedActivity && selectedActivity.items && selectedActivity.items.length">
-      <v-card style="width: 100%;text-align: center" dark elevation="24">
-        <v-btn-toggle v-model="activityItemTabModel" color="success">
-          <v-btn class="ma-1" elevation="12" @click="selectActivityItem(item)" dark :value="item.id" v-for="item in selectedActivity.items">
+      <v-card dark style="width: 100%;text-align: center;background-color: #333"  elevation="24">
+        <v-btn-toggle class="d-flex flex-wrap justify-center" group v-model="activityItemTabModel">
+          <v-btn
+
+                 small
+                 dark
+                 class="ma-1"
+                 style="border: 1px solid #fff"
+                 elevation="12"
+                 @click="selectActivityItem(item)"
+                 :value="item.id"
+                 v-for="item in selectedActivity.items">
+            <span style="margin-right:2px;width: 10px;height: 10px;display: inline-block" :style="{backgroundColor : item.detail.color || ''}">
+
+            </span>
             {{ item.name }}
           </v-btn>
         </v-btn-toggle>
