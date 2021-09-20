@@ -58,12 +58,15 @@ export default {
     }
   }),
   mounted() {
-    this.queue.queueable_type = this.activity.model_type;
-    this.queue.queueable_id = this.activity.id;
-    this.queue.detail.price = this.activity.detail.period_price;
-    this.queue.detail.period = this.activity.detail.period;
+    this.reload()
   },
   methods:{
+    reload() {
+      this.queue.queueable_type = this.activity?.model_type;
+      this.queue.queueable_id = this.activity?.id;
+      this.queue.detail.price = this.activity?.detail?.period_price;
+      this.queue.detail.period = this.activity?.detail?.period;
+    },
     async store() {
       this.loading = true;
       let response = await this.$http.post(queues,this.queue)
@@ -81,6 +84,7 @@ export default {
   watch:{
     open(value) {
       this.dialog = value;
+      this.reload()
     }
   }
 }

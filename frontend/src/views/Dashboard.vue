@@ -1,6 +1,45 @@
 <template>
   <v-container>
     <v-row v-if="!loading">
+
+      <v-col cols="12" md="12">
+        <v-menu
+            ref="menu"
+            v-model="dateRangeDialog"
+            :close-on-content-click="false"
+            :return-value.sync="date"
+            transition="scale-transition"
+            offset-y
+            min-width="auto">
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+                style="max-width: 400px"
+                v-model="date"
+                label="Picker in menu"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+
+            >
+              <template v-slot:append>
+                <v-btn @click="getData" fab icon color="primary"><v-icon>mdi-reload</v-icon></v-btn>
+              </template>
+            </v-text-field>
+
+          </template>
+          <v-date-picker range v-model="date" no-title scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="dateRangeDialog = false">
+              Cancel
+            </v-btn>
+            <v-btn text color="primary" @click="$refs.menu.save(date)">
+              OK
+            </v-btn>
+          </v-date-picker>
+        </v-menu>
+      </v-col>
+
       <v-col cols="12" md="6">
         <v-card dark color="primary">
           <v-card-title class="text-h5">Məbləğ</v-card-title>
@@ -45,14 +84,14 @@
 
 <script>
 import {useFilters} from "../utils/hooks";
+import moment from "moment";
 
 export default {
   name: 'Home',
-
-  components: {
-  },
   data:() => ({
     loading:true,
+    date: [],
+    dateRangeDialog:false,
     query: {
 
     },
@@ -63,13 +102,14 @@ export default {
     }
   }),
   mounted() {
+    this.date = []
     this.getData()
   },
   methods:{
     async getData() {
       this.loading = true;
       let response = await this.$http.get('dashboard',{
-        params: {...useFilters(this.query)}
+        params: {date:this.date,...useFilters(this.query)}
       })
 
       if (response?.success) {
@@ -78,8 +118,12 @@ export default {
 
       this.loading = false;
 
-
     }
   }
 }
 </script>
+<style scoped>
+.vdpr-datepicker::v-deep .my_custom_class {
+  background-color: aqua !important;
+}
+</style>

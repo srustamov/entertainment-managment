@@ -8407,6 +8407,11 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha1-HuO8mhbsv1EYvjNLsV+cRvgvWCU=
 
+vue-time-date-range-picker@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/vue-time-date-range-picker/-/vue-time-date-range-picker-1.5.0.tgz#5bd5e7e741bf665d6142aa8fd1703c537dacf746"
+  integrity sha512-6segsIb+qhhNiNCZCa/+RZktev+3v2TY9qhvbE1/Z/RjpDwYi0ZA68msVdp4KwJo5ZfIcCPjPqksxTroNyiK9A==
+
 vue-toast-notification@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/vue-toast-notification/-/vue-toast-notification-0.6.2.tgz#44bb164505c310f6a721ff96921761b006ebb5cc"

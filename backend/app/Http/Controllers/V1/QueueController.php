@@ -14,7 +14,6 @@ class QueueController extends Controller
 {
     public function index(Request $request): Api
     {
-        dump($request->all());
         $queues = Queue::filter($request->getFilters())
             ->select('queues.*')
             ->join('queue_statuses','queues.status_id','queue_statuses.id')

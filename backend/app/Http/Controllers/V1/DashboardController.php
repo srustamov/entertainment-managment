@@ -4,10 +4,10 @@ namespace App\Http\Controllers\V1;
 
 use App\Components\Api;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Request;
 use App\Models\Queue;
 use Carbon\CarbonInterval;
 use Exception;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -16,13 +16,22 @@ class DashboardController extends Controller
      */
     public function index(Request $request): Api
     {
-        $amount = Queue::filter($request->getFilters())
+        $query = function () use ($request){
+            return Queue::filter($request->getFilters())
+                ->without(['status','detail'])
+                ->when(count($request->get('date',[])),function ($query) use ($request) {
+                    $query->whereDateBetween('queues.created_at',$request->get('date'));
+                });
+        };
+
+
+        $amount = $query()
             ->selectRaw('SUM(price) as amount')
             ->join('queue_detail', 'queues.id', 'queue_detail.queue_id')
             ->where('queues.status_id', 3)
             ->value('amount');
 
-        $minutes = Queue::filter($request->getFilters())
+        $minutes = $query()
                 ->selectRaw('SUM(queue_detail.period) as minutes')
                 ->join('queue_detail', 'queues.id', 'queue_detail.queue_id')
                 ->where('queues.status_id', 3)
@@ -30,7 +39,8 @@ class DashboardController extends Controller
 
         $minutes = CarbonInterval::minutes($minutes)->forHumans();
 
-        $queues = Queue::filter($request->getFilters())
+        $queues = $query()
+            ->without(['status','detail'])
             ->selectRaw('queue_statuses.name,queue_statuses.color,COUNT(queues.id) as count')
             ->join('queue_statuses', 'queues.status_id', 'queue_statuses.id')
             ->groupBy('status_id')

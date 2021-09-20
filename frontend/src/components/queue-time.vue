@@ -71,12 +71,15 @@ export default {
             this.$toast.default(`${this.queue.number} sıralı ${this.queue.queueable.name} növbəsi bitdi`, {
               duration: 7000,
               dismissible: true,
-              pauseOnHover: true
+              pauseOnHover: true,
+              onClick : () => {
+                console.log('bitdi')
+              }
             })
             let sound = new Audio('sounds/notification.mp3');
             sound.play()
           }
-        }, 500)
+        }, 1000)
 
         await this.$store.dispatch('queue/setTimer', {
           key: this.queue.id,

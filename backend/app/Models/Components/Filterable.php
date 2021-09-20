@@ -14,6 +14,7 @@ trait Filterable
 {
     public function scopeFilter(Builder $builder,array $filters): Builder
     {
+
         if (array_key_exists('sort',$filters)) {
             foreach ((array)$filters['sort'] as $column => $orderType) {
                 if (in_array($column,$this->getFillable()) && in_array(strtoupper($orderType),['ASC','DESC'])) {
@@ -57,7 +58,7 @@ trait Filterable
 
         if (array_key_exists('query',$filters)) {
             foreach ((array)$filters['query'] as $query) {
-                if (in_array(count($query),[2,3]) && in_array($query[0],$this->getFillable())) {
+                if (in_array(count($query),[2,3])) {
                     if (count($query) == 2 && is_array($query[1])) {
                         $builder->whereIn(...$query);
                     } else {
@@ -95,6 +96,11 @@ trait Filterable
 
     }
 
+
+    private function validColumn($column)
+    {
+        return in_array(Arr::last(explode('.',$column)),$this->getFillable());
+    }
 
     private function parseRelationString(string $value): array
     {

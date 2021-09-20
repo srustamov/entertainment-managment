@@ -137,7 +137,7 @@ class Queue extends Model
     {
         return (
             $this->started_at && !$this->end_at &&
-            Carbon::make($this->started_at)->addMinutes($this->detail->period) < now()
+            Carbon::make($this->started_at)->addMinutes($this->detail->period) <= now()
         );
     }
 

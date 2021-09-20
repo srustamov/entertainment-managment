@@ -28,23 +28,31 @@
       <v-data-table
           v-if="fetchQueuesIsEnable"
           :options.sync="filters"
-          :headers="headers"
+          :headers="mapHeaders"
           :items="queues.data"
           disable-pagination
+          hide-default-footer
           :items-per-page="15"
           show-expand
           :loading="loading">
         <template v-slot:top>
           <v-row class="flex-wrap">
-            <v-col cols="12" xs="12" sm="6" md="2">
+            <v-col cols="12" xs="12" sm="12" md="4">
               <v-select
                   v-model="query.status_id"
                   :items="statuses"
-                  attach
                   item-text="name"
                   item-value="id"
-                  chips
+                  filled
                   label="Növbə vəziyyəti"
+                  multiple>
+              </v-select>
+            </v-col>
+            <v-col cols="12" xs="12" sm="12" md="8">
+              <v-select dense filled v-model="selectedHeaders" :items="headers"
+                  item-text="text"
+                  item-value="text"
+                  label="Başlıqlar"
                   multiple>
               </v-select>
             </v-col>
@@ -158,6 +166,7 @@ export default {
       //{text: 'Bitmə tarixi', value: 'end_at', sortable: true},
       {text: 'Əməliyyatlar', value: 'actions', sortable: false, align: 'center'},
     ],
+    selectedHeaders:[],
     filters: {},
     query: {
       page: 1,
@@ -167,7 +176,7 @@ export default {
     activityItemTabModel: null,
     selectedActivity: null,
     selectedActivityItem: null,
-    createDialog:false
+    createDialog:false,
   }),
   async mounted() {
     await this.fetchActivities()
@@ -176,15 +185,20 @@ export default {
     if (this.activities.length) {
       this.selectActivity(this.activities[0])
     }
-
+    this.selectedHeaders = this.headers.map(v => v.text)
     await this.$store.dispatch('queue/fetchStatuses');
   },
   computed: {
     ...mapGetters({
       queues: 'queue/list',
       statuses: 'queue/statuses',
-      activities: 'activity/list',
+      activities: 'activity/list'
     }),
+    mapHeaders() {
+      return this.headers.filter((h) => {
+        return this.selectedHeaders.includes(h.text)
+      })
+    },
     fetchQueuesIsEnable() {
       if (this.selectedActivityItem) {
         return true;
