@@ -15,7 +15,7 @@
             <v-text-field
                 style="max-width: 400px"
                 v-model="date"
-                label="Picker in menu"
+                label="Tarix aralığı"
                 prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
