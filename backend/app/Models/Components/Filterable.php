@@ -14,7 +14,6 @@ trait Filterable
 {
     public function scopeFilter(Builder $builder,array $filters): Builder
     {
-
         if (array_key_exists('sort',$filters)) {
             foreach ((array)$filters['sort'] as $column => $orderType) {
                 if (in_array($column,$this->getFillable()) && in_array(strtoupper($orderType),['ASC','DESC'])) {

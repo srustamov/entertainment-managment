@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Components\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ActivityCreateRequest;
-use App\Http\Requests\Request;
 use App\Models\Activity;
+use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
 
-    public function index(Request $request)
+    public function index(Request $request): Api
     {
         return api(Activity::filter($request->getFilters())->get());
     }

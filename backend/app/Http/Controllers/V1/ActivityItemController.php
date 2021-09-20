@@ -5,8 +5,8 @@ namespace App\Http\Controllers\V1;
 use App\Components\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ActivityItemCreateRequest;
-use App\Http\Requests\Request;
 use App\Models\ActivityItem;
+use Illuminate\Http\Request;
 
 class ActivityItemController extends Controller
 {

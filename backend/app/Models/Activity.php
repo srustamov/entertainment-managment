@@ -29,7 +29,7 @@ class Activity extends Model
         'name',
     ];
 
-    protected $with = ['detail'];
+    protected $with = ['items','detail'];
 
     protected $appends = ['model_type'];
 

@@ -1,78 +1,94 @@
 <template>
-  <v-btn text>{{ hour }}:{{ minutes }}:{{ seconds }}  </v-btn>
+  <v-btn text>{{ hour }}:{{ minutes }}:{{ seconds }}</v-btn>
 </template>
 
 <script>
 import moment from 'moment'
+import {mapGetters} from "vuex";
 
 export default {
   props: ['queue'],
   data() {
     return {
+      timer : null,
       now: moment().unix(),
-      timer: null,
       endDate: null,
     }
   },
-  mounted() {
+  async mounted() {
+
+    this.timer = await this.$store.getters['queue/timers'][`timer-${this.queue.id}`];
+
     this.start()
   },
   computed: {
+    ...mapGetters({
+      timers: 'queue/timers'
+    }),
     hour() {
-      let hours = Math.trunc((this.endDate - this.now)  / 3600);
+      let hours = Math.trunc((this.endDate - this.now) / 3600);
       return hours > 9 ? hours : '0' + (hours < 0 ? "0" : hours);
     },
     minutes() {
-      let minutes = Math.trunc((this.endDate - this.now)  / 60) % 60;
+      let minutes = Math.trunc((this.endDate - this.now) / 60) % 60;
       return minutes > 9 ? minutes : '0' + (minutes < 0 ? 0 : minutes);
     },
     seconds() {
-      let seconds = Math.trunc((this.endDate - this.now) ) % 60
+      let seconds = Math.trunc((this.endDate - this.now)) % 60
       return seconds > 9 ? seconds : '0' + (seconds < 0 ? "0" : seconds);
     }
   },
-  methods:{
+  methods: {
     start() {
-      console.log('start')
       if (this?.queue?.started_at) {
-        this.endDate = moment(this.queue.started_at).add(this.queue?.detail?.period,'minutes').unix()
+        this.endDate = moment(this.queue.started_at).add(this.queue?.detail?.period, 'minutes').unix()
       }
     },
   },
   watch: {
     endDate: {
-      immediate: true,
-      handler(newVal) {
+      //immediate: true,
+      async handler(newVal) {
+
         if (this.timer) {
-          clearInterval(this.timer)
+
+          clearInterval(this.timer);
+
+          await this.$store.dispatch('queue/clearTimer', this.queue.id)
         }
 
-        if(this.queue.status_id !== 2) {
+        if (this.queue.status_id !== 2) {
           return;
         }
 
-        this.timer = setInterval(() => {
+        let interval = setInterval(() => {
           this.now = moment().unix()
           if (this.now > newVal) {
             this.now = newVal
-            clearInterval(this.timer)
+            clearInterval(this.$store.getters['queue/timers'][`timer-${this.queue.id}`])
+            this.$store.dispatch('queue/clearTimer',this.queue.id)
             this.queue.is_expired = true;
-            this.$toast.default(`${this.queue.number} sıralı ${this.queue.queueable.name} növbəsi bitdi`,{
-              duration:7000,
-              dismissible:true,
-              pauseOnHover:true
+            this.$toast.default(`${this.queue.number} sıralı ${this.queue.queueable.name} növbəsi bitdi`, {
+              duration: 7000,
+              dismissible: true,
+              pauseOnHover: true
             })
             let sound = new Audio('sounds/notification.mp3');
             sound.play()
           }
-        }, 1000)
+        }, 500)
+
+        await this.$store.dispatch('queue/setTimer', {
+          key: this.queue.id,
+          timer: interval
+        })
       }
     },
-    queue:{
-      handler(){
+    queue: {
+      handler() {
 
       },
-      deep:true
+      deep: true
     }
   },
   beforeDestroy() {

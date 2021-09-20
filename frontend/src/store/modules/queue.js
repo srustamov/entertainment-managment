@@ -9,11 +9,13 @@ export default {
         list:{
             data:[]
         },
-        statuses:[]
+        statuses:[],
+        timers:{}
     },
     getters:{
         list: state => state.list,
-        statuses: state => state.statuses
+        statuses: state => state.statuses,
+        timers: state => state.timers,
     },
     actions:{
         async fetch({state},params) {
@@ -29,6 +31,13 @@ export default {
             if (response?.success) {
                 return state.statuses = response.data
             }
+        },
+        setTimer({state},{key,timer}) {
+            state.timers[`timer-${key}`] = timer;
+        },
+        clearTimer({state},key) {
+            clearInterval(state.timers[`timer-${key}`])
+            delete state.timers[`timer-${key}`]
         }
     }
 }

@@ -150,12 +150,12 @@ export default {
     search: '',
     headers: [
       {text: 'Növbə', value: 'number'},
-      {text: 'Tip', value: "type", sortable: false},
-      {text: 'Qalan Vaxt', value: "time", sortable: false},
-      {text: 'Status', value: "status_id", sortable: true},
-      {text: 'Başlama tarixi', value: 'started_at', sortable: true},
-      {text: 'Yaradılma tarixi', value: 'created_at'},
-      {text: 'Bitmə tarixi', value: 'end_at', sortable: true},
+      {text: 'Tip', value: "type", sortable: false,align:'center'},
+      {text: 'Qalan Vaxt', value: "time", sortable: false,align:'center'},
+      {text: 'Status', value: "status_id", sortable: true,align:'center'},
+      {text: 'Başlama tarixi', value: 'started_at', sortable: true,align:'center'},
+      {text: 'Yaradılma tarixi', value: 'created_at',align:'center'},
+      //{text: 'Bitmə tarixi', value: 'end_at', sortable: true},
       {text: 'Əməliyyatlar', value: 'actions', sortable: false, align: 'center'},
     ],
     filters: {},
@@ -300,9 +300,6 @@ export default {
         this.fetchQueues(1)
       },
       deep: true
-    },
-    activityTabModel(v) {
-      console.log(v)
     }
   }
 }

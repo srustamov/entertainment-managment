@@ -17,4 +17,10 @@ class Controller extends BaseController
             $this->boot();
         }
     }
+
+
+    public function beginTransaction()
+    {
+
+    }
 }
