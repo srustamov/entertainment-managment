@@ -12,16 +12,17 @@
     </v-card-title>
     <v-card-title v-if="selectedActivity && selectedActivity.items && selectedActivity.items.length">
       <v-card dark style="width: 100%;text-align: center;background-color: #333"  elevation="24">
+        <v-text-field
+            v-model="activityItemsSearch"
+            v-if="selectedActivity.items.length > 10"
+            dense placeholder="axtar"
+            style="max-width: 250px;" solo>
+        </v-text-field>
         <v-btn-toggle class="d-flex flex-wrap justify-center" group v-model="activityItemTabModel">
-          <v-btn
-                 small
-                 dark
-                 class="ma-1"
-                 style="border: 1px solid #fff"
-                 elevation="12"
+          <v-btn small dark class="ma-1" style="border: 1px solid #fff" elevation="12"
                  @click="selectActivityItem(item)"
                  :value="item.id"
-                 v-for="item in selectedActivity.items">
+                 v-for="item in activityItemsMap">
             <span style="margin-right:2px;width: 10px;height: 10px;display: inline-block" :style="{backgroundColor : item.detail.color || ''}">
 
             </span>
@@ -40,6 +41,7 @@
           :items="queues.data"
           disable-pagination
           hide-default-footer
+          single-expand
           :items-per-page="15"
           :search="search"
           show-expand
@@ -169,6 +171,7 @@ import QueueTime from '../components/queue-time';
 import QueueCreateDialog from '../components/queue-create';
 import QueueService from "../services/QueueService";
 import {headers, useColumns} from "../utils/queue";
+import {search} from "../utils/helpers";
 
 export default {
   name: 'Home',
@@ -189,6 +192,7 @@ export default {
     selectedActivity: null,
     selectedActivityItem: null,
     createDialog:false,
+    activityItemsSearch:''
   }),
   async mounted() {
     await this.fetchActivities()
@@ -221,6 +225,9 @@ export default {
     },
     createActive() {
       return this.selectedActivityItem?.detail ||  this.selectedActivity?.detail;
+    },
+    activityItemsMap() {
+      return search(this.selectedActivity.items,'name',this.activityItemsSearch)
     }
   },
   methods: {
