@@ -1,8 +1,6 @@
 <template>
   <v-card>
-
     <v-card-subtitle class="text-center d-block">Fəaliyyətlər</v-card-subtitle>
-
     <v-card-title>
       <v-card style="width: 100%" dark elevation="24">
         <v-tabs v-model="activityTabModel" background-color="deep-purple accent-4" flat centered dark>
@@ -12,8 +10,6 @@
         </v-tabs>
       </v-card>
     </v-card-title>
-
-
     <v-card-title v-if="selectedActivity && selectedActivity.items && selectedActivity.items.length">
       <v-card dark style="width: 100%;text-align: center;background-color: #333"  elevation="24">
         <v-btn-toggle class="d-flex flex-wrap justify-center" group v-model="activityItemTabModel">
@@ -37,6 +33,7 @@
 
     <v-card-text>
       <v-data-table
+          dense
           v-if="fetchQueuesIsEnable"
           :options.sync="filters"
           :headers="mapHeaders"
@@ -44,40 +41,29 @@
           disable-pagination
           hide-default-footer
           :items-per-page="15"
+          :search="search"
           show-expand
           :loading="loading">
         <template v-slot:top>
           <v-row class="flex-wrap">
-            <v-col cols="12" xs="12" sm="12" md="4">
+            <v-col cols="12" xs="12" sm="12" md="3">
+              <v-text-field dense solo v-model="search" placeholder="axtar"></v-text-field>
+            </v-col>
+            <v-col cols="12" xs="12" sm="12" md="6">
               <v-select
+                  dense
                   v-model="query.status_id"
                   :items="statuses"
                   item-text="name"
                   item-value="id"
-                  filled
+                  solo
                   label="Növbə vəziyyəti"
                   multiple>
               </v-select>
             </v-col>
-            <v-col cols="12" xs="12" sm="12" md="8">
-              <v-select dense filled v-model="selectedHeaders" :items="headers"
-                  item-text="text"
-                  item-value="text"
-                  label="Başlıqlar"
-                  multiple>
-              </v-select>
-            </v-col>
-
-            <v-col cols="12" xs="12" sm="6" md="8" class="text-right">
-              <v-pagination v-if="queues && queues.total" v-model="query.page" :length="queues.last_page"
-                  circle
-                  total-visible="7"
-                  next-icon="mdi-menu-right"
-                  prev-icon="mdi-menu-left">
-              </v-pagination>
-            </v-col>
-            <v-col cols="12" xs="12" sm="6" md="2" class="text-right">
+            <v-col cols="12" xs="12" sm="6" md="3" class="text-right">
               <v-btn
+                  small
                   class="mr-1"
                   v-if="createActive"
                   @click="createDialog=true"
@@ -87,23 +73,47 @@
               <v-btn :loading="loading" small @click="fetchQueues(1)" color="primary" fab>
                 <v-icon>mdi-reload</v-icon>
               </v-btn>
-            </v-col>
+              <v-menu :close-on-content-click="false" :nudge-width="200" offset-x>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn icon color="indigo" dark v-bind="attrs" v-on="on">
+                    <v-icon>mdi-table-headers-eye</v-icon>
+                  </v-btn>
+                </template>
 
+                <v-card>
+                  <v-card-text>
+                    <v-checkbox v-model="columns" :label="head.text" color="red" :value="head.text" hide-details v-for="head in getTableHeaders()">
+                    </v-checkbox>
+                  </v-card-text>
+                </v-card>
+
+              </v-menu>
+            </v-col>
           </v-row>
         </template>
+        <template v-slot:footer>
+          <v-col cols="12" xs="12" class="text-right">
+            <v-pagination v-if="queues && queues.total" v-model="query.page" :length="queues.last_page"
+                          circle
+                          total-visible="7"
+                          next-icon="mdi-menu-right"
+                          prev-icon="mdi-menu-left">
+            </v-pagination>
+          </v-col>
+        </template>
         <template v-slot:item.actions="{ item,index }">
-          <v-btn small dark  @click="startQueue(item,index)" v-if="item.startable" color="green">
+          <v-btn x-small dark  @click="startQueue(item,index)" v-if="item.startable" color="green">
             <v-icon>mdi-play</v-icon> Başlat
           </v-btn>
-          <v-btn small dark  @click="endQueue(item,index)" v-if="item.endable" color="red">
+          <v-btn x-small dark  @click="endQueue(item,index)" v-if="item.endable" color="red">
             <v-icon>mdi-stop</v-icon> Bitir
           </v-btn>
-          <v-btn :loading="loading" small dark @click="deleteQueue(item,index)" v-if="item.deletable" color="red">
+          <v-btn :loading="loading" x-small dark @click="deleteQueue(item,index)" v-if="item.deletable" color="red">
             <v-icon>mdi-remove</v-icon> Sil
           </v-btn>
         </template>
         <template v-slot:item.number="{ item }">
-          <v-btn fab small dark color="pink">{{item.number}}</v-btn>
+          <v-btn x-small dark color="pink">{{item.number}}</v-btn>
         </template>
         <template v-slot:item.time="{ item }">
           <v-btn depressed x-small color="error" v-if="item.is_expired">Vaxt bitib</v-btn>
@@ -158,6 +168,7 @@ import {useFilters} from "../utils/hooks";
 import QueueTime from '../components/queue-time';
 import QueueCreateDialog from '../components/queue-create';
 import QueueService from "../services/QueueService";
+import {headers, useColumns} from "../utils/queue";
 
 export default {
   name: 'Home',
@@ -167,18 +178,8 @@ export default {
   data: () => ({
     loading: true,
     search: '',
-    headers: [
-      {text: 'Növbə', value: 'number'},
-      {text: 'Tip', value: "type", sortable: false,align:'center'},
-      {text: 'Qalan Vaxt', value: "time", sortable: false,align:'center'},
-      {text: 'Status', value: "status_id", sortable: true,align:'center'},
-      {text: 'Başlama tarixi', value: 'started_at', sortable: true,align:'center'},
-      {text: 'Yaradılma tarixi', value: 'created_at',align:'center'},
-      //{text: 'Bitmə tarixi', value: 'end_at', sortable: true},
-      {text: 'Əməliyyatlar', value: 'actions', sortable: false, align: 'center'},
-    ],
-    selectedHeaders:[],
     filters: {},
+    columns:null,
     query: {
       page: 1,
       with: ['queueable'],
@@ -196,18 +197,18 @@ export default {
     if (this.activities.length) {
       this.selectActivity(this.activities[0])
     }
-    this.selectedHeaders = this.headers.map(v => v.text)
+    this.columns = this.$store.getters['queue/table_columns'];
     await this.$store.dispatch('queue/fetchStatuses');
   },
   computed: {
     ...mapGetters({
       queues: 'queue/list',
       statuses: 'queue/statuses',
-      activities: 'activity/list'
+      activities: 'activity/list',
     }),
     mapHeaders() {
-      return this.headers.filter((h) => {
-        return this.selectedHeaders.includes(h.text)
+      return headers.filter((h) => {
+        return this.columns.includes(h.text)
       })
     },
     fetchQueuesIsEnable() {
@@ -223,25 +224,7 @@ export default {
     }
   },
   methods: {
-    async fetchQueues(page) {
-      if (!this.fetchQueuesIsEnable) {
-        return false;
-      }
-
-      this.loading = true;
-
-      await this.$store.dispatch('queue/fetch', {
-        page, ...useFilters(
-            {...this.filters, ...this.query}
-        )
-      })
-      this.loading = false;
-    },
-    async fetchActivities() {
-      this.loading = true;
-      await this.$store.dispatch('activity/fetch', useFilters({with: ['items']}))
-      this.loading = false;
-    },
+    getTableHeaders: () => headers,
     selectActivity(value) {
       this.selectedActivityItem = null;
       this.activityItemTabModel = null;
@@ -264,6 +247,25 @@ export default {
           ['queueable_id', value.items.map(v => v.id)],
         ])
       }
+    },
+    async fetchQueues(page) {
+      if (!this.fetchQueuesIsEnable) {
+        return false;
+      }
+
+      this.loading = true;
+
+      await this.$store.dispatch('queue/fetch', {
+        page, ...useFilters(
+            {...this.filters, ...this.query}
+        )
+      })
+      this.loading = false;
+    },
+    async fetchActivities() {
+      this.loading = true;
+      await this.$store.dispatch('activity/fetch', useFilters({with: ['items']}))
+      this.loading = false;
     },
     async startQueue(queue,index) {
       this.loading = true;
@@ -308,7 +310,8 @@ export default {
         this.queues.data.splice(index,1)
       }
 
-    }
+    },
+
   },
   watch: {
     filters: {
@@ -316,7 +319,6 @@ export default {
         if (!_.isEmpty(old)) {
           this.fetchQueues(1)
         }
-
       },
       deep: true
     },
@@ -325,6 +327,11 @@ export default {
         this.fetchQueues(1)
       },
       deep: true
+    },
+    columns(v,old) {
+      if(old !== null) {
+        useColumns(v)
+      }
     }
   }
 }

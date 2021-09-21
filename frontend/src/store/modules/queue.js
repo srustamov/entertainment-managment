@@ -1,6 +1,8 @@
 import $axios from "../../plugins/axios";
 import {queues, queuesStatuses} from "../../utils/routes";
-import Vue from "vue";
+import {useColumns} from "../../utils/queue";
+
+
 
 export default {
     namespaced:true,
@@ -10,12 +12,14 @@ export default {
             data:[]
         },
         statuses:[],
-        timers:{}
+        timers:{},
+        tableShowColumns: useColumns()
     },
     getters:{
         list: state => state.list,
         statuses: state => state.statuses,
         timers: state => state.timers,
+        table_columns: state => state.tableShowColumns
     },
     actions:{
         async fetch({state},params) {
@@ -38,6 +42,9 @@ export default {
         clearTimer({state},key) {
             clearInterval(state.timers[`timer-${key}`])
             delete state.timers[`timer-${key}`]
+        },
+        setTableShowColumns({state},columns) {
+            state.tableShowColumns = columns;
         }
     }
 }
