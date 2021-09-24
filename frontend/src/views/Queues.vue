@@ -4,14 +4,15 @@
     <v-card-title>
       <v-card style="width: 100%" dark elevation="24">
         <v-tabs v-model="activityTabModel" background-color="deep-purple accent-4" flat centered dark>
-          <v-tab v-for="activity in activities" @click="selectActivity(activity)" :key="`${activity.model_type}:${activity.id}`">
+          <v-tab v-for="activity in activities" @click="selectActivity(activity)"
+                 :key="`${activity.model_type}:${activity.id}`">
             {{ activity.name }}
           </v-tab>
         </v-tabs>
       </v-card>
     </v-card-title>
     <v-card-title v-if="selectedActivity && selectedActivity.items && selectedActivity.items.length">
-      <v-card dark style="width: 100%;text-align: center;background-color: #333"  elevation="24">
+      <v-card dark style="width: 100%;text-align: center;background-color: #333" elevation="24">
         <v-text-field
             v-model="activityItemsSearch"
             v-if="selectedActivity.items.length > 10"
@@ -23,7 +24,8 @@
                  @click="selectActivityItem(item)"
                  :value="item.id"
                  v-for="item in activityItemsMap">
-            <span style="margin-right:2px;width: 10px;height: 10px;display: inline-block" :style="{backgroundColor : item.detail.color || ''}">
+            <span style="margin-right:2px;width: 10px;height: 10px;display: inline-block"
+                  :style="{backgroundColor : item.detail.color || ''}">
 
             </span>
             {{ item.name }}
@@ -84,7 +86,8 @@
 
                 <v-card>
                   <v-card-text>
-                    <v-checkbox v-model="columns" :label="head.text" color="red" :value="head.text" hide-details v-for="head in getTableHeaders()">
+                    <v-checkbox v-model="columns" :label="head.text" color="red" :value="head.text" hide-details
+                                v-for="head in getTableHeaders()">
                     </v-checkbox>
                   </v-card-text>
                 </v-card>
@@ -104,18 +107,21 @@
           </v-col>
         </template>
         <template v-slot:item.actions="{ item,index }">
-          <v-btn x-small dark  @click="startQueue(item,index)" v-if="item.startable" color="green">
-            <v-icon>mdi-play</v-icon> Başlat
+          <v-btn x-small dark @click="startQueue(item,index)" v-if="item.startable" color="green">
+            <v-icon>mdi-play</v-icon>
+            Başlat
           </v-btn>
-          <v-btn x-small dark  @click="endQueue(item,index)" v-if="item.endable" color="red">
-            <v-icon>mdi-stop</v-icon> Bitir
+          <v-btn x-small dark @click="endQueue(item,index)" v-if="item.endable" color="red">
+            <v-icon>mdi-stop</v-icon>
+            Bitir
           </v-btn>
           <v-btn :loading="loading" x-small dark @click="deleteQueue(item,index)" v-if="item.deletable" color="red">
-            <v-icon>mdi-remove</v-icon> Sil
+            <v-icon>mdi-remove</v-icon>
+            Sil
           </v-btn>
         </template>
         <template v-slot:item.number="{ item }">
-          <v-btn x-small dark color="pink">{{item.number}}</v-btn>
+          <v-btn x-small dark color="pink">{{ item.number }}</v-btn>
         </template>
         <template v-slot:item.time="{ item }">
           <v-btn depressed x-small color="error" v-if="item.is_expired">Vaxt bitib</v-btn>
@@ -134,16 +140,20 @@
               <v-card-text>
                 <v-row>
                   <v-col cols="12" md="2">
-                    <v-text-field flat :readonly="!item.editable" label="Qiymət" v-model="item.detail.price"></v-text-field>
+                    <v-text-field flat :readonly="!item.editable" label="Qiymət"
+                                  v-model="item.detail.price"></v-text-field>
                   </v-col>
                   <v-col cols="12" md="2">
                     <v-text-field :readonly="!item.editable" label="vaxt" v-model="item.detail.period"></v-text-field>
                   </v-col>
                   <v-col cols="12" md="5">
-                    <v-textarea rows="1" :readonly="!item.editable" v-model="item.detail.description" flat label="Məlumat"></v-textarea>
+                    <v-textarea rows="1" :readonly="!item.editable" v-model="item.detail.description" flat
+                                label="Məlumat"></v-textarea>
                   </v-col>
                   <v-col cols="12" md="3">
-                    <v-btn :disabled="!item.editable" :loading="loading" color="info" @click="updateQueueDetail(item,index)">Yenilə</v-btn>
+                    <v-btn :disabled="!item.editable" :loading="loading" color="info"
+                           @click="updateQueueDetail(item,index)">Yenilə
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -176,13 +186,13 @@ import {search} from "../utils/helpers";
 export default {
   name: 'Home',
   components: {
-    QueueTime,QueueCreateDialog
+    QueueTime, QueueCreateDialog
   },
   data: () => ({
     loading: true,
     search: '',
     filters: {},
-    columns:null,
+    columns: null,
     query: {
       page: 1,
       with: ['queueable'],
@@ -191,16 +201,35 @@ export default {
     activityItemTabModel: null,
     selectedActivity: null,
     selectedActivityItem: null,
-    createDialog:false,
-    activityItemsSearch:''
+    createDialog: false,
+    activityItemsSearch: ''
   }),
   async mounted() {
     await this.fetchActivities()
-    this.activityTabModel = 0;
 
-    if (this.activities.length) {
-      this.selectActivity(this.activities[0])
+    if (this.$route.query.activity) {
+
+      this.activityTabModel = this.activities.findIndex(a => a.id == this.$route.query.activity)
+
+      this.selectActivity(this.activities[this.activityTabModel]);
+
+      if (this.$route.query.activity_item) {
+        this.activityItemTabModel = this.selectedActivity?.items?.findIndex(a => a.id == this.$route.query.activity_item)
+
+        if (this.activityItemTabModel > -1) {
+          this.selectActivityItem(this.selectedActivity?.items[this.activityItemTabModel])
+        }
+
+      }
+    } else {
+      this.activityTabModel = 0;
+
+      if (this.activities.length) {
+        this.selectActivity(this.activities[0])
+      }
     }
+
+
     this.columns = this.$store.getters['queue/table_columns'];
     await this.$store.dispatch('queue/fetchStatuses');
   },
@@ -224,10 +253,10 @@ export default {
       );
     },
     createActive() {
-      return this.selectedActivityItem?.detail ||  this.selectedActivity?.detail;
+      return this.selectedActivityItem?.detail || this.selectedActivity?.detail;
     },
     activityItemsMap() {
-      return search(this.selectedActivity.items,'name',this.activityItemsSearch)
+      return search(this.selectedActivity.items, 'name', this.activityItemsSearch)
     }
   },
   methods: {
@@ -274,47 +303,47 @@ export default {
       await this.$store.dispatch('activity/fetch', useFilters({with: ['items']}))
       this.loading = false;
     },
-    async startQueue(queue,index) {
+    async startQueue(queue, index) {
       this.loading = true;
       let response = await QueueService.make(queue).start()
       this.loading = false;
 
       if (response) {
         this.$toast.success('Növbə başladıldı')
-        this.$set(this.queues.data,index,response)
+        this.$set(this.queues.data, index, response)
       } else {
         this.$toast.error('Növbə başladılmadı')
       }
     },
-    async endQueue(queue,index) {
+    async endQueue(queue, index) {
       this.loading = true;
       let response = await QueueService.make(queue).end()
       this.loading = false;
 
       if (response) {
         this.$toast.success('Növbə bitirildi')
-        this.$set(this.queues.data,index,response)
+        this.$set(this.queues.data, index, response)
       } else {
         this.$toast.error('Növbə bitirilmədi')
       }
     },
-    async updateQueueDetail(queue,index) {
+    async updateQueueDetail(queue, index) {
       this.loading = true;
       let response = await QueueService.make(queue).updateDetail()
 
       if (response) {
-        this.$set(this.queues.data,index,response)
+        this.$set(this.queues.data, index, response)
       }
 
       this.loading = false;
     },
-    async deleteQueue(queue,index) {
+    async deleteQueue(queue, index) {
       this.loading = true;
       let response = await QueueService.make(queue).remove()
       this.loading = false;
 
       if (response) {
-        this.queues.data.splice(index,1)
+        this.queues.data.splice(index, 1)
       }
 
     },
@@ -322,7 +351,7 @@ export default {
   },
   watch: {
     filters: {
-      handler(v,old) {
+      handler(v, old) {
         if (!_.isEmpty(old)) {
           this.fetchQueues(1)
         }
@@ -335,8 +364,8 @@ export default {
       },
       deep: true
     },
-    columns(v,old) {
-      if(old !== null) {
+    columns(v, old) {
+      if (old !== null) {
         useColumns(v)
       }
     }

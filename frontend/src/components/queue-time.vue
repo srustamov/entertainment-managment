@@ -5,14 +5,16 @@
 <script>
 import moment from 'moment'
 import {mapGetters} from "vuex";
+import {ACTIVITY_ITEM_TYPE, ACTIVITY_TYPE} from "../utils/queue";
 
 export default {
   props: ['queue'],
   data() {
     return {
-      timer : null,
+      timer: null,
       now: moment().unix(),
       endDate: null,
+      sound: new Audio('sounds/notification.mp3')
     }
   },
   async mounted() {
@@ -61,23 +63,33 @@ export default {
           return;
         }
 
-        let interval = setInterval(() => {
+        let interval = setInterval(async () => {
           this.now = moment().unix()
           if (this.now > newVal) {
             this.now = newVal
             clearInterval(this.$store.getters['queue/timers'][`timer-${this.queue.id}`])
-            this.$store.dispatch('queue/clearTimer',this.queue.id)
+            this.$store.dispatch('queue/clearTimer', this.queue.id)
             this.queue.is_expired = true;
             this.$toast.default(`${this.queue.number} sıralı ${this.queue.queueable.name} növbəsi bitdi`, {
               duration: 7000,
               dismissible: true,
               pauseOnHover: true,
-              onClick : () => {
-                console.log('bitdi')
+              onClick: () => {
+                if (this.$route.name !== 'queues') {
+
+                  let isBaseActivity = this.queue.queueable_type === ACTIVITY_TYPE;
+
+                  this.$router.push({
+                    name: "queues", query: {
+                      activity: isBaseActivity ? this.queue.queueable_id : this.queue?.queueable?.activity_id,
+                      activity_item: isBaseActivity ? undefined :  this.queue.queueable_id,
+                      queue:this.queue.id
+                    }
+                  })
+                }
               }
             })
-            let sound = new Audio('sounds/notification.mp3');
-            sound.play()
+            await this.sound.play()
           }
         }, 1000)
 
