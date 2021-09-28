@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "mike42/escpos-php": "^3.0",
         "nwidart/laravel-modules": "^8.2",
+        "predis/predis": "^1.1",
         "spatie/laravel-activitylog": "^4.1",
         "spatie/laravel-medialibrary": "^9.0.0",
         "tymon/jwt-auth": "^1.0",

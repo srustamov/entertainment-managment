@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  laravel:
+  management:
 
 services:
   site:
@@ -13,16 +13,15 @@ services:
         - NGINXGROUP=${NGINXGROUP:-www-data}
     container_name: nginx
     ports:
-      - 80:80
+      - "80:80"
     volumes:
-      - ./backend:/var/www/html:delegated
+      - ./src:/var/www/html:delegated
     depends_on:
       - php
       - redis
       - mysql
-#      - mailhog
     networks:
-      - laravel
+      - management
 
   mysql:
     image: mariadb:10.6
@@ -30,7 +29,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       MYSQL_DATABASE: management
       MYSQL_USER: "root"
@@ -39,7 +38,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
-      - laravel
+      - management
 
   php:
     build:
@@ -50,18 +49,18 @@ services:
         - PHPGROUP=${PHPGROUP:-www-data}
     container_name: php
     volumes:
-      - ./backend:/var/www/html:delegated
+      - ./src:/var/www/html:delegated
     networks:
-      - laravel
+      - management
 
   redis:
     image: redis:alpine
     container_name: redis
     restart: unless-stopped
     ports:
-      - 6379:6379
+      - "6379:6379"
     networks:
-      - laravel
+      - management
 
   composer:
     build:
@@ -72,27 +71,29 @@ services:
         - PHPGROUP=${PHPGROUP:-www-data}
     container_name: composer
     volumes:
-      - ./backend:/var/www/html
+      - ./src:/var/www/html
     working_dir: /var/www/html
     depends_on:
       - php
     user: ${PHPUSER:-www-data}
     entrypoint: ['composer', '--ignore-platform-reqs']
     networks:
-      - laravel
+      - management
 
   npm:
     image: node:13.7
     container_name: npm
     volumes:
-      - ./backend:/var/www/html
+      - ./src:/var/www/html
     ports:
-      - 3000:3000
-      - 3001:3001
+      - "3000:3000"
+      - "3001:3001"
     working_dir: /var/www/html
-    entrypoint: ['npm']
+    entrypoint: [
+       # 'npm'
+    ]
     networks:
-      - laravel
+      - management
 
   artisan:
     build:
@@ -103,19 +104,10 @@ services:
         - PHPGROUP=${PHPGROUP:-www-data}
     container_name: artisan
     volumes:
-      - ./backend:/var/www/html:delegated
+      - ./src:/var/www/html:delegated
     depends_on:
       - mysql
     working_dir: /var/www/html
-    entrypoint: ['php', '/var/www/html/artisan']
+    entrypoint: ['php', '/var/www/html/backend/artisan migrate --seed']
     networks:
-      - laravel
-
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: mailhog
-    ports:
-      - 1025:1025
-      - 8025:8025
-    networks:
-      - laravel
+      - management
