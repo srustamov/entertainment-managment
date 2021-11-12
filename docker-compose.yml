@@ -1,113 +1,57 @@
-version: '3'
-
-networks:
-  management:
+version: "3.3"
 
 services:
-  site:
+
+  nginx:
     build:
-      context: .
-      dockerfile: nginx.dockerfile
-      args:
-        - NGINXUSER=${NGINXUSER:-www-data}
-        - NGINXGROUP=${NGINXGROUP:-www-data}
-    container_name: nginx
+      context: ./docker/nginx
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     volumes:
-      - ./src:/var/www/html:delegated
-    depends_on:
-      - php
-      - redis
-      - mysql
+      - ./src:/var/www/html
+      - ./docker/nginx/config/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/config/nginx.conf:/etc/nginx/nginx.conf
     networks:
-      - management
-
-  mysql:
-    image: mariadb:10.6
-    container_name: mysql
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: management
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: "samir96"
-      MYSQL_ROOT_PASSWORD: "samir96"
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    networks:
-      - management
+      - appnet
 
   php:
     build:
-      context: .
-      dockerfile: php.dockerfile
-      args:
-        - PHPUSER=${PHPUSER:-www-data}
-        - PHPGROUP=${PHPGROUP:-www-data}
-    container_name: php
-    volumes:
-      - ./src:/var/www/html:delegated
-    networks:
-      - management
-
-  redis:
-    image: redis:alpine
-    container_name: redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    networks:
-      - management
-
-  composer:
-    build:
-      context: .
-      dockerfile: composer.dockerfile
-      args:
-        - PHPUSER=${PHPUSER:-www-data}
-        - PHPGROUP=${PHPGROUP:-www-data}
-    container_name: composer
+      context: ./docker/php
+      dockerfile: Dockerfile
     volumes:
       - ./src:/var/www/html
-    working_dir: /var/www/html
-    depends_on:
-      - php
-    user: ${PHPUSER:-www-data}
-    entrypoint: ['composer', '--ignore-platform-reqs']
+      - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
     networks:
-      - management
+      - appnet
 
-  npm:
-    image: node:13.7
-    container_name: npm
+  node:
+    build:
+      context: ./docker/node
+      dockerfile: Dockerfile
+    container_name: node
     volumes:
       - ./src:/var/www/html
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-    working_dir: /var/www/html
-    entrypoint: [
-       # 'npm'
-    ]
     networks:
-      - management
+      - appnet
 
-  artisan:
-    build:
-      context: .
-      dockerfile: php.dockerfile
-      args:
-        - PHPUSER=${PHPUSER:-www-data}
-        - PHPGROUP=${PHPGROUP:-www-data}
-    container_name: artisan
+  database:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     volumes:
-      - ./src:/var/www/html:delegated
-    depends_on:
-      - mysql
-    working_dir: /var/www/html
-    entrypoint: ['php', '/var/www/html/backend/artisan migrate --seed']
+      - management:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=management
+      - MYSQL_ROOT_PASSWORD=samir96
     networks:
-      - management
+      - appnet
+
+networks:
+  appnet:
+    driver: "bridge"
+
+volumes:
+  management:
