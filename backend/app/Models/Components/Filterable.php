@@ -12,7 +12,7 @@ use Illuminate\Support\Arr;
  */
 trait Filterable
 {
-    public function scopeFilter(Builder $builder,array $filters): Builder
+    public function scopeFilter(Builder $builder,array $filters): Builder|self
     {
 
         if (array_key_exists('sort',$filters)) {

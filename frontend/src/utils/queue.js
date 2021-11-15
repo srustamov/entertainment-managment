@@ -1,4 +1,7 @@
 import store from '../store';
+import Vue from 'vue';
+
+// const $t = Vue.$t;
 
 export const QUEUE_STATUS_PENDING = 1;
 export const QUEUE_STATUS_NOW = 2;

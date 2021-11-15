@@ -3,9 +3,8 @@
 
 namespace App\Interfaces;
 
-interface PrinterInterface
+interface Printable
 {
-
     public function print();
 
     public function setIp(string $ip);

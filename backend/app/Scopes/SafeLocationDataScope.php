@@ -14,12 +14,13 @@ class SafeLocationDataScope implements Scope
 
             if (in_array('location_id',$model->getFillable())) {
                 $builder->where($model->getTable().'.location_id', '=', auth()->user()->location_id);
-            } elseif (in_array('activity_id',$model->getFillable())) {
+            }
+//            elseif (in_array('activity_id',$model->getFillable())) {
 //                $builder->whereIn(
 //                    $model->getTable().'.activity_id',
 //                    auth('api')->user()->location->activities()
 //                );
-            }
+//            }
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -17,6 +18,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+
+
+//        Nova::serving(function() {
+//            Event::listen('eloquent.booted:App\Models\QueueStatus', function($rating) {
+//                dd(1);
+//                \App\Models\QueueStatus::withoutGlobalScopes();
+//            });
+//        });
     }
 
     /**

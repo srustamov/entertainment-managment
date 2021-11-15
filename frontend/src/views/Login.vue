@@ -6,7 +6,7 @@
           <v-flex xs12 sm8 md4>
             <v-card elevation="24" :loading="loading">
               <v-toolbar class="text-center d-flex justify-center" dark color="success">
-                <v-toolbar-title class="text-center">Giriş formu</v-toolbar-title>
+                <v-toolbar-title class="text-center">{{$t('login.title')}}</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form @submit.native.prevent="login" ref="form" :lazy-validation="true">
@@ -16,7 +16,7 @@
                       required
                       prepend-icon="fa-user"
                       name="login"
-                      label="Email"
+                      :label="$t('login.email')"
                       type="text"
                       solo
                   ></v-text-field>
@@ -26,7 +26,7 @@
                       v-model="model.password"
                       prepend-icon="fa-lock"
                       name="password"
-                      label="Şifrə"
+                      :label="$t('login.password')"
                       type="password"
                       solo
                   ></v-text-field>
@@ -34,7 +34,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn block @click="login" type="submit" color="primary">Giriş</v-btn>
+                <v-btn block @click="login" type="submit" color="primary">{{ $t('login.login') }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -59,10 +59,10 @@ export default {
       loading: false,
       rules: {
         email: [
-          v => !!v || 'Email tələb olunur'
+          v => !!v || this.$t('login.email_required')
         ],
         password: [
-          v => !!v || 'Şifrə tələb olunur'
+          v => !!v || this.$t('login.password_required')
         ]
       }
     };
@@ -100,7 +100,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .login {
   flex: 1;
@@ -138,7 +137,6 @@ $teal: rgb(0, 124, 137);
 }
 .login .el-input__prefix {
   background: rgb(238, 237, 234);
-  left: 0;
   height: calc(100% - 2px);
   left: 1px;
   top: 1px;
@@ -155,7 +153,6 @@ $teal: rgb(0, 124, 137);
   padding-bottom: 30px;
 }
 h2 {
-  font-family: "Open Sans";
   letter-spacing: 1px;
   font-family: Roboto, sans-serif;
   padding-bottom: 20px;

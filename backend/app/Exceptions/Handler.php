@@ -6,6 +6,7 @@ use App\Components\Api;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -54,26 +55,32 @@ class Handler extends ExceptionHandler
                     'message' => $message = $this->isHttpException($e)
                         ? (Response::$statusTexts[$e->getStatusCode()] ?? "")
                         : $e->getMessage(),
+                ] + (config('app.debug') ? [
                     'line' => $e->getLine(),
                     'code' => $this->getCode($e),
                     'exception' => class_basename($e),
-                ] + (config('app.debug') ? [
                     'trace' => $e->getTrace(),
                     'file' => $e->getFile(),
                 ] : []))
             ->setMessage($message);
     }
 
-    public function render($request, Throwable $e): \Illuminate\Http\Response|Api|JsonResponse|Response
+    public function render($request, Throwable $e): Api|JsonResponse|Response
     {
-        if (Str::startsWith($request->getHost(),'api')) {
+        if (!$this->isNovaEndpoint($request)) {
             return $this->renderException($e);
         }
         return parent::render($request,$e);
     }
 
 
-    public function getCode($e)
+
+    private function isNovaEndpoint($request): bool
+    {
+        return Str::startsWith($request->url(),'nova');
+    }
+
+    public function getCode($e): int
     {
         if ($this->isHttpException($e)) {
             return $e->getStatusCode();

@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-subtitle class="text-center d-block">Fəaliyyətlər</v-card-subtitle>
+    <v-card-subtitle class="text-center d-block">{{$t("activities")}}</v-card-subtitle>
     <v-card-title>
       <v-card style="width: 100%" dark elevation="24">
         <v-tabs v-model="activityTabModel" background-color="deep-purple accent-4" flat centered dark>
@@ -16,17 +16,22 @@
         <v-text-field
             v-model="activityItemsSearch"
             v-if="selectedActivity.items.length > 10"
-            dense placeholder="axtar"
+            dense
+            :placeholder="$t('search')"
             style="max-width: 250px;" solo>
         </v-text-field>
         <v-btn-toggle class="d-flex flex-wrap justify-center" group v-model="activityItemTabModel">
-          <v-btn small dark class="ma-1" style="border: 1px solid #fff" elevation="12"
+          <v-btn small dark class="ma-1"
+                 style="border: 1px solid #fff"
+                 elevation="12"
                  @click="selectActivityItem(item)"
                  :value="item.id"
+                 :key="item.id"
                  v-for="item in activityItemsMap">
-            <span style="margin-right:2px;width: 10px;height: 10px;display: inline-block"
-                  :style="{backgroundColor : item.detail.color || ''}">
-
+            <span
+                style="margin-right:2px;width: 10px;height: 10px;display: inline-block"
+                :style="{backgroundColor : item.detail.color || ''}"
+            >
             </span>
             {{ item.name }}
           </v-btn>
@@ -51,7 +56,7 @@
         <template v-slot:top>
           <v-row class="flex-wrap">
             <v-col cols="12" xs="12" sm="12" md="3">
-              <v-text-field dense solo v-model="search" placeholder="axtar"></v-text-field>
+              <v-text-field dense solo v-model="search" :placeholder="$t('search')"></v-text-field>
             </v-col>
             <v-col cols="12" xs="12" sm="12" md="6">
               <v-select
@@ -61,7 +66,7 @@
                   item-text="name"
                   item-value="id"
                   solo
-                  label="Növbə vəziyyəti"
+                  :label="$t('queue.status')"
                   multiple>
               </v-select>
             </v-col>
@@ -86,8 +91,14 @@
 
                 <v-card>
                   <v-card-text>
-                    <v-checkbox v-model="columns" :label="head.text" color="red" :value="head.text" hide-details
-                                v-for="head in getTableHeaders()">
+                    <v-checkbox
+                        v-model="columns"
+                        :label="head.text"
+                        color="red"
+                        :value="head.text"
+                        hide-details
+                        :key="i"
+                        v-for="(head,i) in getTableHeaders()">
                     </v-checkbox>
                   </v-card-text>
                 </v-card>
@@ -109,22 +120,22 @@
         <template v-slot:item.actions="{ item,index }">
           <v-btn x-small dark @click="startQueue(item,index)" v-if="item.startable" color="green">
             <v-icon>mdi-play</v-icon>
-            Başlat
+            {{$t("queue.start")}}
           </v-btn>
           <v-btn x-small dark @click="endQueue(item,index)" v-if="item.endable" color="red">
             <v-icon>mdi-stop</v-icon>
-            Bitir
+            {{$t("queue.end")}}
           </v-btn>
           <v-btn :loading="loading" x-small dark @click="deleteQueue(item,index)" v-if="item.deletable" color="red">
             <v-icon>mdi-remove</v-icon>
-            Sil
+            {{$t("queue.delete")}}
           </v-btn>
         </template>
         <template v-slot:item.number="{ item }">
           <v-btn x-small dark color="pink">{{ item.number }}</v-btn>
         </template>
         <template v-slot:item.time="{ item }">
-          <v-btn depressed x-small color="error" v-if="item.is_expired">Vaxt bitib</v-btn>
+          <v-btn depressed x-small color="error" v-if="item.is_expired">{{$t('time_end')}}</v-btn>
           <queue-time v-else-if="item.started_at" :queue="item"></queue-time>
         </template>
         <template v-slot:item.type="{ item }">
@@ -140,7 +151,7 @@
               <v-card-text>
                 <v-row>
                   <v-col cols="12" md="2">
-                    <v-text-field flat :readonly="!item.editable" label="Qiymət"
+                    <v-text-field flat :readonly="!item.editable" :label="$t('price')"
                                   v-model="item.detail.price"></v-text-field>
                   </v-col>
                   <v-col cols="12" md="2">
@@ -148,11 +159,12 @@
                   </v-col>
                   <v-col cols="12" md="5">
                     <v-textarea rows="1" :readonly="!item.editable" v-model="item.detail.description" flat
-                                label="Məlumat"></v-textarea>
+                                :label="$t('description')"></v-textarea>
                   </v-col>
                   <v-col cols="12" md="3">
                     <v-btn :disabled="!item.editable" :loading="loading" color="info"
-                           @click="updateQueueDetail(item,index)">Yenilə
+                           @click="updateQueueDetail(item,index)">
+                      {{$t('update')}}
                     </v-btn>
                   </v-col>
                 </v-row>

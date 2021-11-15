@@ -15,6 +15,7 @@ class CreateQueueStatusesTable extends Migration
     {
         Schema::create('queue_statuses', function (Blueprint $table) {
             $table->id();
+            $table->string('locale');
             $table->string('name')->unique();
             $table->string('color')->nullable();
             $table->tinyInteger('sort')->default(0);

@@ -15,6 +15,8 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import VueToast from 'vue-toast-notification';
+import useI18n from './plugins/i18n';
+
 
 import vuetify from './plugins/vuetify'
 
@@ -22,16 +24,17 @@ import vuetify from './plugins/vuetify'
 
   await ifAuthLoadUser()
 
+  const i18n = await useI18n();
+
   Vue.config.productionTip = false
 
-  Vue.use(VueToast,{
-    position: 'top-right'
-  })
+  Vue.use(VueToast,{position: 'top-right'})
 
   new Vue({
     router,
     store,
     vuetify,
+    i18n,
     render: h => h(App)
   }).$mount('#app')
 }) ()

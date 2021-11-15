@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Interfaces\PrinterInterface;
+use App\Interfaces\Printable;
 use App\Models\Queue;
 use Exception;
 use Illuminate\Support\Facades\Response;
@@ -13,7 +13,7 @@ use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use App\Services\Printer;
 
 
-class QueueService implements PrinterInterface
+class QueueService implements Printable
 {
     const PRINTER_TIMEOUT = 15;
 

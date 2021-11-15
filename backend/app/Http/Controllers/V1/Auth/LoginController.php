@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\Auth;
 use App\Components\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class LoginController extends Controller
 {
@@ -24,11 +25,11 @@ class LoginController extends Controller
     {
         $credentials = $request->only(['email', 'password']);
 
-        if (!$token = auth('api')->attempt($credentials)) {
-            return api([])
+        if (!$token = auth(guard: 'api')->attempt($credentials)) {
+            return api(data:[],code: Response::HTTP_UNPROCESSABLE_ENTITY)
                 ->setCode(422)
                 ->notOk()
-                ->setMessage('Email vəya şifrə düzgün deyil');
+                ->setMessage(trans('auth.failed'));
         }
 
         return $this->respondWithToken($token);
@@ -71,7 +72,7 @@ class LoginController extends Controller
     {
         auth('api')->logout();
 
-        return api()->setMessage('Successfully logged out');
+        return api()->setMessage(trans('auth.logged_out'));
     }
 
     /**

@@ -39,7 +39,7 @@ class QueueStatus extends Resource
      * @var array
      */
     public static array $search = [
-        'id','name'
+        'id','name','status'
     ];
 
     /**
@@ -51,15 +51,37 @@ class QueueStatus extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
+            //ID::make(__('ID'), 'id')->sortable(),
             Text::make('Ad','name')->sortable()
                 ->rules([
                     'required',
                     'string',
                 ]),
+            Text::make('Status','status')->sortable()
+                ->rules([
+                    'required',
+                    'numeric',
+                ]),
             Swatches::make('Color','color')->rules(['required']),
         ];
     }
+
+
+    public static function authorizedToCreate(Request $request)
+    {
+        return false;
+    }
+
+    public function authorizedToUpdate(Request $request)
+    {
+        return false;
+    }
+
+    public function authorizedToDelete(Request $request)
+    {
+        return false;
+    }
+
 
 
     /**

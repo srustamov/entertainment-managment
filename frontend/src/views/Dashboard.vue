@@ -61,7 +61,7 @@
       <v-col cols="12" md="12">
         <v-card dark>
           <v-card-title class="d-block text-center">Növbələr</v-card-title>
-          <v-card-text  v-for="queue in data.queues">
+          <v-card-text :key="key"  v-for="(queue,key) in data.queues">
             <v-card-subtitle>{{queue.name}}</v-card-subtitle>
             <v-progress-linear striped :title="queue.name" top :color="queue.color" :value="queue.percent" height="20">
               <strong>{{ Math.ceil(queue.count) }}</strong>

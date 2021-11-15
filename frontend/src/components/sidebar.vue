@@ -16,7 +16,7 @@
     <template v-slot:append>
       <div class="pa-2">
         <v-btn :loading="loading" @click="logout" rounded block>
-          <v-icon>mdi-logout</v-icon> Çıxış
+          <v-icon>mdi-logout</v-icon> {{$t('sidebar.logout')}}
         </v-btn>
       </div>
     </template>
@@ -34,40 +34,42 @@ export default {
       type:Boolean
     }
   },
-  data:() => ({
-    loading:false,
-    listModel:null,
-    list:[
-      {
-        name : "Əsas",
-        icon:'home',
-        route:'dashboard'
-      },
-      {
-        name : "Növbələr",
-        icon:'user-clock',
-        route:'queues'
-      },
-      {
-        name : "Fəaliyyətlər",
-        icon:'sitemap',
-        route:'',
-        disabled:true
-      },
-      {
-        name : "Abunəliklər",
-        icon:'clock-outline',
-        route:'',
-        disabled:true
-      },
-      {
-        name : "Tənzimləmələr",
-        icon:'cog',
-        route:'',
-        disabled:true
-      }
-    ]
-  }),
+  data(){
+    return {
+      loading:false,
+      listModel:null,
+      list:[
+        {
+          name : this.$t('sidebar.dashboard'),
+          icon:'home',
+          route:'dashboard'
+        },
+        {
+          name : this.$t('sidebar.queues'),
+          icon:'user-clock',
+          route:'queues'
+        },
+        {
+          name : this.$t('sidebar.activities'),
+          icon:'sitemap',
+          route:'',
+          disabled:true
+        },
+        {
+          name : this.$t('sidebar.subscriptions'),
+          icon:'clock-outline',
+          route:'',
+          disabled:true
+        },
+        {
+          name : this.$t('sidebar.settings'),
+          icon:'cog',
+          route:'',
+          disabled:true
+        }
+      ]
+    }
+  },
   mounted() {
     this.listModel = this.$route.name;
   },

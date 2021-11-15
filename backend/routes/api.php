@@ -1,13 +1,13 @@
 <?php
 
 
+use App\Http\Controllers\V1\LocaleController;
 use App\Http\Controllers\V1\ActivityController;
 use App\Http\Controllers\V1\ActivityItemController;
 use App\Http\Controllers\V1\Auth\LoginController;
 use App\Http\Controllers\V1\DashboardController;
 use App\Http\Controllers\V1\QueueController;
 use App\Http\Requests\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -42,5 +42,8 @@ Route::prefix('v1')->group(function () {
             ->except(['show']);
         Route::get('queues/statuses', [QueueController::class,'statuses']);
     });
+
+
+    Route::get('lang.json',[LocaleController::class,'json']);
 
 });

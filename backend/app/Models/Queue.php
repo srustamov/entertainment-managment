@@ -106,7 +106,7 @@ class Queue extends Model
 
     public function status()
     {
-        return $this->belongsTo(QueueStatus::class,'status_id');
+        return $this->belongsTo(QueueStatus::class,'status_id','status');
     }
 
 

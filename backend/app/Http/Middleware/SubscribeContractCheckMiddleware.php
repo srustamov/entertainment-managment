@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SubscribeContractCheckMiddleware
 {
@@ -17,8 +18,12 @@ class SubscribeContractCheckMiddleware
     public function handle(Request $request, Closure $next): mixed
     {
         if (!auth('api')->user()->location->activeContract()->exists()) {
-            return api([])->setCode(400)->notOk()->setMessage('Abunəliyiniz bitmişdir');
+            return api([])
+                ->setCode(Response::HTTP_PAYMENT_REQUIRED)
+                ->notOk()
+                ->setMessage(trans('app.subscription_expired'));
         }
+
         return $next($request);
     }
 }
