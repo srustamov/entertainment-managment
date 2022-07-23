@@ -1,0 +1,28 @@
+{
+    "en" : {
+        "login" : {
+            "title" : "Login",
+            "username" : "Username",
+            "email" : "Email",
+            "password" : "Password",
+            "login" : "Login",
+            "register" : "Register",
+            "forgot" : "Forgot Password",
+            "remember" : "Remember me",
+            "error" : "Invalid username or password",
+            "email_required" : "Email is required",
+            "email_invalid" : "Email is invalid",
+            "password_required" : "Password is required"
+        },
+        "sidebar" : {
+            "home" : "Home",
+            "profile" : "Profile",
+            "logout" : "Logout",
+            "dashboard" : "Dashboard",
+            "queues" : "Queues",
+            "activities" : "Activities",
+            "subscriptions" : "Subscriptions",
+            "settings" : "Settings"
+        }
+    }
+}

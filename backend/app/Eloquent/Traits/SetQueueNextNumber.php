@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Components;
+namespace App\Eloquent\Traits;
 
 
 trait SetQueueNextNumber

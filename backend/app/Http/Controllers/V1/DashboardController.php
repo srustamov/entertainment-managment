@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Components\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Queue;
+use App\Support\Api;
 use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Http\Request;

@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Models\Components;
+namespace App\Eloquent\Traits;
 
 
 use App\Models\Queue;
 use App\Models\QueueDetail;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use function collect;
 
-
+/**
+ * Trait QueueDetailComponent
+ * @package App\Eloquent\Traits
+ */
 trait QueueDetailComponent
 {
     public Collection $queue_detail;
+
 
     public static function bootQueueDetailComponent()
     {
@@ -58,7 +63,7 @@ trait QueueDetailComponent
     }
 
 
-    private function getQueueDetail()
+    private function getQueueDetail(): Collection
     {
         return $this->queue_detail ?? collect([]);
     }

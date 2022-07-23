@@ -2,15 +2,14 @@
 
 namespace App\Services;
 
-use App\Interfaces\Printable;
 use App\Models\Queue;
+use App\Support\Interfaces\Printable;
 use Exception;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
 use JetBrains\PhpStorm\Pure;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use App\Services\Printer;
 
 
 class QueueService implements Printable

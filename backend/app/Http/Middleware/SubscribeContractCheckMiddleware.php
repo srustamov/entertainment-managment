@@ -17,7 +17,7 @@ class SubscribeContractCheckMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (!auth('api')->user()->location->activeContract()->exists()) {
+        if (!user()->location->activeContract()->exists()) {
             return api([])
                 ->setCode(Response::HTTP_PAYMENT_REQUIRED)
                 ->notOk()

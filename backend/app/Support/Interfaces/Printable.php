@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Interfaces;
+namespace App\Support\Interfaces;
 
 interface Printable
 {

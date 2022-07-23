@@ -11,7 +11,7 @@ class FormRequest extends \Illuminate\Foundation\Http\FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }

@@ -14,6 +14,7 @@ use JsonSerializable;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Scout\Searchable;
+use ReturnTypeWillChange;
 
 abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
 {
@@ -48,7 +49,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      *
      * @var bool
      */
-    public static $showColumnBorders = false;
+    public static $showColumnBorders = true;
 
     /**
      * The underlying model resource instance.
@@ -544,7 +545,8 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      *
      * @return array
      */
-    public function jsonSerialize()
+    #[ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
         return $this->serializeWithId($this->resolveFields(
             resolve(NovaRequest::class)

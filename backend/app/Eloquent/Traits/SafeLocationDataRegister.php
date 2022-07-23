@@ -1,24 +1,26 @@
 <?php
 
-namespace App\Models\Components;
+namespace App\Eloquent\Traits;
 
 use App\Models\Activity;
 use App\Scopes\SafeLocationDataScope;
+use function abort;
+use function auth;
+use function user;
 
 trait SafeLocationDataRegister
 {
 
-    /** @noinspection PhpUndefinedFieldInspection */
     public static function bootSafeLocationDataRegister()
     {
         static::addGlobalScope(new SafeLocationDataScope);
 
         static::creating(function ($model) {
 
-            if (auth('api')->check()) {
+            if ($user = user()) {
 
                 if (in_array('location_id',$model->getFillable())) {
-                    $model->location_id = auth('api')->user()->location_id;
+                    $model->location_id = $user->location_id;
                 }
 
                 if (in_array('user_id',$model->getFillable())) {
@@ -26,8 +28,8 @@ trait SafeLocationDataRegister
                 }
 
                 if (in_array('activity_id',$model->getFillable())) {
-                    if (auth('api')->user()->location_id != Activity::find($model->activity_id)->location_id) {
-                        abort(403,'Seçilən fəaliyyət sizin əraziyə uyğun deyil');
+                    if ($user->location_id != Activity::find($model->activity_id)->location_id) {
+                        abort(403,'You are not allowed to create this activity in this location');
                     }
                 }
             }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
+use App\Support\Interfaces\CurrentUser;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -21,12 +22,15 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
  * @property string name
  * @property string email
  * @property string password
+ * @property mixed $location_id
+ * @property Location $location
  * @method static User find(int $int)
  */
 class User extends Model implements JWTSubject,
     AuthenticatableContract,
     AuthorizableContract,
-    CanResetPasswordContract
+    CanResetPasswordContract,
+    CurrentUser
 {
     use HasFactory,
         Notifiable,

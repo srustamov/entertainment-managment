@@ -2,11 +2,10 @@
 
 namespace App\Exceptions;
 
-use App\Components\Api;
+use App\Support\Api;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -59,7 +58,7 @@ class Handler extends ExceptionHandler
                     'line' => $e->getLine(),
                     'code' => $this->getCode($e),
                     'exception' => class_basename($e),
-                    'trace' => $e->getTrace(),
+                    //'trace' => $e->getTrace(),
                     'file' => $e->getFile(),
                 ] : []))
             ->setMessage($message);

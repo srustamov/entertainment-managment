@@ -11,7 +11,7 @@ class LocaleController extends Controller
     {
         return [
             'locale'   => app()->getLocale(),
-            'messages' => json_decode(File::get(storage_path('app/frontend/lang.json')))
+            'messages' => json_decode(File::get(storage_path('frontend/lang.json')))
         ];
     }
 }

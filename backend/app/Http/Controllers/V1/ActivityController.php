@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Components\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ActivityCreateRequest;
 use App\Models\Activity;
+use App\Support\Api;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller

@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import {useFilters} from "../utils/hooks";
+import {useFilters} from "@/utils/hooks";
 import moment from "moment";
 
 export default {

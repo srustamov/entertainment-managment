@@ -46,7 +46,7 @@
 
 <script>
 
-import {login} from '../utils/routes';
+import {login} from '@/utils/routes';
 
 export default {
   name: "login",

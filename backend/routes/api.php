@@ -7,7 +7,7 @@ use App\Http\Controllers\V1\ActivityItemController;
 use App\Http\Controllers\V1\Auth\LoginController;
 use App\Http\Controllers\V1\DashboardController;
 use App\Http\Controllers\V1\QueueController;
-use App\Http\Requests\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {

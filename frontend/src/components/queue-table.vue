@@ -88,7 +88,7 @@
       <v-btn x-small dark color="pink">{{ item.number }}</v-btn>
     </template>
     <template v-slot:item.time="{ item }">
-      <v-btn depressed x-small color="error" v-if="item.is_expired">Vaxt bitib</v-btn>
+      <v-btn depressed x-small color="error" v-if="item.is_expired">Expired</v-btn>
       <queue-time v-else-if="item.started_at" :queue="item"></queue-time>
     </template>
     <template v-slot:item.type="{ item }">
@@ -104,19 +104,19 @@
           <v-card-text>
             <v-row>
               <v-col cols="12" md="2">
-                <v-text-field flat :readonly="!item.editable" label="Qiymət"
+                <v-text-field flat :readonly="!item.editable" label="Price"
                               v-model="item.detail.price"></v-text-field>
               </v-col>
               <v-col cols="12" md="2">
-                <v-text-field :readonly="!item.editable" label="vaxt" v-model="item.detail.period"></v-text-field>
+                <v-text-field :readonly="!item.editable" label="time" v-model="item.detail.period"></v-text-field>
               </v-col>
               <v-col cols="12" md="5">
                 <v-textarea rows="1" :readonly="!item.editable" v-model="item.detail.description" flat
-                            label="Məlumat"></v-textarea>
+                            label="Info"></v-textarea>
               </v-col>
               <v-col cols="12" md="3">
                 <v-btn :disabled="!item.editable" :loading="loading" color="info"
-                       @click="updateQueueDetail(item,index)">Yenilə
+                       @click="updateQueueDetail(item,index)"> Reload
                 </v-btn>
               </v-col>
             </v-row>
@@ -149,7 +149,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

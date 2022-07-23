@@ -1,5 +1,5 @@
 <?php
-namespace App\Components;
+namespace App\Support;
 
 
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -12,8 +12,12 @@ use Illuminate\Support\Facades\Route;
 use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 use Symfony\Component\HttpFoundation\Response;
+use function auth;
+use function config;
+use function request;
+use function response;
 
-class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
+class Api implements Arrayable, JsonSerializable, Jsonable, Responsable
 {
     public bool $success = true;
 
@@ -25,22 +29,18 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
 
     public mixed $error;
 
-    public array $extra;
-
     public Authenticatable $user;
 
     private bool $debug;
 
 
-    public function __construct($data = [], $success = true, $code = 200,array $extra = [])
+    public function __construct($data = [], $success = true, $code = 200)
     {
         $this->data = $data;
 
         $this->success = $success;
 
         $this->code = $code;
-
-        $this->extra = $extra;
     }
 
 
@@ -52,7 +52,6 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
     {
         return new static(...func_get_args());
     }
-
 
     public function setMessage($message) : static
     {
@@ -78,13 +77,6 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
     public function notOk(): static
     {
         $this->success = false;
-
-        return $this;
-    }
-
-    public function setExtra(array $extra): static
-    {
-        $this->extra = $extra;
 
         return $this;
     }
@@ -131,7 +123,6 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
             'message' => $this->message ?? "",
             'user' => $this->user ?? auth('api')->user(),
             'error' => $this->error ?? false,
-            'extra' => $this->extra
         ];
 
 
@@ -140,7 +131,6 @@ class Api implements Arrayable,JsonSerializable, Jsonable, Responsable
                 'request' => [
                     'method' => request()->method(),
                     'params' => request()->all(),
-                    //'headers' => request()->server->getHeaders(),
                 ],
                 'query' => DB::getQueryLog(),
                 'route' => Route::getCurrentRoute()?->getAction() ? : request()->path(),

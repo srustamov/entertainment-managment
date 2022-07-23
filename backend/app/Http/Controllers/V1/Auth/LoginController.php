@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\V1\Auth;
 
-use App\Components\Api;
 use App\Http\Controllers\Controller;
+use App\Support\Api;
+use App\Support\Interfaces\CurrentUser;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use JetBrains\PhpStorm\Pure;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {
-
-    public function boot()
-    {
-       // $this->middleware('auth:api', ['except' => ['login']]);
-    }
-
     /**
      * Get a JWT via given credentials.
      *
@@ -27,7 +23,6 @@ class LoginController extends Controller
 
         if (!$token = auth(guard: 'api')->attempt($credentials)) {
             return api(data:[],code: Response::HTTP_UNPROCESSABLE_ENTITY)
-                ->setCode(422)
                 ->notOk()
                 ->setMessage(trans('auth.failed'));
         }
@@ -47,19 +42,21 @@ class LoginController extends Controller
         return api([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'expires_in' => auth('api')?->factory()?->getTTL() * 60,
         ]);
     }
 
     /**
      * Get the authenticated User.
      *
+     * @param CurrentUser $user
      * @return Api
      */
-    public function user(): Api
+    #[Pure]
+    public function user(CurrentUser $user): Api
     {
         return api([
-            'user' => auth('api')->user()
+            'user' => $user
         ]);
     }
 

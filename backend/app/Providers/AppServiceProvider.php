@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $settings = Setting::all()->pluck('value','key');
+        //$settings = Setting::all()->pluck('value','key');
 
-        app()->setLocale($settings['default_locale'] ?? 'en');
+        //app()->setLocale($settings['default_locale'] ?? 'en');
 
     }
 }

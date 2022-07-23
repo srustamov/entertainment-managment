@@ -9,16 +9,16 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field readonly label="Fəaliyyət" :value="activity.name"></v-text-field>
+                <v-text-field readonly label="Activity" :value="activity.name"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field label="Qiymət" v-model="queue.detail.price"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field label="Vaxt (dəqiqə ilə)" v-model="queue.detail.period" required></v-text-field>
+                <v-text-field label="Time (with minute)" v-model="queue.detail.period" required></v-text-field>
               </v-col>
               <v-col cols="12" md="12">
-                <v-textarea rows="2" label="Açıqlama" v-model="queue.detail.description" required></v-textarea>
+                <v-textarea rows="2" label="Description" v-model="queue.detail.description" required></v-textarea>
               </v-col>
 
             </v-row>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {queues} from "../utils/routes";
+import {queues} from "@/utils/routes";
 
 export default {
   name: "queue-create",
@@ -73,11 +73,11 @@ export default {
       this.loading = false;
 
       if (response?.success) {
-        this.$toast.success('Növbə yaradıldı')
+        this.$toast.success('Queue created successfully');
         this.$emit('success',response?.data)
         this.$emit('close')
       } else {
-        this.$toast.error(`Növbə yaradılmadı (${response?.message})`)
+        this.$toast.error(`Queue doesn't created (${response?.message})`)
       }
     }
   },
@@ -89,7 +89,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

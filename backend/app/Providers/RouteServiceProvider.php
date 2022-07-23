@@ -26,7 +26,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string|null
      */
-     protected ?string $namespace = 'App\\Http\\Controllers';
+     protected $namespace = 'App\\Http\\Controllers';
 
 
     /**
@@ -40,7 +40,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->routes(function () {
             Route::middleware('api')
-                ->domain(config('app.api_domain'))
+                //->domain(config('app.api_domain'))
                 //->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
         });

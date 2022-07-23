@@ -1,7 +1,7 @@
 import Vue from "vue";
 import $axios from "../plugins/axios";
-import {queues} from "../utils/routes";
-import {QUEUE_STATUS_ENDED, QUEUE_STATUS_NOW} from "../utils/queue";
+import {queues} from "@/utils/routes";
+import {QUEUE_STATUS_ENDED, QUEUE_STATUS_NOW} from "@/utils/queue";
 
 export default class QueueService {
 

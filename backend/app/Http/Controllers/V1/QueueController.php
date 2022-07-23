@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Components\Api;
 use App\Http\Controllers\Controller;
-use App\Models\QueueStatus;
 use App\Models\Queue;
+use App\Models\QueueStatus;
+use App\Support\Api;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

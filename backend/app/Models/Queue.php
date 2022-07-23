@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
-use App\Models\Components\QueueDetailComponent;
-use App\Models\Components\SafeLocationDataRegister;
-use App\Models\Components\SetQueueNextNumber;
+use App\Eloquent\Traits\QueueDetailComponent;
+use App\Eloquent\Traits\SafeLocationDataRegister;
+use App\Eloquent\Traits\SetQueueNextNumber;
 use App\Services\QueueService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
@@ -35,6 +36,8 @@ class Queue extends Model
     use SoftDeletes;
     use SafeLocationDataRegister;
     use SetQueueNextNumber;
+
+    /** @uses bootQueueDetailComponent() */
     use QueueDetailComponent;
 
     use LogsActivity;
@@ -94,7 +97,7 @@ class Queue extends Model
                 ->value('number') + 1;
     }
 
-    public function getActivitylogOptions(): LogOptions
+    public function getActivityLogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly([
@@ -104,13 +107,13 @@ class Queue extends Model
             ]);
     }
 
-    public function status()
+    public function status(): BelongsTo
     {
         return $this->belongsTo(QueueStatus::class,'status_id','status');
     }
 
 
-    public function location()
+    public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class);
     }
@@ -133,11 +136,11 @@ class Queue extends Model
 //        }
 //    }
 
-    public function getIsExpiredAttribute()
+    public function getIsExpiredAttribute(): bool
     {
         return (
             $this->started_at && !$this->end_at &&
-            Carbon::make($this->started_at)->addMinutes($this->detail->period) <= now()
+            Carbon::make($this->started_at)->addMinutes($this->detail->period)->lt(now())
         );
     }
 

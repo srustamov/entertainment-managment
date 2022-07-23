@@ -1,5 +1,5 @@
 import store from '../store';
-import Vue from 'vue';
+// import Vue from 'vue';
 
 // const $t = Vue.$t;
 

@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
-use App\Models\Components\Queueable;
-use App\Models\Components\SafeLocationDataRegister;
+use App\Eloquent\Traits\Queueable;
+use App\Eloquent\Traits\SafeLocationDataRegister;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
