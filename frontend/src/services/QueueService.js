@@ -19,6 +19,8 @@ export default class QueueService {
         }
 
         let time = await $axios.get('/time');
+
+        /**@type {Response}*/
         let response = await $axios.put(queues + '/' + this.queue.id, {
             started_at: time,
             status_id: QUEUE_STATUS_NOW
@@ -36,6 +38,7 @@ export default class QueueService {
 
         let time = await $axios.get('/time');
 
+        /**@type {Response}*/
         let response = await $axios.put(queues + '/' + this.queue.id, {
             end_at: time,
             status_id:QUEUE_STATUS_ENDED
@@ -52,15 +55,17 @@ export default class QueueService {
         }
         let time = await $axios.get('/time');
 
+        /**@type {Response}*/
         let response = await $axios.put(queues + '/' + this.queue.id, {
             detail: this.queue.detail,
             updated_at:time
         });
 
+
         if (response?.success) {
-            Vue.$toast.success('Növbə məlumatları yeniləndi')
+            Vue.$toast.success('Queue info updated')
         } else {
-            //Vue.$toast.error(response?.message || 'Növbə məlumatları yenilənmədi')
+            //Vue.$toast.error(response?.message || 'Queue does not updated')
         }
 
         if (response?.success) {
@@ -73,12 +78,13 @@ export default class QueueService {
             return false;
         }
 
+        /**@type {Response}*/
         let response = await $axios.delete(queues + '/' + this.queue.id);
 
         if (response?.success) {
-            Vue.$toast.success('Növbə silindi')
+            Vue.$toast.success('Queue deleted')
         } else {
-            //Vue.$toast.error(response?.message || 'Növbə silinmədi')
+            //Vue.$toast.error(response?.message || 'Queue does not deleted')
         }
 
         return response?.success

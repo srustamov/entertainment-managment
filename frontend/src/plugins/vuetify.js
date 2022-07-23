@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
-import az from 'vuetify/lib/locale/az'
+import en from 'vuetify/lib/locale/en'
 Vue.use(Vuetify);
 
 export default new Vuetify({
     lang: {
-        locales: { az },
-        current: 'az',
+        locales: { en },
+        current: 'en',
     },
     theme: {
         primary: "#f44336",
