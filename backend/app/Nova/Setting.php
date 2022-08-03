@@ -2,20 +2,10 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\AreaFilter;
-use App\Nova\Filters\LocationFilter;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\Pure;
-use Laravel\Nova\Cards\Help;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Yna\NovaSwatches\Swatches;
 
 class Setting extends Resource
 {
@@ -39,7 +29,7 @@ class Setting extends Resource
      * @var array
      */
     public static array $search = [
-        'id','name','key','value'
+        'id', 'name', 'key', 'value',
     ];
 
     /**
@@ -52,12 +42,11 @@ class Setting extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Title','title')->sortable()->rules(['required', 'string']),
-            Text::make('Key','key')->sortable()->rules(['required', 'string']),
-            Text::make('Value','value')->sortable()->rules(['required']),
+            Text::make('Title', 'title')->sortable()->rules(['required', 'string']),
+            Text::make('Key', 'key')->sortable()->rules(['required', 'string']),
+            Text::make('Value', 'value')->sortable()->rules(['required']),
         ];
     }
-
 
     /**
      * Get the cards available for the request.
@@ -78,7 +67,7 @@ class Setting extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function filters(Request $request) : array
+    public function filters(Request $request): array
     {
         return [
 

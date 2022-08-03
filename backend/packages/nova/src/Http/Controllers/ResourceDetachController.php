@@ -39,7 +39,10 @@ class ResourceDetachController extends Controller
 
                 if (empty($inPivots) || in_array($pivot->getAttribute($accessorKeyName), $inPivots)) {
                     $this->deletePivot(
-                        $request, $pivot, $model, $parent,
+                        $request,
+                        $pivot,
+                        $model,
+                        $parent,
                     );
                 }
             }
@@ -58,7 +61,9 @@ class ResourceDetachController extends Controller
     protected function deletePivot(DetachResourceRequest $request, $pivot, $model, $parent)
     {
         $this->deletePivotFields(
-            $request, $resource = $request->newResourceWith($model), $pivot
+            $request,
+            $resource = $request->newResourceWith($model),
+            $pivot
         );
 
         $pivot->delete();
@@ -66,7 +71,10 @@ class ResourceDetachController extends Controller
         tap(Nova::actionEvent(), function ($actionEvent) use ($pivot, $model, $parent, $request) {
             DB::connection($actionEvent->getConnectionName())->table('action_events')->insert(
                 $actionEvent->forResourceDetach(
-                    $request->user(), $parent, collect([$model]), $pivot->getMorphClass()
+                    $request->user(),
+                    $parent,
+                    collect([$model]),
+                    $pivot->getMorphClass()
                 )->map->getAttributes()->all()
             );
         });

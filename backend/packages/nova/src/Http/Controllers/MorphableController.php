@@ -27,7 +27,8 @@ class MorphableController extends Controller
                         ->findFieldByAttribute($request->field);
 
         $withTrashed = $this->shouldIncludeTrashed(
-            $request, $relatedResource
+            $request,
+            $relatedResource
         );
 
         $limit = $relatedResource::usesScout()

@@ -10,33 +10,24 @@ use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
-
     public function index(Request $request): Api
     {
-        return api(Activity::filter($request->getFilters())->get());
+        return api($this->useFilter(Activity::class, $request));
     }
-
 
     public function store(ActivityCreateRequest $request)
     {
-
     }
-
 
     public function show(Activity $activity)
     {
-
     }
-
 
     public function update(Request $request, $id)
     {
-
     }
-
 
     public function destroy($id)
     {
-
     }
 }

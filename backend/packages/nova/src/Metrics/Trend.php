@@ -16,11 +16,15 @@ abstract class Trend extends RangedMetric
     /**
      * Trend metric unit constants.
      */
-    const BY_MONTHS = 'month';
-    const BY_WEEKS = 'week';
-    const BY_DAYS = 'day';
-    const BY_HOURS = 'hour';
-    const BY_MINUTES = 'minute';
+    public const BY_MONTHS = 'month';
+
+    public const BY_WEEKS = 'week';
+
+    public const BY_DAYS = 'day';
+
+    public const BY_HOURS = 'hour';
+
+    public const BY_MINUTES = 'minute';
 
     /**
      * The element's component.
@@ -123,7 +127,7 @@ abstract class Trend extends RangedMetric
      */
     public function count($request, $model, $unit, $column = null)
     {
-        $resource = $model instanceof Builder ? $model->getModel() : new $model;
+        $resource = $model instanceof Builder ? $model->getModel() : new $model();
 
         $column = $column ?? $resource->getQualifiedCreatedAtColumn();
 
@@ -303,8 +307,8 @@ abstract class Trend extends RangedMetric
     /**
      * Return a value result showing a max aggregate over months.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Illuminate\Database\Eloquent\Builder|string $model
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Database\Eloquent\Builder|string  $model
      * @param  \Illuminate\Database\Query\Expression|string  $column
      * @param  string  $dateColumn
      * @return TrendResult
@@ -496,13 +500,15 @@ abstract class Trend extends RangedMetric
      */
     protected function aggregate($request, $model, $unit, $function, $column, $dateColumn = null)
     {
-        $query = $model instanceof Builder ? $model : (new $model)->newQuery();
+        $query = $model instanceof Builder ? $model : (new $model())->newQuery();
 
         $timezone = Nova::resolveUserTimezone($request) ?? $request->timezone;
 
         $expression = (string) TrendDateExpressionFactory::make(
-            $query, $dateColumn = $dateColumn ?? $query->getModel()->getQualifiedCreatedAtColumn(),
-            $unit, $timezone
+            $query,
+            $dateColumn = $dateColumn ?? $query->getModel()->getQualifiedCreatedAtColumn(),
+            $unit,
+            $timezone
         );
 
         $possibleDateResults = $this->getAllPossibleDateResults(
@@ -520,7 +526,8 @@ abstract class Trend extends RangedMetric
         $results = $query
                 ->select(DB::raw("{$expression} as date_result, {$function}({$wrappedColumn}) as aggregate"))
                 ->whereBetween(
-                    $dateColumn, array_map(function ($date) {
+                    $dateColumn,
+                    array_map(function ($date) {
                         return $this->asQueryDatetime($date);
                     }, [$startingDate, $endingDate])
                 )->groupBy(DB::raw($expression))
@@ -529,7 +536,9 @@ abstract class Trend extends RangedMetric
 
         $results = array_merge($possibleDateResults, $results->mapWithKeys(function ($result) use ($request, $unit) {
             return [$this->formatAggregateResultDate(
-                $result->date_result, $unit, $request->twelveHourTime === 'true'
+                $result->date_result,
+                $unit,
+                $request->twelveHourTime === 'true'
             ) => round($result->aggregate, $this->precision)];
         })->all());
 
@@ -648,7 +657,7 @@ abstract class Trend extends RangedMetric
     {
         [$year, $week] = explode('-', $result);
 
-        $isoDate = (new DateTime)->setISODate($year, $week)->setTime(0, 0);
+        $isoDate = (new DateTime())->setISODate($year, $week)->setTime(0, 0);
 
         [$startingDate, $endingDate] = [
             Chronos::instance($isoDate),
@@ -669,8 +678,13 @@ abstract class Trend extends RangedMetric
      * @param  bool  $twelveHourTime
      * @return array
      */
-    protected function getAllPossibleDateResults(Chronos $startingDate, Chronos $endingDate,
-                                                 $unit, $timezone, $twelveHourTime)
+    protected function getAllPossibleDateResults(
+        Chronos $startingDate,
+        Chronos $endingDate,
+        $unit,
+        $timezone,
+        $twelveHourTime
+    )
     {
         $nextDate = $startingDate;
 
@@ -680,7 +694,9 @@ abstract class Trend extends RangedMetric
         }
 
         $possibleDateResults[$this->formatPossibleAggregateResultDate(
-            $nextDate, $unit, $twelveHourTime
+            $nextDate,
+            $unit,
+            $twelveHourTime
         )] = 0;
 
         while ($nextDate->lt($endingDate)) {
@@ -699,7 +715,9 @@ abstract class Trend extends RangedMetric
             if ($nextDate->lte($endingDate)) {
                 $possibleDateResults[
                     $this->formatPossibleAggregateResultDate(
-                        $nextDate, $unit, $twelveHourTime
+                        $nextDate,
+                        $unit,
+                        $twelveHourTime
                     )
                 ] = 0;
             }

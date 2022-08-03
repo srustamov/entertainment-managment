@@ -24,8 +24,7 @@ class LocationFactory extends Factory
         return [
             'area_id' => 1,
             'name' => $this->faker->address,
-            'price' => $this->faker->biasedNumberBetween(100,1000),
+            'price' => $this->faker->biasedNumberBetween(100, 1000),
         ];
     }
-
 }

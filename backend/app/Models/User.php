@@ -3,19 +3,19 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
+use App\Eloquent\Traits\HasLocation;
 use App\Support\Interfaces\CurrentUser;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use JetBrains\PhpStorm\ArrayShape;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 /**
  * @property int area_id
@@ -24,20 +24,18 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
  * @property string password
  * @property mixed $location_id
  * @property Location $location
+ *
  * @method static User find(int $int)
  */
-class User extends Model implements JWTSubject,
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract,
-    CurrentUser
+class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, CurrentUser
 {
-    use HasFactory,
-        Notifiable,
-        Authenticatable,
-        Authorizable,
-        CanResetPassword,
-        MustVerifyEmail;
+    use HasFactory;
+    use Notifiable;
+    use Authenticatable;
+    use Authorizable;
+    use CanResetPassword;
+    use MustVerifyEmail;
+    use HasLocation;
 
     protected $fillable = [
         'location_id',
@@ -46,12 +44,10 @@ class User extends Model implements JWTSubject,
         'password',
     ];
 
-
     protected $hidden = [
         'password',
         'remember_token',
     ];
-
 
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -62,17 +58,11 @@ class User extends Model implements JWTSubject,
         return $this->getKey();
     }
 
-    #[ArrayShape(['location_id' => "int"])]
+    #[ArrayShape(['location_id' => 'int'])]
     public function getJWTCustomClaims(): array
     {
         return [
-            'location_id' => $this->location_id
+            'location_id' => $this->location_id,
         ];
-    }
-
-
-    public function location(): HasOne
-    {
-        return $this->hasOne(Location::class,'id','location_id');
     }
 }

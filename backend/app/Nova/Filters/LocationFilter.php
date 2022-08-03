@@ -2,8 +2,6 @@
 
 namespace App\Nova\Filters;
 
-use App\Models\Area;
-use App\Nova\Location;
 use Illuminate\Http\Request;
 use Laravel\Nova\Filters\Filter;
 
@@ -26,7 +24,7 @@ class LocationFilter extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->where('location_id',$value);
+        return $query->where('location_id', $value);
     }
 
     /**
@@ -37,6 +35,6 @@ class LocationFilter extends Filter
      */
     public function options(Request $request)
     {
-        return \App\Models\Location::all()->pluck('id','name')->toArray();
+        return \App\Models\Location::all()->pluck('id', 'name')->toArray();
     }
 }

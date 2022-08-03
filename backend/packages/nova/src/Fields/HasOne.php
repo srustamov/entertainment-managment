@@ -95,7 +95,8 @@ class HasOne extends Field implements ListableField, RelatableField
     public function authorize(Request $request)
     {
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 

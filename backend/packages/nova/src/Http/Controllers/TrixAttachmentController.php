@@ -22,7 +22,8 @@ class TrixAttachmentController extends Controller
                         });
 
         return response()->json(['url' => call_user_func(
-            $field->attachCallback, $request
+            $field->attachCallback,
+            $request
         )]);
     }
 
@@ -41,7 +42,8 @@ class TrixAttachmentController extends Controller
                         });
 
         call_user_func(
-            $field->detachCallback, $request
+            $field->detachCallback,
+            $request
         );
     }
 
@@ -60,7 +62,8 @@ class TrixAttachmentController extends Controller
                         });
 
         call_user_func(
-            $field->discardCallback, $request
+            $field->discardCallback,
+            $request
         );
     }
 }

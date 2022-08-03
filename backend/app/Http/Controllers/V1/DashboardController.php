@@ -8,6 +8,7 @@ use App\Support\Api;
 use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -16,14 +17,13 @@ class DashboardController extends Controller
      */
     public function index(Request $request): Api
     {
-        $query = function () use ($request){
-            return Queue::filter($request->getFilters())
-                ->without(['status','detail'])
-                ->when(count($request->get('date',[])),function ($query) use ($request) {
-                    $query->whereDateBetween('queues.created_at',$request->get('date'));
+        $query = function () use ($request) {
+            return $this->useFilter(Queue::class, $request)
+                ->without(['status', 'detail'])
+                ->when(count($request->get('date', [])), function ($query) use ($request) {
+                    $query->whereBetween(DB::raw('DATE(queues.created_at)'), $request->get('date'));
                 });
         };
-
 
         $amount = $query()
             ->selectRaw('SUM(price) as amount')
@@ -40,7 +40,7 @@ class DashboardController extends Controller
         $minutes = CarbonInterval::minutes($minutes)->forHumans();
 
         $queues = $query()
-            ->without(['status','detail'])
+            ->without(['status', 'detail'])
             ->selectRaw('queue_statuses.name,queue_statuses.color,COUNT(queues.id) as count')
             ->join('queue_statuses', 'queues.status_id', 'queue_statuses.id')
             ->groupBy('status_id')
@@ -55,7 +55,5 @@ class DashboardController extends Controller
         });
 
         return api(compact('queues', 'minutes', 'amount'));
-
     }
-
 }

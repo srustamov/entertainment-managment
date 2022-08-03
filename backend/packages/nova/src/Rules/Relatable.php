@@ -112,7 +112,8 @@ class Relatable implements Rule
     protected function authorize($resource, $model)
     {
         return (new $resource($model))->authorizedToAdd(
-            $this->request, $this->request->model()
+            $this->request,
+            $this->request->model()
         );
     }
 

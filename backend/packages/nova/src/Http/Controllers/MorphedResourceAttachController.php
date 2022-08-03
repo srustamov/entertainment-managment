@@ -28,8 +28,8 @@ class MorphedResourceAttachController extends ResourceAttachController
 
         if ($relationship->withTimestamps) {
             $pivot->forceFill([
-                $relationship->createdAt() => new DateTime,
-                $relationship->updatedAt() => new DateTime,
+                $relationship->createdAt() => new DateTime(),
+                $relationship->updatedAt() => new DateTime(),
             ]);
         }
 

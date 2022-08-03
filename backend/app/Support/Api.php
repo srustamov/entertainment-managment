@@ -1,66 +1,59 @@
 <?php
-namespace App\Support;
 
+namespace App\Support;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 use Symfony\Component\HttpFoundation\Response;
-use function auth;
-use function config;
-use function request;
-use function response;
 
 class Api implements Arrayable, JsonSerializable, Jsonable, Responsable
 {
-    public bool $success = true;
-
-    public int $code = 200;
-
     public ?string $message;
-
-    public mixed $data;
 
     public mixed $error;
 
     public Authenticatable $user;
 
+    public Request $request;
+
     private bool $debug;
 
-
-    public function __construct($data = [], $success = true, $code = 200)
-    {
-        $this->data = $data;
-
-        $this->success = $success;
-
-        $this->code = $code;
+    public function __construct(
+        public mixed $data = [],
+        public bool $success = true,
+        public int $code = 200
+    ) {
     }
 
-
-    /**
-     * @return static
-     */
     #[Pure]
-    public static function make() : self
+    public static function make(): self
     {
         return new static(...func_get_args());
     }
 
-    public function setMessage($message) : static
+    public function setRequest(Request $request): self
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    public function setMessage($message): static
     {
         $this->message = $message;
 
         return $this;
     }
 
-    public function setCode($code): static
+    public function setCode(int $code): static
     {
         $this->code = $code;
 
@@ -83,7 +76,7 @@ class Api implements Arrayable, JsonSerializable, Jsonable, Responsable
 
     public function setError($error): static
     {
-        $this->error   = $error;
+        $this->error = $error;
         $this->success = false;
 
         return $this;
@@ -96,7 +89,7 @@ class Api implements Arrayable, JsonSerializable, Jsonable, Responsable
         return $this;
     }
 
-    public function setUser($user): static
+    public function setUser(Authenticatable $user): static
     {
         $this->user = $user;
 
@@ -111,20 +104,25 @@ class Api implements Arrayable, JsonSerializable, Jsonable, Responsable
     }
 
 
+    public function setDebug(bool $debug): static
+    {
+        $this->debug = $debug;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
-
         $debug = $this->debug ?? config('app.debug');
 
-        $response =  [
+        $response = [
             'success' => $this->success,
             'code' => $this->code,
             'data' => $this->data,
-            'message' => $this->message ?? "",
+            'message' => $this->message ?? '',
             'user' => $this->user ?? auth('api')->user(),
             'error' => $this->error ?? false,
         ];
-
 
         if ($debug) {
             $response['debug'] = [
@@ -133,7 +131,7 @@ class Api implements Arrayable, JsonSerializable, Jsonable, Responsable
                     'params' => request()->all(),
                 ],
                 'query' => DB::getQueryLog(),
-                'route' => Route::getCurrentRoute()?->getAction() ? : request()->path(),
+                'route' => Route::getCurrentRoute()?->getAction() ?: request()->path(),
             ];
         }
 
@@ -147,11 +145,11 @@ class Api implements Arrayable, JsonSerializable, Jsonable, Responsable
 
     public function toJson($options = 0): bool|string
     {
-        return json_encode($this->toArray(),$options);
+        return json_encode($this->toArray(), $options);
     }
 
     public function toResponse($request): JsonResponse|Response
     {
-        return response()->json($this->toArray(),$this->code);
+        return response()->json($this->toArray(), $this->code);
     }
 }

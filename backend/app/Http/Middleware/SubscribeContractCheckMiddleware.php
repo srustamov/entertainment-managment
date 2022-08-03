@@ -2,26 +2,16 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\NoActiveContractException;
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class SubscribeContractCheckMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param Request $request
-     * @param Closure $next
-     * @return mixed
-     */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (!user()->location->activeContract()->exists()) {
-            return api([])
-                ->setCode(Response::HTTP_PAYMENT_REQUIRED)
-                ->notOk()
-                ->setMessage(trans('app.subscription_expired'));
+        if (! user()?->location?->activeContract()?->exists()) {
+            throw new NoActiveContractException();
         }
 
         return $next($request);

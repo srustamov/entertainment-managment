@@ -11,9 +11,8 @@ class SafeLocationDataScope implements Scope
     public function apply(Builder $builder, Model $model)
     {
         if ($user = user()) {
-
-            if (in_array('location_id',$model->getFillable())) {
-                $builder->where($model->getTable().'.location_id',  $user->location_id);
+            if (in_array('location_id', $model->getFillable())) {
+                $builder->where($model->getTable().'.location_id', $user->location_id);
             }
 //            elseif (in_array('activity_id',$model->getFillable())) {
 //                $builder->whereIn(

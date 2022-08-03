@@ -37,7 +37,7 @@ class FieldCommand extends Command
             return;
         }
 
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/field-stubs',
             $this->fieldPath()
         );
@@ -50,7 +50,7 @@ class FieldCommand extends Command
         $this->replace('{{ class }}', $this->fieldClass(), $this->fieldPath().'/src/Field.stub');
         $this->replace('{{ component }}', $this->fieldName(), $this->fieldPath().'/src/Field.stub');
 
-        (new Filesystem)->move(
+        (new Filesystem())->move(
             $this->fieldPath().'/src/Field.stub',
             $this->fieldPath().'/src/'.$this->fieldClass().'.php'
         );
@@ -59,7 +59,7 @@ class FieldCommand extends Command
         $this->replace('{{ namespace }}', $this->fieldNamespace(), $this->fieldPath().'/src/FieldServiceProvider.stub');
         $this->replace('{{ component }}', $this->fieldName(), $this->fieldPath().'/src/FieldServiceProvider.stub');
 
-        (new Filesystem)->move(
+        (new Filesystem())->move(
             $this->fieldPath().'/src/FieldServiceProvider.stub',
             $this->fieldPath().'/src/FieldServiceProvider.php'
         );

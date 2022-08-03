@@ -10,7 +10,9 @@ class Update extends Page
     use HasSearchableRelations;
 
     public $resourceName;
+
     public $resourceId;
+
     public $queryParams;
 
     /**

@@ -13,7 +13,9 @@ use Laravel\Nova\Trix\StorePendingAttachment;
 
 class Trix extends Field implements StorableContract, DeletableContract
 {
-    use Storable, Deletable, Expandable;
+    use Storable;
+    use Deletable;
+    use Expandable;
 
     /**
      * The field's component.

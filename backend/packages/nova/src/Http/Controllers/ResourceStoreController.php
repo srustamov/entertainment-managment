@@ -27,7 +27,8 @@ class ResourceStoreController extends Controller
 
         $model = DB::transaction(function () use ($request, $resource) {
             [$model, $callbacks] = $resource::fill(
-                $request, $resource::newModel()
+                $request,
+                $resource::newModel()
             );
 
             $this->storeResource($request, $model);

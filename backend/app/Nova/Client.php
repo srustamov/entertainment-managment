@@ -5,13 +5,9 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Client extends Resource
 {
@@ -35,7 +31,7 @@ class Client extends Resource
      * @var array
      */
     public static array $search = [
-        'id','name','email'
+        'id', 'name', 'email',
     ];
 
     /**
@@ -49,7 +45,7 @@ class Client extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Location','location'),
+            BelongsTo::make('Location', 'location'),
 
             Text::make('Name')
                 ->sortable()
@@ -66,11 +62,11 @@ class Client extends Resource
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
-            Boolean::make('Active','status')
+            Boolean::make('Active', 'status')
                 ->trueValue('1')
                 ->falseValue('0')
-                ->creationRules('required', 'numeric', 'min:0','max:1')
-                ->updateRules('required', 'numeric', 'min:0','max:1'),
+                ->creationRules('required', 'numeric', 'min:0', 'max:1')
+                ->updateRules('required', 'numeric', 'min:0', 'max:1'),
         ];
     }
 

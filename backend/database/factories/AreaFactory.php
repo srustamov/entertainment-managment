@@ -25,5 +25,4 @@ class AreaFactory extends Factory
             'name' => $this->faker->city,
         ];
     }
-
 }

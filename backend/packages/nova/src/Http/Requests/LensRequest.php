@@ -8,7 +8,8 @@ use Laravel\Nova\Contracts\RelatableField;
 
 class LensRequest extends NovaRequest
 {
-    use DecodesFilters, InteractsWithLenses;
+    use DecodesFilters;
+    use InteractsWithLenses;
 
     /**
      * Whether to include the table order prefix.
@@ -113,7 +114,8 @@ class LensRequest extends NovaRequest
             $lenResource = new $lens($model);
 
             return transform((new $resource($model))->serializeForIndex(
-                $this, $lenResource->resolveFields($this)
+                $this,
+                $lenResource->resolveFields($this)
             ), function ($payload) use ($lenResource) {
                 $payload['actions'] = collect(array_values($lenResource->actions($this)))
                         ->filter->shownOnIndex()
@@ -127,7 +129,7 @@ class LensRequest extends NovaRequest
     /**
      * Get foreign key name for relation.
      *
-     * @param  \Illuminate\Database\Eloquent\Relations\Relation $relation
+     * @param  \Illuminate\Database\Eloquent\Relations\Relation  $relation
      * @return string
      */
     protected function getRelationForeignKeyName(Relation $relation)

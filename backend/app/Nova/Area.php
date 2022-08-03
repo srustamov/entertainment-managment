@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Area extends Resource
 {
@@ -30,13 +29,13 @@ class Area extends Resource
      * @var array
      */
     public static array $search = [
-        'id','name'
+        'id', 'name',
     ];
 
     /**
      * Get the fields displayed by the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function fields(Request $request)
@@ -44,7 +43,7 @@ class Area extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Name', 'name')
-                ->rules('required','string','min:4')
+                ->rules('required', 'string', 'min:4')
                 ->creationRules(Rule::unique(\App\Models\Area::class))
                 //->updateRules('unique:areas,name,{{resourceId}}')
                 ->sortable(),
@@ -54,7 +53,7 @@ class Area extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function cards(Request $request)
@@ -66,7 +65,7 @@ class Area extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function filters(Request $request)
@@ -78,7 +77,7 @@ class Area extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function lenses(Request $request)
@@ -89,7 +88,7 @@ class Area extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function actions(Request $request)

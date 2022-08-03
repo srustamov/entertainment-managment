@@ -18,12 +18,19 @@ trait PerformsQueries
      * @param  string  $withTrashed
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function buildIndexQuery(NovaRequest $request, $query, $search = null,
-                                      array $filters = [], array $orderings = [],
-                                      $withTrashed = TrashedStatus::DEFAULT)
+    public static function buildIndexQuery(
+        NovaRequest $request,
+        $query,
+        $search = null,
+        array $filters = [],
+        array $orderings = [],
+        $withTrashed = TrashedStatus::DEFAULT
+    )
     {
         return static::applyOrderings(static::applyFilters(
-            $request, static::initializeQuery($request, $query, (string) $search, $withTrashed), $filters
+            $request,
+            static::initializeQuery($request, $query, (string) $search, $withTrashed),
+            $filters
         ), $orderings)->tap(function ($query) use ($request) {
             static::indexQuery($request, $query->with(static::$with));
         });
@@ -98,7 +105,8 @@ trait PerformsQueries
         $keys = static::buildIndexQueryUsingScout($request, $search, $withTrashed)->get()->map->getKey();
 
         return static::applySoftDeleteConstraint(
-            $query->whereIn(static::newModel()->getQualifiedKeyName(), $keys->all()), $withTrashed
+            $query->whereIn(static::newModel()->getQualifiedKeyName(), $keys->all()),
+            $withTrashed
         );
     }
 
@@ -110,11 +118,15 @@ trait PerformsQueries
      * @param  string  $withTrashed
      * @return \Laravel\Scout\Builder
      */
-    public static function buildIndexQueryUsingScout(NovaRequest $request, $search = null,
-                                          $withTrashed = TrashedStatus::DEFAULT)
+    public static function buildIndexQueryUsingScout(
+        NovaRequest $request,
+        $search = null,
+        $withTrashed = TrashedStatus::DEFAULT
+    )
     {
         return tap(static::applySoftDeleteConstraint(
-            static::newModel()->search($search), $withTrashed
+            static::newModel()->search($search),
+            $withTrashed
         ), function ($scoutBuilder) use ($request) {
             static::scoutQuery($request, $scoutBuilder);
         })->take(static::$scoutSearchResults);
@@ -130,7 +142,7 @@ trait PerformsQueries
     protected static function applySoftDeleteConstraint($query, $withTrashed)
     {
         return static::softDeletes()
-                ? (new ApplySoftDeleteConstraint)->__invoke($query, $withTrashed)
+                ? (new ApplySoftDeleteConstraint())->__invoke($query, $withTrashed)
                 : $query;
     }
 

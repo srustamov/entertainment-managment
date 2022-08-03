@@ -2,19 +2,13 @@
 
 namespace App\Nova;
 
-
-use App\Nova\Filters\LocationFilter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\Pure;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-
 
 class Log extends Resource
 {
@@ -38,7 +32,7 @@ class Log extends Resource
      * @var array
      */
     public static array $search = [
-        'id','description','event','subject_type','causer'
+        'id', 'description', 'event', 'subject_type', 'causer',
     ];
 
     /**
@@ -52,13 +46,13 @@ class Log extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('description')->readonly()->sortable(),
-            Text::make('Type','subject_type')->readonly()->sortable(),
-            Text::make('Subject id','subject_id')->readonly()->sortable(),
-            Text::make('Event','event')->readonly()->sortable(),
-            MorphTo::make('Couser','causer',User::class)->readonly(),
-            DateTime::make('Created at','created_at')->sortable()->readonly(),
-            Text::make('Properties','properties')->readonly(),
-//            KeyValue::make('Changes','properties**.attributes**')->readonly()
+            Text::make('Type', 'subject_type')->readonly()->sortable(),
+            Text::make('Subject id', 'subject_id')->readonly()->sortable(),
+            Text::make('Event', 'event')->readonly()->sortable(),
+            MorphTo::make('Couser', 'causer', User::class)->readonly(),
+            DateTime::make('Created at', 'created_at')->sortable()->readonly(),
+            Text::make('Properties', 'properties')->readonly(),
+            //            KeyValue::make('Changes','properties**.attributes**')->readonly()
 
         ];
     }
@@ -72,7 +66,6 @@ class Log extends Resource
     {
         return false;
     }
-
 
     /**
      * Get the cards available for the request.
@@ -93,7 +86,7 @@ class Log extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function filters(Request $request) : array
+    public function filters(Request $request): array
     {
         return [
 

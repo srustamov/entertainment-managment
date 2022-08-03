@@ -10,7 +10,12 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class File extends Field implements StorableContract, DeletableContract, Downloadable
 {
-    use Storable, Deletable, AcceptsTypes, HasDownload, HasThumbnail, HasPreview;
+    use Storable;
+    use Deletable;
+    use AcceptsTypes;
+    use HasDownload;
+    use HasThumbnail;
+    use HasPreview;
 
     /**
      * The field's component.
@@ -152,7 +157,9 @@ class File extends Field implements StorableContract, DeletableContract, Downloa
         }
 
         return $request->file($requestAttribute)->storeAs(
-            $this->getStorageDir(), call_user_func($this->storeAsCallback, $request), $this->getStorageDisk()
+            $this->getStorageDir(),
+            call_user_func($this->storeAsCallback, $request),
+            $this->getStorageDisk()
         );
     }
 

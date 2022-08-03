@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
+use App\Eloquent\Traits\HasLocation;
 use App\Eloquent\Traits\QueueDetailComponent;
 use App\Eloquent\Traits\SafeLocationDataRegister;
 use App\Eloquent\Traits\SetQueueNextNumber;
@@ -15,9 +16,11 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\QueryBuilder\AllowedFilter;
 
 /**
  * @method static Queue create(array $array)
+ *
  * @property null|Carbon $started_at
  * @property null|Carbon $end_at
  * @property null|Carbon $missing_at
@@ -36,19 +39,24 @@ class Queue extends Model
     use SoftDeletes;
     use SafeLocationDataRegister;
     use SetQueueNextNumber;
+    use HasLocation;
 
     /** @uses bootQueueDetailComponent() */
     use QueueDetailComponent;
 
     use LogsActivity;
 
-    const STARTED_AT = 'started_at';
-    const MISSING_AT = 'missing_at';
-    const END_AT = 'end_at';
-    const TYPES = [
+    public const STARTED_AT = 'started_at';
+
+    public const MISSING_AT = 'missing_at';
+
+    public const END_AT = 'end_at';
+
+    public const TYPES = [
         Activity::class,
         ActivityItem::class,
     ];
+
     protected $fillable = [
         'location_id',
         'queueable_type',
@@ -61,6 +69,7 @@ class Queue extends Model
         'updated_at',
         'detail',
     ];
+
     protected $dates = [
         //'started_at',
         //'end_at',
@@ -69,11 +78,11 @@ class Queue extends Model
 
     protected $casts = [
         'number' => 'int',
-        'created_at' => "datetime:Y-m-d H:i:s",
-        'updated_at' => "datetime:Y-m-d H:i:s",
-        'missing_at' => "datetime:Y-m-d H:i:s",
-        'started_at' => "datetime:Y-m-d H:i:s",
-        'end_at' => "datetime:Y-m-d H:i:s",
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'missing_at' => 'datetime:Y-m-d H:i:s',
+        'started_at' => 'datetime:Y-m-d H:i:s',
+        'end_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     protected $appends = [
@@ -81,14 +90,40 @@ class Queue extends Model
         'startable',
         'endable',
         'editable',
-        'deletable'
+        'deletable',
     ];
 
-    protected $with = ['status','detail'];
+    protected $with = ['status', 'detail'];
+
+
+    public function getFilters(): array
+    {
+        return [
+            'includes' => ['status', 'detail','queueable'],
+            'fields'   => [],
+            'sorts'    => [
+                'number',
+                'created_at',
+                'updated_at',
+                'started_at',
+                'end_at',
+                'missing_at',
+            ],
+            'filters'  => [
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('queueable_type'),
+                AllowedFilter::exact('queueable_id'),
+                AllowedFilter::exact('number'),
+                AllowedFilter::exact('started_at'),
+                AllowedFilter::exact('end_at'),
+                AllowedFilter::exact('missing_at'),
+            ]
+        ];
+    }
 
     public static function getNextNumber($queueable): int
     {
-        return (int)Queue::query()
+        return (int) Queue::query()
                 ->select('number')
                 ->where('queueable_type', $queueable)
                 ->whereNull('missing_at')
@@ -109,13 +144,7 @@ class Queue extends Model
 
     public function status(): BelongsTo
     {
-        return $this->belongsTo(QueueStatus::class,'status_id','status');
-    }
-
-
-    public function location(): BelongsTo
-    {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(QueueStatus::class, 'status_id', 'status');
     }
 
     public function queueable(): MorphTo
@@ -123,25 +152,11 @@ class Queue extends Model
         return $this->morphTo();
     }
 
-//    public function getStatusAttribute()
-//    {
-//        if (!$this->started_at && !$this->missing_at) {
-//            return $this->statuses[self::STATUS_NEW];
-//        } elseif ($this->started_at && !$this->end_at && !$this->missing_at) {
-//            return $this->statuses[self::STATUS_NOW];
-//        } elseif (!$this->missing_at) {
-//            return $this->statuses[self::STATUS_ENDED];
-//        } else {
-//            return $this->statuses[self::STATUS_MISSING];
-//        }
-//    }
-
     public function getIsExpiredAttribute(): bool
     {
-        return (
-            $this->started_at && !$this->end_at &&
-            Carbon::make($this->started_at)->addMinutes($this->detail->period)->lt(now())
-        );
+        return
+            $this->started_at && ! $this->end_at &&
+            Carbon::make($this->started_at)->addMinutes($this->detail->period)->lt(now());
     }
 
     public function getStartableAttribute(): bool

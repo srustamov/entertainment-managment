@@ -14,7 +14,10 @@ use Laravel\Nova\ProxiesCanSeeToGate;
 
 abstract class Filter implements FilterContract, JsonSerializable
 {
-    use Metable, AuthorizedToSee, ProxiesCanSeeToGate, Makeable;
+    use Metable;
+    use AuthorizedToSee;
+    use ProxiesCanSeeToGate;
+    use Makeable;
 
     /**
      * The displayable name of the filter.

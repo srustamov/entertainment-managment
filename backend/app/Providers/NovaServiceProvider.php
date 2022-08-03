@@ -19,7 +19,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
-
 //        Nova::serving(function() {
 //            Event::listen('eloquent.booted:App\Models\QueueStatus', function($rating) {
 //                dd(1);
@@ -37,8 +36,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Nova::routes()
                 ->withAuthenticationRoutes();
-                //->withPasswordResetRoutes()
-                //->register();
+        //->withPasswordResetRoutes()
+        //->register();
     }
 
     /**
@@ -52,7 +51,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Gate::define('viewNova', function ($user) {
             return in_array($user->email, [
-                'rustemovv96@gmail.com'
+                'rustemovv96@gmail.com',
             ]);
         });
     }

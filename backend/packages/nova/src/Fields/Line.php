@@ -9,10 +9,13 @@ class Line extends Text
 {
     use Makeable;
 
-    const HEADING = 'extra-large';
-    const BASE = 'large';
-    const SUBTITLE = 'medium';
-    const SMALL = 'small';
+    public const HEADING = 'extra-large';
+
+    public const BASE = 'large';
+
+    public const SUBTITLE = 'medium';
+
+    public const SMALL = 'small';
 
     /**
      * The type for the line field.
@@ -113,7 +116,7 @@ class Line extends Text
     /**
      * Set the extra CSS classes to be applied to the line field.
      *
-     * @param mixed $classes
+     * @param  mixed  $classes
      * @return $this
      */
     public function extraClasses($classes)

@@ -13,7 +13,8 @@ use Laravel\Nova\Metrics\HasHelpText;
 
 abstract class Field extends FieldElement implements JsonSerializable, Resolvable
 {
-    use Macroable, HasHelpText;
+    use Macroable;
+    use HasHelpText;
 
     /**
      * The displayable name of the field.
@@ -189,8 +190,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Stack the label above the field.
      *
-     * @param bool $stack
-     *
+     * @param  bool  $stack
      * @return $this
      */
     public function stacked($stack = true)
@@ -354,12 +354,19 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     {
         if (isset($this->fillCallback)) {
             return call_user_func(
-                $this->fillCallback, $request, $model, $attribute, $requestAttribute
+                $this->fillCallback,
+                $request,
+                $model,
+                $attribute,
+                $requestAttribute
             );
         }
 
         return $this->fillAttributeFromRequest(
-            $request, $requestAttribute, $model, $attribute
+            $request,
+            $requestAttribute,
+            $model,
+            $attribute
         );
     }
 
@@ -384,7 +391,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Check value for null value.
      *
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return bool
      */
     protected function isNullValue($value)
@@ -450,7 +457,8 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
                             : $this->creationRules, ];
 
         return array_merge_recursive(
-            $this->getRules($request), $rules
+            $this->getRules($request),
+            $rules
         );
     }
 
@@ -480,7 +488,8 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
                             : $this->updateRules, ];
 
         return array_merge_recursive(
-            $this->getRules($request), $rules
+            $this->getRules($request),
+            $rules
         );
     }
 
@@ -723,6 +732,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      *
      * @param  string
      * @return $this
+     *
      * @throws \Exception
      */
     public function helpWidth($helpWidth)
@@ -734,6 +744,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * Return the width of the help text tooltip.
      *
      * @return string
+     *
      * @throws \Exception
      */
     public function getHelpWidth()
@@ -778,7 +789,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Set the placeholder text for the field if supported.
      *
-     * @param string $text
+     * @param  string  $text
      * @return $this
      */
     public function placeholder($text)

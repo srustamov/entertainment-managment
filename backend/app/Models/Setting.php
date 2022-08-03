@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property mixed $id
+ *
  * @method static Setting find($id)
  * @method static Setting findOrFail($id)
  */
@@ -17,6 +18,6 @@ class Setting extends Model
     protected $fillable = [
         'title',
         'key',
-        'value'
+        'value',
     ];
 }

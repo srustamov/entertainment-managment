@@ -6,7 +6,8 @@ use Laravel\Nova\Contracts\QueryBuilder;
 
 class ResourceIndexRequest extends NovaRequest
 {
-    use CountsResources, QueriesResources;
+    use CountsResources;
+    use QueriesResources;
 
     /**
      * Get the paginator instance for the index request.
@@ -16,8 +17,12 @@ class ResourceIndexRequest extends NovaRequest
     public function searchIndex()
     {
         return app()->make(QueryBuilder::class, [$this->resource()])->search(
-            $this, $this->newQuery(), $this->search,
-            $this->filters()->all(), $this->orderings(), $this->trashed()
+            $this,
+            $this->newQuery(),
+            $this->search,
+            $this->filters()->all(),
+            $this->orderings(),
+            $this->trashed()
         )->paginate((int) $this->perPage());
     }
 
@@ -29,8 +34,12 @@ class ResourceIndexRequest extends NovaRequest
     public function toCount()
     {
         return app()->make(QueryBuilder::class, [$this->resource()])->search(
-            $this, $this->newQuery(), $this->search,
-            $this->filters()->all(), $this->orderings(), $this->trashed()
+            $this,
+            $this->newQuery(),
+            $this->search,
+            $this->filters()->all(),
+            $this->orderings(),
+            $this->trashed()
         )->toBaseQueryBuilder()->getCountForPagination();
     }
 

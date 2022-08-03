@@ -26,14 +26,14 @@ use stdClass;
 abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
 {
     use
-        AuthorizedToSee,
-        ConditionallyLoadsAttributes,
-        DelegatesToResource,
-        Makeable,
-        ProxiesCanSeeToGate,
-        ResolvesActions,
-        ResolvesCards,
-        ResolvesFilters;
+        AuthorizedToSee;
+    use ConditionallyLoadsAttributes;
+    use DelegatesToResource;
+    use Makeable;
+    use ProxiesCanSeeToGate;
+    use ResolvesActions;
+    use ResolvesCards;
+    use ResolvesFilters;
 
     /**
      * The displayable name of the lens.
@@ -74,7 +74,7 @@ abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function __construct($resource = null)
     {
-        $this->resource = $resource ?: new stdClass;
+        $this->resource = $resource ?: new stdClass();
     }
 
     /**

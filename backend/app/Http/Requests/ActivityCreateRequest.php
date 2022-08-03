@@ -15,7 +15,7 @@ class ActivityCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','min:3',Rule::unique(Activity::class,'name')],
+            'name' => ['required', 'string', 'min:3', Rule::unique(Activity::class, 'name')],
         ];
     }
 }

@@ -15,11 +15,11 @@ use Laravel\Nova\Util;
 
 class BelongsTo extends Field implements RelatableField
 {
-    use AssociatableRelation,
-        DeterminesIfCreateRelationCanBeShown,
-        FormatsRelatableDisplayValues,
-        ResolvesReverseRelation,
-        Searchable;
+    use AssociatableRelation;
+    use DeterminesIfCreateRelationCanBeShown;
+    use FormatsRelatableDisplayValues;
+    use ResolvesReverseRelation;
+    use Searchable;
 
     /**
      * The field's component.
@@ -127,7 +127,8 @@ class BelongsTo extends Field implements RelatableField
     public function authorize(Request $request)
     {
         return $this->isNotRedundant($request) && call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -195,7 +196,8 @@ class BelongsTo extends Field implements RelatableField
     public function getRules(NovaRequest $request)
     {
         $query = $this->buildAssociatableQuery(
-            $request, $request->{$this->attribute.'_trashed'} === 'true'
+            $request,
+            $request->{$this->attribute.'_trashed'} === 'true'
         )->toBase();
 
         return array_merge_recursive(parent::getRules($request), [
@@ -272,9 +274,13 @@ class BelongsTo extends Field implements RelatableField
         $request->first === 'true'
                         ? $query->whereKey($model->newQueryWithoutScopes(), $request->current)
                         : $query->search(
-                                $request, $model->newQuery(), $request->search,
-                                [], [], TrashedStatus::fromBoolean($withTrashed)
-                          );
+                            $request,
+                            $model->newQuery(),
+                            $request->search,
+                            [],
+                            [],
+                            TrashedStatus::fromBoolean($withTrashed)
+                        );
 
         return $query->tap(function ($query) use ($request, $model) {
             forward_static_call($this->associatableQueryCallable($request, $model), $request, $query, $this);

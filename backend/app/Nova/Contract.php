@@ -9,7 +9,6 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Textarea;
 
 class Contract extends Resource
@@ -42,16 +41,15 @@ class Contract extends Resource
         'status',
     ];
 
-
     public function title()
     {
-        return $this->location->name ?? "";
+        return $this->location->name ?? '';
     }
 
     /**
      * Get the fields displayed by the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function fields(Request $request)
@@ -89,7 +87,7 @@ class Contract extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     #[Pure]
@@ -102,7 +100,7 @@ class Contract extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function filters(Request $request): array
@@ -114,7 +112,7 @@ class Contract extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function lenses(Request $request)
@@ -125,7 +123,7 @@ class Contract extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function actions(Request $request)

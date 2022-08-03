@@ -7,8 +7,8 @@ return [
      * See https://saintplay.github.io/vue-swatches/#sub-props
      */
     'props' => [
-//        'colors' => 'basic', // Preset
-//         'colors' => 'material-basic', // Preset
+        //        'colors' => 'basic', // Preset
+        //         'colors' => 'material-basic', // Preset
         'colors' => [
             '#1976D2',
             '#424242',
@@ -297,5 +297,5 @@ return [
 
         'show-fallback' => true,
         'fallback-type' => 'input', // Or "color"
-    ]
+    ],
 ];

@@ -18,7 +18,8 @@ class SearchController extends Controller
     public function index(GlobalSearchRequest $request)
     {
         return (new GlobalSearch(
-            $request, Nova::globallySearchableResources($request)
+            $request,
+            Nova::globallySearchableResources($request)
         ))->get();
     }
 }

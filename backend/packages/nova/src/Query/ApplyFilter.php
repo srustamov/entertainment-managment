@@ -43,7 +43,9 @@ class ApplyFilter
     public function __invoke(Request $request, $query)
     {
         $this->filter->apply(
-            $request, $query, $this->value
+            $request,
+            $query,
+            $this->value
         );
 
         return $query;

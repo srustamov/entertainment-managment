@@ -10,7 +10,8 @@ use Symfony\Component\Process\Process;
 
 class CardCommand extends Command
 {
-    use AcceptsNameAndVendor, RenamesStubs;
+    use AcceptsNameAndVendor;
+    use RenamesStubs;
 
     /**
      * The name and signature of the console command.
@@ -37,7 +38,7 @@ class CardCommand extends Command
             return;
         }
 
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/card-stubs',
             $this->cardPath()
         );
@@ -51,7 +52,7 @@ class CardCommand extends Command
         $this->replace('{{ class }}', $this->cardClass(), $this->cardPath().'/src/Card.stub');
         $this->replace('{{ component }}', $this->cardName(), $this->cardPath().'/src/Card.stub');
 
-        (new Filesystem)->move(
+        (new Filesystem())->move(
             $this->cardPath().'/src/Card.stub',
             $this->cardPath().'/src/'.$this->cardClass().'.php'
         );

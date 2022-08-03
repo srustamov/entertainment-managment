@@ -8,6 +8,7 @@ use Laravel\Nova\Nova;
 class Detail extends Page
 {
     public $resourceName;
+
     public $resourceId;
 
     /**

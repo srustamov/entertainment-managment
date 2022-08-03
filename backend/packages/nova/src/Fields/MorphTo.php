@@ -18,9 +18,9 @@ use Laravel\Nova\Util;
 
 class MorphTo extends Field implements RelatableField
 {
-    use DeterminesIfCreateRelationCanBeShown,
-        ResolvesReverseRelation,
-        Searchable;
+    use DeterminesIfCreateRelationCanBeShown;
+    use ResolvesReverseRelation;
+    use Searchable;
 
     /**
      * The field's component.
@@ -137,7 +137,8 @@ class MorphTo extends Field implements RelatableField
         }
 
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -198,7 +199,8 @@ class MorphTo extends Field implements RelatableField
                 $this->morphToId = Util::safeInt($this->morphToId);
 
                 $this->value = $this->formatDisplayValue(
-                    $value, Nova::resourceForModel($value)
+                    $value,
+                    Nova::resourceForModel($value)
                 );
 
                 $this->viewable = $this->viewable
@@ -275,7 +277,9 @@ class MorphTo extends Field implements RelatableField
     {
         if ($relatedResource = Nova::resourceForKey($request->{$this->attribute.'_type'})) {
             return new Relatable($request, $this->buildMorphableQuery(
-                $request, $relatedResource, $request->{$this->attribute.'_trashed'} === 'true'
+                $request,
+                $relatedResource,
+                $request->{$this->attribute.'_trashed'} === 'true'
             )->toBase());
         }
     }
@@ -341,14 +345,20 @@ class MorphTo extends Field implements RelatableField
         $request->first === 'true'
                         ? $query->whereKey($model->newQueryWithoutScopes(), $request->current)
                         : $query->search(
-                                $request, $model->newQuery(), $request->search,
-                                [], [], TrashedStatus::fromBoolean($withTrashed)
-                          );
+                            $request,
+                            $model->newQuery(),
+                            $request->search,
+                            [],
+                            [],
+                            TrashedStatus::fromBoolean($withTrashed)
+                        );
 
         return $query->tap(function ($query) use ($request, $relatedResource, $model) {
             forward_static_call(
                 $this->morphableQueryCallable($request, $relatedResource, $model),
-                $request, $query, $this
+                $request,
+                $query,
+                $this
             );
         });
     }
@@ -530,7 +540,7 @@ class MorphTo extends Field implements RelatableField
     /**
      * Set the default relation resource class to be selected.
      *
-     * @param \Closure|string $resourceClass
+     * @param  \Closure|string  $resourceClass
      * @return $this
      */
     public function defaultResource($resourceClass)

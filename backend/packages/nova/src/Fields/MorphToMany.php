@@ -15,11 +15,11 @@ use Laravel\Nova\TrashedStatus;
 
 class MorphToMany extends Field implements DeletableContract, ListableField, PivotableField, RelatableField
 {
-    use Deletable,
-        DetachesPivotModels,
-        FormatsRelatableDisplayValues,
-        ManyToManyCreationRules,
-        Searchable;
+    use Deletable;
+    use DetachesPivotModels;
+    use FormatsRelatableDisplayValues;
+    use ManyToManyCreationRules;
+    use Searchable;
 
     /**
      * The field's component.
@@ -123,7 +123,8 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Piv
     public function authorize(Request $request)
     {
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -185,9 +186,13 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Piv
         $request->first === 'true'
                         ? $query->whereKey($model->newQueryWithoutScopes(), $request->current)
                         : $query->search(
-                                $request, $model->newQuery(), $request->search,
-                                [], [], TrashedStatus::fromBoolean($withTrashed)
-                          );
+                            $request,
+                            $model->newQuery(),
+                            $request->search,
+                            [],
+                            [],
+                            TrashedStatus::fromBoolean($withTrashed)
+                        );
 
         return $query->tap(function ($query) use ($request, $model) {
             forward_static_call($this->attachableQueryCallable($request, $model), $request, $query, $this);
@@ -303,7 +308,7 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Piv
             'debounce' => $this->debounce,
             'listable' => true,
             'morphToManyRelationship' => $this->manyToManyRelationship,
-            'perPage'=> $this->resourceClass::$perPageViaRelationship,
+            'perPage' => $this->resourceClass::$perPageViaRelationship,
             'resourceName' => $this->resourceName,
             'searchable' => $this->searchable,
             'withSubtitles' => $this->withSubtitles,

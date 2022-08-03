@@ -57,8 +57,8 @@ class BootNova
     protected function registerTools()
     {
         Nova::tools([
-            new Dashboard,
-            new ResourceManager,
+            new Dashboard(),
+            new ResourceManager(),
         ]);
     }
 }

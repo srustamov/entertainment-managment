@@ -15,7 +15,8 @@ class PivotFieldDestroyRequest extends NovaRequest
     public function authorizeForAttachment()
     {
         if (! $this->newResourceWith($this->findModelOrFail())->authorizedToAttach(
-            $this, $this->findRelatedModel()
+            $this,
+            $this->findRelatedModel()
         )) {
             abort(403);
         }

@@ -11,10 +11,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * @property mixed $id
  * @property mixed $period_price
- * @property double $period
+ * @property float $period
  * @property string $color
  * @property string $size
  * @property string $number
+ *
  * @method static ActivityDetail find($id)
  * @method static ActivityDetail findOrFail($id)
  */
@@ -35,14 +36,14 @@ class ActivityDetail extends Model implements HasMedia
         'period',
     ];
 
-    public $timestamps  = false;
+    public $timestamps = false;
 
     protected $casts = [
         'period_price' => 'double',
         'period' => 'double',
     ];
 
-    protected $appends = ['period_unit','images'];
+    protected $appends = ['period_unit', 'images'];
 
     protected $with = ['media'];
 

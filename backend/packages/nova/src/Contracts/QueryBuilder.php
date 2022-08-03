@@ -26,9 +26,14 @@ interface QueryBuilder
      * @param  string  $withTrashed
      * @return $this
      */
-    public function search(NovaRequest $request, $query, $search = null,
-                                      array $filters = [], array $orderings = [],
-                                      $withTrashed = TrashedStatus::DEFAULT);
+    public function search(
+        NovaRequest $request,
+        $query,
+        $search = null,
+        array $filters = [],
+        array $orderings = [],
+        $withTrashed = TrashedStatus::DEFAULT
+    );
 
     /**
      * Set the "limit" for the search query.

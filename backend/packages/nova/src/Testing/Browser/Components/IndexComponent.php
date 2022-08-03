@@ -37,7 +37,9 @@ class IndexComponent extends BaseComponent
         $selector = '[dusk="'.$this->resourceName.'-index-component"]';
 
         return sprintf(
-           (! is_null($this->viaRelationship) ? '%s[data-relationship="%s"]' : '%s'), $selector, $this->viaRelationship
+            (! is_null($this->viaRelationship) ? '%s[data-relationship="%s"]' : '%s'),
+            $selector,
+            $this->viaRelationship
         );
     }
 

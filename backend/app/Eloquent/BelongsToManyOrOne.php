@@ -1,15 +1,13 @@
 <?php
 
-
 namespace App\Eloquent;
-
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class BelongsToManyOrOne extends BelongsToMany
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected bool $isMany = true;
 

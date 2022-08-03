@@ -7,7 +7,9 @@ use Laravel\Nova\MemoizesMethods;
 
 class NovaRequest extends FormRequest
 {
-    use InteractsWithResources, InteractsWithRelatedResources, MemoizesMethods;
+    use InteractsWithResources;
+    use InteractsWithRelatedResources;
+    use MemoizesMethods;
 
     /**
      * Determine if this request is via a many to many relationship.

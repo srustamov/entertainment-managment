@@ -45,7 +45,8 @@ class ActionEvent extends Model
         $provider = config('auth.guards.'.(config('nova.guard') ?? 'web').'.provider');
 
         return $this->belongsTo(
-            config('auth.providers.'.$provider.'.model'), 'user_id'
+            config('auth.providers.'.$provider.'.model'),
+            'user_id'
         );
     }
 
@@ -219,8 +220,8 @@ class ActionEvent extends Model
                 'changes' => null,
                 'status' => 'finished',
                 'exception' => '',
-                'created_at' => new DateTime,
-                'updated_at' => new DateTime,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime(),
             ]);
         });
     }
@@ -254,8 +255,8 @@ class ActionEvent extends Model
                 'changes' => null,
                 'status' => 'finished',
                 'exception' => '',
-                'created_at' => new DateTime,
-                'updated_at' => new DateTime,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime(),
             ]);
         });
     }
@@ -270,8 +271,13 @@ class ActionEvent extends Model
      * @param  string  $status
      * @return void
      */
-    public static function createForModels(ActionRequest $request, Action $action,
-                                           $batchId, Collection $models, $status = 'running')
+    public static function createForModels(
+        ActionRequest $request,
+        Action $action,
+        $batchId,
+        Collection $models,
+        $status = 'running'
+    )
     {
         $models = $models->map(function ($model) use ($request, $action, $batchId, $status) {
             return array_merge(
@@ -300,8 +306,12 @@ class ActionEvent extends Model
      * @param  string  $status
      * @return array
      */
-    public static function defaultAttributes(ActionRequest $request, Action $action,
-                                             $batchId, $status = 'running')
+    public static function defaultAttributes(
+        ActionRequest $request,
+        Action $action,
+        $batchId,
+        $status = 'running'
+    )
     {
         if ($request->isPivotAction()) {
             $pivotClass = $request->pivotRelation()->getPivotClass();
@@ -325,8 +335,8 @@ class ActionEvent extends Model
             'changes' => null,
             'status' => $status,
             'exception' => '',
-            'created_at' => new DateTime,
-            'updated_at' => new DateTime,
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime(),
         ];
     }
 

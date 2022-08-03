@@ -6,10 +6,10 @@ use Illuminate\Support\Str;
 
 abstract class Dashboard extends Element
 {
-    use AuthorizedToSee,
-        Metable,
-        Makeable,
-        ProxiesCanSeeToGate;
+    use AuthorizedToSee;
+    use Metable;
+    use Makeable;
+    use ProxiesCanSeeToGate;
 
     /**
      * Get the displayable name of the dashboard.

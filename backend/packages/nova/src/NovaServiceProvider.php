@@ -113,8 +113,8 @@ class NovaServiceProvider extends ServiceProvider
      */
     protected function registerCarbonMacros()
     {
-        Carbon::mixin(new Macros\FirstDayOfQuarter);
-        Carbon::mixin(new Macros\FirstDayOfPreviousQuarter);
+        Carbon::mixin(new Macros\FirstDayOfQuarter());
+        Carbon::mixin(new Macros\FirstDayOfPreviousQuarter());
     }
 
     /**

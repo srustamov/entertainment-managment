@@ -8,6 +8,7 @@ use Laravel\Dusk\Component as BaseComponent;
 class DetailComponent extends BaseComponent
 {
     public $resourceName;
+
     public $resourceId;
 
     /**

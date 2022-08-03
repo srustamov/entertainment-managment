@@ -4,7 +4,7 @@ return [
 
     'api_domain' => env('API_DOMAIN'),
 
-    'api_version' => env('API_VERSION','v1'),
+    'api_version' => env('API_VERSION', 'v1'),
 
     /*
     |--------------------------------------------------------------------------
@@ -179,7 +179,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\ApiServiceProvider::class,
 
     ],
 

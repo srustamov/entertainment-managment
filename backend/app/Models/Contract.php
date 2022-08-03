@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Eloquent\Model;
+use App\Eloquent\Traits\HasLocation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contract extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
+    use HasLocation;
 
     protected $table = 'location_contracts';
 
@@ -32,11 +35,6 @@ class Contract extends Model
         'expire_date' => 'date',
     ];
 
-    public function location(): BelongsTo
-    {
-        return $this->belongsTo(Location::class);
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -44,6 +42,6 @@ class Contract extends Model
 
     public function scopeActive(Builder $builder): Builder
     {
-        return $builder->where('status',1);
+        return $builder->where('status', 1);
     }
 }

@@ -22,7 +22,8 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers, ValidatesRequests;
+    use AuthenticatesUsers;
+    use ValidatesRequests;
 
     /**
      * Create a new controller instance.

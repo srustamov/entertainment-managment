@@ -51,32 +51,31 @@ class Handler extends ExceptionHandler
             ->notOk()
             ->setCode($this->getCode($e))
             ->setError([
-                    'message' => $message = $this->isHttpException($e)
-                        ? (Response::$statusTexts[$e->getStatusCode()] ?? "")
-                        : $e->getMessage(),
-                ] + (config('app.debug') ? [
-                    'line' => $e->getLine(),
-                    'code' => $this->getCode($e),
-                    'exception' => class_basename($e),
-                    //'trace' => $e->getTrace(),
-                    'file' => $e->getFile(),
-                ] : []))
+                'message' => $message = $this->isHttpException($e)
+                    ? (Response::$statusTexts[$e->getStatusCode()] ?? '')
+                    : $e->getMessage(),
+            ] + (config('app.debug') ? [
+                'line' => $e->getLine(),
+                'code' => $this->getCode($e),
+                'exception' => class_basename($e),
+                //'trace' => $e->getTrace(),
+                'file' => $e->getFile(),
+            ] : []))
             ->setMessage($message);
     }
 
     public function render($request, Throwable $e): Api|JsonResponse|Response
     {
-        if (!$this->isNovaEndpoint($request)) {
+        if (! $this->isNovaEndpoint($request)) {
             return $this->renderException($e);
         }
-        return parent::render($request,$e);
+
+        return parent::render($request, $e);
     }
-
-
 
     private function isNovaEndpoint($request): bool
     {
-        return Str::startsWith($request->url(),'nova');
+        return Str::startsWith($request->url(), 'nova');
     }
 
     public function getCode($e): int

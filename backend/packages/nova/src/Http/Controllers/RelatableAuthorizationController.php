@@ -21,12 +21,14 @@ class RelatableAuthorizationController extends Controller
 
         if ($request->viaManyToMany()) {
             return ['authorized' => (new $resource($model))->authorizedToAttachAny(
-                $request, $request->model()
+                $request,
+                $request->model()
             )];
         }
 
         return ['authorized' => (new $resource($model))->authorizedToAdd(
-            $request, $request->model()
+            $request,
+            $request->model()
         )];
     }
 }

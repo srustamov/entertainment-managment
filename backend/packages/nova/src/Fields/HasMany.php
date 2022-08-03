@@ -71,7 +71,8 @@ class HasMany extends Field implements ListableField, RelatableField
     public function authorize(Request $request)
     {
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -109,7 +110,7 @@ class HasMany extends Field implements ListableField, RelatableField
         return array_merge([
             'hasManyRelationship' => $this->hasManyRelationship,
             'listable' => true,
-            'perPage'=> $this->resourceClass::$perPageViaRelationship,
+            'perPage' => $this->resourceClass::$perPageViaRelationship,
             'resourceName' => $this->resourceName,
             'singularLabel' => $this->singularLabel ?? $this->resourceClass::singularLabel(),
         ], parent::jsonSerialize());

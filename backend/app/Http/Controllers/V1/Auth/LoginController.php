@@ -14,15 +14,15 @@ class LoginController extends Controller
     /**
      * Get a JWT via given credentials.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Api
      */
     public function login(Request $request): Api
     {
         $credentials = $request->only(['email', 'password']);
 
-        if (!$token = auth(guard: 'api')->attempt($credentials)) {
-            return api(data:[],code: Response::HTTP_UNPROCESSABLE_ENTITY)
+        if (! $token = auth(guard: 'api')->attempt($credentials)) {
+            return api(data:[], code: Response::HTTP_UNPROCESSABLE_ENTITY)
                 ->notOk()
                 ->setMessage(trans('auth.failed'));
         }
@@ -33,8 +33,7 @@ class LoginController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param string $token
-     *
+     * @param  string  $token
      * @return Api
      */
     protected function respondWithToken(string $token): Api
@@ -49,14 +48,14 @@ class LoginController extends Controller
     /**
      * Get the authenticated User.
      *
-     * @param CurrentUser $user
+     * @param  CurrentUser  $user
      * @return Api
      */
     #[Pure]
     public function user(CurrentUser $user): Api
     {
         return api([
-            'user' => $user
+            'user' => $user,
         ]);
     }
 

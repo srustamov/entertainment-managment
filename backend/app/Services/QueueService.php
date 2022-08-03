@@ -11,12 +11,11 @@ use JetBrains\PhpStorm\Pure;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
-
 class QueueService implements Printable
 {
-    const PRINTER_TIMEOUT = 15;
+    public const PRINTER_TIMEOUT = 15;
 
-    const NEW_LINE = "\r\n";
+    public const NEW_LINE = "\r\n";
 
     public string $ip = '0.0.0.0';
 
@@ -28,7 +27,6 @@ class QueueService implements Printable
     {
         $this->queue = $queue;
     }
-
 
     #[Pure]
     public static function make(Queue $queue): static
@@ -58,8 +56,7 @@ class QueueService implements Printable
 
         $printer->setContentCenter();
         $printer->setTextSize(1, 1);
-        $printer->text("Növbə:" . $this->queue->number);
-
+        $printer->text('Növbə:'.$this->queue->number);
 
         $printer->qrCode($this->queue->id, 0, 5);
 
@@ -123,12 +120,12 @@ class QueueService implements Printable
 
         $image = Image::canvas(1000, 690, '#ffff')
             ->insert($qrPath, 'left-top', 50, 50)
-            ->text("Test 1", 530, 150, function ($font) {
+            ->text('Test 1', 530, 150, function ($font) {
                 $font->file(storage_path('fonts/Roboto-Regular.ttf'));
                 $font->size(40);
                 $font->valign('top');
             })
-            ->text("Test 2", 620, 300, function ($font) {
+            ->text('Test 2', 620, 300, function ($font) {
                 $font->file(storage_path('fonts/Roboto-Regular.ttf'));
                 $font->size(60);
                 $font->valign('top');
@@ -146,7 +143,7 @@ class QueueService implements Printable
                 EscposImage::load(storage_path($filename), false)
             );
         } catch (Exception $e) {
-            $printer->text($e->getMessage() . "\n");
+            $printer->text($e->getMessage()."\n");
         }
 
         $printer->cut();

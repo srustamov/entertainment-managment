@@ -111,7 +111,7 @@ abstract class Partition extends Metric
      */
     protected function aggregate($request, $model, $function, $column, $groupBy)
     {
-        $query = $model instanceof Builder ? $model : (new $model)->newQuery();
+        $query = $model instanceof Builder ? $model : (new $model())->newQuery();
 
         $wrappedColumn = $column instanceof Expression
                 ? (string) $column
@@ -120,7 +120,8 @@ abstract class Partition extends Metric
                 );
 
         $results = $query->select(
-            $groupBy, DB::raw("{$function}({$wrappedColumn}) as aggregate")
+            $groupBy,
+            DB::raw("{$function}({$wrappedColumn}) as aggregate")
         )->groupBy($groupBy)->get();
 
         return $this->result($results->mapWithKeys(function ($result) use ($groupBy) {

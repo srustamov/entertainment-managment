@@ -5,13 +5,10 @@ namespace App\Nova;
 use App\Nova\Filters\AreaFilter;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use NovaAttachMany\AttachMany;
 
 class Location extends Resource
 {
@@ -35,13 +32,13 @@ class Location extends Resource
      * @var array
      */
     public static array $search = [
-        'name','price'
+        'name', 'price',
     ];
 
     /**
      * Get the fields displayed by the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function fields(Request $request): array
@@ -55,15 +52,15 @@ class Location extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Currency::make('Price','price')
+            Currency::make('Price', 'price')
                 ->sortable()
-                ->rules('required', 'numeric','min:10','max:100000'),
+                ->rules('required', 'numeric', 'min:10', 'max:100000'),
 
-            HasMany::make('Activities','activities'),
+            HasMany::make('Activities', 'activities'),
 
-            Text::make('Created At',function ($location){
+            Text::make('Created At', function ($location) {
                 return $location->created_at->format('Y-m-d H:i:s');
-            })->sortable()->readonly()
+            })->sortable()->readonly(),
 
         ];
     }
@@ -71,7 +68,7 @@ class Location extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function cards(Request $request): array
@@ -82,20 +79,20 @@ class Location extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function filters(Request $request): array
     {
         return [
-            new AreaFilter
+            new AreaFilter(),
         ];
     }
 
     /**
      * Get the lenses available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function lenses(Request $request): array
@@ -106,7 +103,7 @@ class Location extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      */
     public function actions(Request $request): array

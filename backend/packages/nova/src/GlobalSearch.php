@@ -53,7 +53,8 @@ class GlobalSearch
     {
         foreach ($this->resources as $resourceClass) {
             $query = app()->make(QueryBuilder::class, [$resourceClass])->search(
-                $this->request, $resourceClass::newModel()->newQuery(),
+                $this->request,
+                $resourceClass::newModel()->newQuery(),
                 $this->request->search
             );
 

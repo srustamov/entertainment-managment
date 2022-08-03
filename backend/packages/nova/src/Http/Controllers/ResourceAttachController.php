@@ -33,8 +33,11 @@ class ResourceAttachController extends Controller
 
         DB::transaction(function () use ($request, $resource, $model) {
             [$pivot, $callbacks] = $resource::fillPivot(
-                $request, $model, $this->initializePivot(
-                    $request, $model->{$request->viaRelationship}()
+                $request,
+                $model,
+                $this->initializePivot(
+                    $request,
+                    $model->{$request->viaRelationship}()
                 )
             );
 
@@ -91,6 +94,7 @@ class ResourceAttachController extends Controller
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Relations\BelongsToMany  $relationship
      * @return \Illuminate\Database\Eloquent\Relations\Pivot
+     *
      * @throws \Exception
      */
     protected function initializePivot(NovaRequest $request, $relationship)
@@ -116,8 +120,8 @@ class ResourceAttachController extends Controller
 
         if ($relationship->withTimestamps) {
             $pivot->forceFill([
-                $relationship->createdAt() => new DateTime,
-                $relationship->updatedAt() => new DateTime,
+                $relationship->createdAt() => new DateTime(),
+                $relationship->updatedAt() => new DateTime(),
             ]);
         }
 

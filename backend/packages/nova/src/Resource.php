@@ -18,24 +18,24 @@ use ReturnTypeWillChange;
 
 abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
 {
-    use Authorizable,
-        ConditionallyLoadsAttributes,
-        DelegatesToResource,
-        FillsFields,
-        PerformsValidation,
-        PerformsQueries,
-        ResolvesActions,
-        ResolvesFields,
-        ResolvesFilters,
-        ResolvesLenses,
-        ResolvesCards;
+    use Authorizable;
+    use ConditionallyLoadsAttributes;
+    use DelegatesToResource;
+    use FillsFields;
+    use PerformsValidation;
+    use PerformsQueries;
+    use ResolvesActions;
+    use ResolvesFields;
+    use ResolvesFilters;
+    use ResolvesLenses;
+    use ResolvesCards;
 
     /**
      * The default displayable pivot class name.
      *
      * @var string
      */
-    const DEFAULT_PIVOT_NAME = 'Pivot';
+    public const DEFAULT_PIVOT_NAME = 'Pivot';
 
     /**
      * The visual style used for the table. Available options are 'tight' and 'default'.
@@ -267,7 +267,8 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
         }
 
         return static::$softDeletes[static::$model] = in_array(
-            SoftDeletes::class, class_uses_recursive(static::newModel())
+            SoftDeletes::class,
+            class_uses_recursive(static::newModel())
         );
     }
 
@@ -284,8 +285,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     /**
      * Determine whether the global search links will take the user to the detail page.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
-     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return string
      */
     public function globalSearchLink(NovaRequest $request)
@@ -396,7 +396,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         $model = static::$model;
 
-        return new $model;
+        return new $model();
     }
 
     /**
@@ -444,7 +444,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     /**
      * Indicates whether Nova should prevent the user from leaving an unsaved form, losing their data.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return  bool
      */
     public static function preventFormAbandonment(Request $request)
@@ -479,7 +479,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      * Prepare the resource for JSON serialization.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param \Laravel\Nova\Resource $resource
+     * @param  \Laravel\Nova\Resource  $resource
      * @return array
      */
     public function serializeForDetail(NovaRequest $request, Resource $resource)
@@ -506,7 +506,8 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         if ($request->viaManyToMany()) {
             return $request->findParentResourceOrFail()->authorizedToAttach(
-                $request, $this->model()
+                $request,
+                $this->model()
             );
         }
 
@@ -523,7 +524,9 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     {
         if ($request->viaManyToMany()) {
             return $request->findParentResourceOrFail()->authorizedToDetach(
-                $request, $this->model(), $request->viaRelationship
+                $request,
+                $this->model(),
+                $request->viaRelationship
             );
         }
 

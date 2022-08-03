@@ -10,7 +10,8 @@ use Symfony\Component\Process\Process;
 
 class AssetCommand extends Command
 {
-    use AcceptsNameAndVendor, RenamesStubs;
+    use AcceptsNameAndVendor;
+    use RenamesStubs;
 
     /**
      * The name and signature of the console command.
@@ -37,7 +38,7 @@ class AssetCommand extends Command
             return;
         }
 
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/asset-stubs',
             $this->assetPath()
         );

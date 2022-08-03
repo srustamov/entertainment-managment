@@ -2,19 +2,11 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\AreaFilter;
 use App\Nova\Filters\LocationFilter;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\Pure;
-use Laravel\Nova\Cards\Help;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Yna\NovaSwatches\Swatches;
 
 class QueueStatus extends Resource
@@ -39,7 +31,7 @@ class QueueStatus extends Resource
      * @var array
      */
     public static array $search = [
-        'id','name','status'
+        'id', 'name', 'status',
     ];
 
     /**
@@ -52,20 +44,19 @@ class QueueStatus extends Resource
     {
         return [
             //ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Ad','name')->sortable()
+            Text::make('Ad', 'name')->sortable()
                 ->rules([
                     'required',
                     'string',
                 ]),
-            Text::make('Status','status')->sortable()
+            Text::make('Status', 'status')->sortable()
                 ->rules([
                     'required',
                     'numeric',
                 ]),
-            Swatches::make('Color','color')->rules(['required']),
+            Swatches::make('Color', 'color')->rules(['required']),
         ];
     }
-
 
     public static function authorizedToCreate(Request $request)
     {
@@ -81,8 +72,6 @@ class QueueStatus extends Resource
     {
         return false;
     }
-
-
 
     /**
      * Get the cards available for the request.
@@ -103,7 +92,7 @@ class QueueStatus extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function filters(Request $request) : array
+    public function filters(Request $request): array
     {
         return [
             new LocationFilter(),

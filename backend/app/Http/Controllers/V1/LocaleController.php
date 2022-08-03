@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\File;
 
 class LocaleController extends Controller
 {
-    public function json() : array
+    public function json(): array
     {
         return [
-            'locale'   => app()->getLocale(),
-            'messages' => json_decode(File::get(storage_path('frontend/lang.json')))
+            'locale' => app()->getLocale(),
+            'messages' => json_decode(File::get(storage_path('frontend/lang.json'))),
         ];
     }
 }

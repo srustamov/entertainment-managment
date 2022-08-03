@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Area extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = ['name'];
-
 
     public function locations(): HasMany
     {
@@ -22,7 +22,7 @@ class Area extends Model
 
     public function users(): HasManyThrough
     {
-        return $this->hasManyThrough(User::class,Location::class);
+        return $this->hasManyThrough(User::class, Location::class);
     }
 
     public function activities(): HasManyThrough
@@ -32,5 +32,4 @@ class Area extends Model
             through: Location::class
         );
     }
-
 }

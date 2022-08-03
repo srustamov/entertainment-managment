@@ -20,7 +20,10 @@ use ReflectionClass;
 
 class Action implements JsonSerializable
 {
-    use Metable, AuthorizedToSee, ProxiesCanSeeToGate, Makeable;
+    use Metable;
+    use AuthorizedToSee;
+    use ProxiesCanSeeToGate;
+    use Makeable;
 
     /**
      * The displayable name of the action.
@@ -253,6 +256,7 @@ class Action implements JsonSerializable
      *
      * @param  \Laravel\Nova\Http\Requests\ActionRequest  $request
      * @return mixed
+     *
      * @throws MissingActionHandlerException
      */
     public function handleRequest(ActionRequest $request)
@@ -272,12 +276,17 @@ class Action implements JsonSerializable
 
             $results = [
                 DispatchAction::forModels(
-                    $request, $this, $method, $results = collect([]), $fields
+                    $request,
+                    $this,
+                    $method,
+                    $results = collect([]),
+                    $fields
                 ),
             ];
         } else {
             $results = $request->chunks(
-                static::$chunkCount, function ($models) use ($fields, $request, $method, &$wasExecuted) {
+                static::$chunkCount,
+                function ($models) use ($fields, $request, $method, &$wasExecuted) {
                     $models = $models->filterForExecution($request);
 
                     if (count($models) > 0) {
@@ -285,7 +294,11 @@ class Action implements JsonSerializable
                     }
 
                     return DispatchAction::forModels(
-                        $request, $this, $method, $models, $fields
+                        $request,
+                        $this,
+                        $method,
+                        $models,
+                        $fields
                     );
                 }
             );
@@ -303,7 +316,6 @@ class Action implements JsonSerializable
      *
      * @param  \Laravel\Nova\Fields\ActionFields  $fields
      * @param  array  $results
-     *
      * @return mixed
      */
     public function handleResult(ActionFields $fields, $results)

@@ -2,9 +2,8 @@
 
 namespace App\Eloquent;
 
-
 use App\Eloquent\Traits\Filterable;
-
+use App\Eloquent\Traits\ResolveRouteBinding;
 
 /**
  * @property mixed $id
@@ -12,4 +11,5 @@ use App\Eloquent\Traits\Filterable;
 class Model extends \Illuminate\Database\Eloquent\Model
 {
     use Filterable;
+    use ResolveRouteBinding;
 }

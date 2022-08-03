@@ -104,7 +104,7 @@ abstract class Value extends RangedMetric
      */
     protected function aggregate($request, $model, $function, $column = null, $dateColumn = null)
     {
-        $query = $model instanceof Builder ? $model : (new $model)->newQuery();
+        $query = $model instanceof Builder ? $model : (new $model())->newQuery();
 
         $column = $column ?? $query->getModel()->getQualifiedKeyName();
 
@@ -176,8 +176,7 @@ abstract class Value extends RangedMetric
     /**
      * Calculate the previous quarter range.
      *
-     * @param string $timezone
-     *
+     * @param  string  $timezone
      * @return array
      */
     protected function previousQuarterRange($timezone)
@@ -232,7 +231,6 @@ abstract class Value extends RangedMetric
      * Calculate the previous quarter range.
      *
      * @param  string  $timezone
-     *
      * @return array
      */
     protected function currentQuarterRange($timezone)

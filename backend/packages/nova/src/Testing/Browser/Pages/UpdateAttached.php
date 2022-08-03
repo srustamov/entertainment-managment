@@ -8,8 +8,11 @@ use Laravel\Nova\Nova;
 class UpdateAttached extends Page
 {
     public $resourceName;
+
     public $resourceId;
+
     public $relation;
+
     public $relatedId;
 
     /**

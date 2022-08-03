@@ -10,7 +10,8 @@ use Symfony\Component\Process\Process;
 
 class CustomFilterCommand extends Command
 {
-    use AcceptsNameAndVendor, RenamesStubs;
+    use AcceptsNameAndVendor;
+    use RenamesStubs;
 
     /**
      * The name and signature of the console command.
@@ -37,7 +38,7 @@ class CustomFilterCommand extends Command
             return;
         }
 
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/filter-stubs',
             $this->filterPath()
         );
@@ -50,7 +51,7 @@ class CustomFilterCommand extends Command
         $this->replace('{{ class }}', $this->filterClass(), $this->filterPath().'/src/Filter.stub');
         $this->replace('{{ component }}', $this->filterName(), $this->filterPath().'/src/Filter.stub');
 
-        (new Filesystem)->move(
+        (new Filesystem())->move(
             $this->filterPath().'/src/Filter.stub',
             $this->filterPath().'/src/'.$this->filterClass().'.php'
         );

@@ -42,7 +42,7 @@ trait ResolvesFields
                 if ($field instanceof Resolvable && $field->pivot) {
                     $accessor = $this->pivotAccessorFor($request, $request->viaResource);
 
-                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot);
+                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot());
                 }
             });
     }
@@ -70,7 +70,7 @@ trait ResolvesFields
                 if ($field->pivot) {
                     $accessor = $this->pivotAccessorFor($request, $request->viaResource);
 
-                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot);
+                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot());
                 } else {
                     $field->resolveForDisplay($this->resource);
                 }
@@ -105,7 +105,7 @@ trait ResolvesFields
                 if ($field->pivot) {
                     $accessor = $this->pivotAccessorFor($request, $request->viaResource);
 
-                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot);
+                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot());
                 } else {
                     $field->resolveForDisplay($this->resource);
                 }
@@ -140,7 +140,7 @@ trait ResolvesFields
                 if ($field->pivot) {
                     $accessor = $this->pivotAccessorFor($request, $request->viaResource);
 
-                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot);
+                    $field->resolveForDisplay($this->{$accessor} ?? new Pivot());
                 } else {
                     $field->resolveForDisplay($this->resource);
                 }
@@ -202,7 +202,7 @@ trait ResolvesFields
      * Resolve the detail fields and assign them to their associated panel.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param \Laravel\Nova\Resource $resource
+     * @param  \Laravel\Nova\Resource  $resource
      * @return \Laravel\Nova\Fields\FieldCollection
      */
     public function detailFieldsWithinPanels(NovaRequest $request, Resource $resource)
@@ -267,7 +267,8 @@ trait ResolvesFields
     public function creationPivotFields(NovaRequest $request, $relatedResource)
     {
         return $this->removeNonCreationFields(
-            $request, $this->resolvePivotFields($request, $relatedResource)
+            $request,
+            $this->resolvePivotFields($request, $relatedResource)
         );
     }
 
@@ -318,7 +319,7 @@ trait ResolvesFields
      * Resolve the update fields and assign them to their associated panel.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param \Laravel\Nova\Resource $resource
+     * @param  \Laravel\Nova\Resource  $resource
      * @return \Laravel\Nova\Fields\FieldCollection
      */
     public function updateFieldsWithinPanels(NovaRequest $request, Resource $resource = null)
@@ -339,7 +340,8 @@ trait ResolvesFields
     public function updatePivotFields(NovaRequest $request, $relatedResource)
     {
         return $this->removeNonUpdateFields(
-            $request, $this->resolvePivotFields($request, $relatedResource)
+            $request,
+            $this->resolvePivotFields($request, $relatedResource)
         );
     }
 
@@ -439,7 +441,7 @@ trait ResolvesFields
                       ->findFieldByAttribute($attribute);
 
         if (! isset($field->resourceClass)) {
-            return new FieldCollection;
+            return new FieldCollection();
         }
 
         $relatedResource = $field instanceof MorphTo
@@ -468,7 +470,8 @@ trait ResolvesFields
      */
     public function resolveAvatarField(NovaRequest $request)
     {
-        return tap($this->availableFields($request)
+        return tap(
+            $this->availableFields($request)
             ->authorized($request)
             ->whereInstanceOf(Cover::class)
             ->first(),
@@ -498,7 +501,7 @@ trait ResolvesFields
     /**
      * Determine whether the resource's avatar should be rounded, if applicable.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return bool
      */
     public function resolveIfAvatarShouldBeRounded(NovaRequest $request)
@@ -539,7 +542,7 @@ trait ResolvesFields
      * Get the panels that are available for the given detail request.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param \Laravel\Nova\Resource $resource
+     * @param  \Laravel\Nova\Resource  $resource
      * @return array
      */
     public function availablePanelsForDetail(NovaRequest $request, Resource $resource)
@@ -645,7 +648,7 @@ trait ResolvesFields
             if ($field instanceof Resolvable) {
                 $accessor = $this->pivotAccessorFor($request, $relatedResource);
 
-                $field->resolve($this->{$accessor} ?? new Pivot);
+                $field->resolve($this->{$accessor} ?? new Pivot());
             }
         })->authorized($request)->all()))->values();
     }

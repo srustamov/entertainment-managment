@@ -5,19 +5,15 @@ namespace App\Nova;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
-use Laravel\Nova\Cards\Help;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Yna\NovaSwatches\Swatches;
 
 class ActivityDetail extends Resource
 {
-
     public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
@@ -38,7 +34,7 @@ class ActivityDetail extends Resource
      * @var array
      */
     public static array $search = [
-        'id','color','price','size','period'
+        'id', 'color', 'price', 'size', 'period',
     ];
 
     /**
@@ -52,9 +48,9 @@ class ActivityDetail extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Images::make('Image', 'main')->rules([]),
-            Swatches::make('Color','color')->rules(['required'])->required(),
-            Currency::make('Price','period_price')->sortable()->rules( 'required', 'max:255'),
-            Text::make('Period','period')->sortable()->rules( 'required', 'max:255'),
+            Swatches::make('Color', 'color')->rules(['required'])->required(),
+            Currency::make('Price', 'period_price')->sortable()->rules('required', 'max:255'),
+            Text::make('Period', 'period')->sortable()->rules('required', 'max:255'),
         ];
     }
 
@@ -77,7 +73,7 @@ class ActivityDetail extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function filters(Request $request) : array
+    public function filters(Request $request): array
     {
         return [
         ];

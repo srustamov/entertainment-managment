@@ -22,7 +22,8 @@ class AssociatableController extends Controller
                     ->findFieldByAttribute($request->field);
 
         $withTrashed = $this->shouldIncludeTrashed(
-            $request, $associatedResource = $field->resourceClass
+            $request,
+            $associatedResource = $field->resourceClass
         );
 
         $limit = $associatedResource::usesScout()

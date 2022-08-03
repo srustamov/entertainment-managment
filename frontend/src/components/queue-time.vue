@@ -5,7 +5,7 @@
 <script>
 import moment from 'moment'
 import {mapGetters} from "vuex";
-import {ACTIVITY_ITEM_TYPE, ACTIVITY_TYPE} from "@/utils/queue";
+import { ACTIVITY_TYPE} from "@/utils/queue";
 
 export default {
   props: ['queue'],
@@ -70,7 +70,7 @@ export default {
             clearInterval(this.$store.getters['queue/timers'][`timer-${this.queue.id}`])
             await this.$store.dispatch('queue/clearTimer', this.queue.id)
             this.queue.is_expired = true;
-            this.$toast.default(`${this.queue.number} sıralı ${this.queue.queueable.name} növbəsi bitdi`, {
+            this.$toast.default(`${this.queue.number} ${this.queue.queueable.name} is expired`, {
               duration: 7000,
               dismissible: true,
               pauseOnHover: true,
@@ -80,7 +80,8 @@ export default {
                   let isBaseActivity = this.queue.queueable_type === ACTIVITY_TYPE;
 
                   this.$router.push({
-                    name: "queues", query: {
+                    name: "queues",
+                    query: {
                       activity: isBaseActivity ? this.queue.queueable_id : this.queue?.queueable?.activity_id,
                       activity_item: isBaseActivity ? undefined :  this.queue.queueable_id,
                       queue:this.queue.id

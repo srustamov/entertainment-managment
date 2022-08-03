@@ -1,6 +1,5 @@
 <?php
 
-
 return [
-    'subscription_expired' => 'Abunəliyiniz bitmişdir'
+    'subscription_expired' => 'Abunəliyiniz bitmişdir',
 ];

@@ -2,19 +2,14 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\AreaFilter;
 use App\Nova\Filters\LocationFilter;
 use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
-use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Queue extends Resource
 {
@@ -38,7 +33,7 @@ class Queue extends Resource
      * @var array
      */
     public static array $search = [
-        'id','number'
+        'id', 'number',
     ];
 
     /**
@@ -53,14 +48,14 @@ class Queue extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('Location', 'location')->sortable(),
 
-            BelongsTo::make('Status','status',QueueStatus::class),
+            BelongsTo::make('Status', 'status', QueueStatus::class),
 
-            MorphTo::make('Tip','queueable')->readonly(),
+            MorphTo::make('Tip', 'queueable')->readonly(),
 
-            Number::make('Növbə','number')->sortable()->readonly(),
-            DateTime::make('Tarix','created_at')->sortable()->readonly(),
-            DateTime::make('Başlama tarixi','started_at')->sortable()->nullable(),
-            DateTime::make('Bitmə tarixi','end_at')->sortable()->nullable(),
+            Number::make('Növbə', 'number')->sortable()->readonly(),
+            DateTime::make('Tarix', 'created_at')->sortable()->readonly(),
+            DateTime::make('Başlama tarixi', 'started_at')->sortable()->nullable(),
+            DateTime::make('Bitmə tarixi', 'end_at')->sortable()->nullable(),
         ];
     }
 
@@ -88,7 +83,7 @@ class Queue extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function filters(Request $request) : array
+    public function filters(Request $request): array
     {
         return [
             new LocationFilter(),

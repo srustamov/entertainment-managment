@@ -10,7 +10,8 @@ use Symfony\Component\Process\Process;
 
 class ToolCommand extends Command
 {
-    use AcceptsNameAndVendor, RenamesStubs;
+    use AcceptsNameAndVendor;
+    use RenamesStubs;
 
     /**
      * The name and signature of the console command.
@@ -39,7 +40,7 @@ class ToolCommand extends Command
 
         $noInteraction = $this->option('no-interaction');
 
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/tool-stubs',
             $this->toolPath()
         );
@@ -56,7 +57,7 @@ class ToolCommand extends Command
         $this->replace('{{ class }}', $this->toolClass(), $this->toolPath().'/src/Tool.stub');
         $this->replace('{{ component }}', $this->toolName(), $this->toolPath().'/src/Tool.stub');
 
-        (new Filesystem)->move(
+        (new Filesystem())->move(
             $this->toolPath().'/src/Tool.stub',
             $this->toolPath().'/src/'.$this->toolClass().'.php'
         );

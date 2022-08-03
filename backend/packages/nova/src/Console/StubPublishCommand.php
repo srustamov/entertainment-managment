@@ -29,7 +29,7 @@ class StubPublishCommand extends Command
     public function handle()
     {
         if (! is_dir($stubsPath = $this->laravel->basePath('stubs/nova'))) {
-            (new Filesystem)->makeDirectory($stubsPath, 0755, true);
+            (new Filesystem())->makeDirectory($stubsPath, 0755, true);
         }
 
         $files = [

@@ -8,7 +8,8 @@ use Laravel\Nova\Nova;
 
 trait CallsQueuedActions
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue;
+    use SerializesModels;
 
     /**
      * The action class name.

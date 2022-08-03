@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests;
 
 /**
@@ -14,5 +15,31 @@ class FormRequest extends \Illuminate\Foundation\Http\FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function rules(): array
+    {
+        return [];
+    }
+
+
+    public function withDto($dto)
+    {
+        foreach ($this->validated() as $key => $value) {
+            $dto->$key = $value;
+        }
+
+        return $dto;
+    }
+
+    public function getDto()
+    {
+        $dto =  new \stdClass();
+
+        foreach ($this->validated() as $key => $value) {
+            $dto->$key = $value;
+        }
+
+        return $dto;
     }
 }

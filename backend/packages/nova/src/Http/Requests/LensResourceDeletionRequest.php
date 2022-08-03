@@ -8,7 +8,8 @@ use LogicException;
 
 class LensResourceDeletionRequest extends NovaRequest
 {
-    use InteractsWithLenses, QueriesResources;
+    use InteractsWithLenses;
+    use QueriesResources;
 
     /**
      * Get the selected models for the action in chunks.

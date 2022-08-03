@@ -17,7 +17,7 @@ class CreateQueuesTable extends Migration
         Schema::create('queues', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('location_id')->index();
-            $table->morphs('queueable',true);
+            $table->morphs('queueable', true);
             $table->integer('number');
             $table->integer('status_id')->default(1);
             $table->timestamp(Queue::STARTED_AT)->nullable();

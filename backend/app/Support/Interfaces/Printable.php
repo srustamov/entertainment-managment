@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Support\Interfaces;
 
 interface Printable
@@ -11,9 +10,9 @@ interface Printable
 
     public function setPort(int $port);
 
-    public function getIp() : string;
+    public function getIp(): string;
 
-    public function getPort() : int;
+    public function getPort(): int;
 
     public function getPrinter();
 }

@@ -17,7 +17,7 @@ class CreateQueueDetailTable extends Migration
             $table->id();
             $table->unsignedInteger('queue_id')->index();
             $table->integer('period');
-            $table->double('price',8,2);
+            $table->double('price', 8, 2);
             $table->text('description')->nullable();
             $table->json('properties')->nullable();
             $table->timestamps();

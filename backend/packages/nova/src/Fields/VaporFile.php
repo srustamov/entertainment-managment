@@ -11,7 +11,12 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class VaporFile extends Field implements StorableContract, DeletableContract, Downloadable
 {
-    use AcceptsTypes, Deletable, HasDownload, HasPreview, HasThumbnail, Storable;
+    use AcceptsTypes;
+    use Deletable;
+    use HasDownload;
+    use HasPreview;
+    use HasThumbnail;
+    use Storable;
 
     /**
      * The field's component.
@@ -82,6 +87,7 @@ class VaporFile extends Field implements StorableContract, DeletableContract, Do
      *
      * @param  string  $disk
      * @return $this
+     *
      * @throws \Exception
      */
     public function disk($disk)

@@ -16,7 +16,8 @@ trait FillsFields
     public static function fill(NovaRequest $request, $model)
     {
         return static::fillFields(
-            $request, $model,
+            $request,
+            $model,
             (new static($model))->creationFieldsWithoutReadonly($request)
         );
     }
@@ -31,7 +32,8 @@ trait FillsFields
     public static function fillForUpdate(NovaRequest $request, $model)
     {
         return static::fillFields(
-            $request, $model,
+            $request,
+            $model,
             (new static($model))->updateFieldsWithoutReadonly($request)
         );
     }
@@ -49,7 +51,8 @@ trait FillsFields
         $instance = new static($model);
 
         return static::fillFields(
-            $request, $pivot,
+            $request,
+            $pivot,
             $instance->creationPivotFields($request, $request->relatedResource)
         );
     }
@@ -67,7 +70,8 @@ trait FillsFields
         $instance = new static($model);
 
         return static::fillFields(
-            $request, $pivot,
+            $request,
+            $pivot,
             $instance->updatePivotFields($request, $request->relatedResource)
         );
     }

@@ -4,9 +4,11 @@ namespace Laravel\Nova;
 
 class TrashedStatus
 {
-    const DEFAULT = '';
-    const WITH = 'with';
-    const ONLY = 'only';
+    public const DEFAULT = '';
+
+    public const WITH = 'with';
+
+    public const ONLY = 'only';
 
     public static function fromBoolean($withTrashed)
     {

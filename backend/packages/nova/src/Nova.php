@@ -19,8 +19,8 @@ use Symfony\Component\Finder\Finder;
 
 class Nova
 {
-    use AuthorizesRequests,
-        Concerns\InteractsWithEvents;
+    use AuthorizesRequests;
+    use Concerns\InteractsWithEvents;
 
     /**
      * The registered dashboard names.
@@ -210,7 +210,7 @@ class Nova
     {
         Route::aliasMiddleware('nova.guest', RedirectIfAuthenticated::class);
 
-        return new PendingRouteRegistration;
+        return new PendingRouteRegistration();
     }
 
     /**
@@ -316,7 +316,7 @@ class Nova
             array_merge(static::$resources, $resources)
         );
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -329,13 +329,13 @@ class Nova
     {
         static::$resources = $resources;
 
-        return new static;
+        return new static();
     }
 
     /**
      * Get the available resource groups for the given request.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return \Illuminate\Support\Collection
      */
     public static function groups(Request $request)
@@ -349,7 +349,7 @@ class Nova
     /**
      * Get the grouped resources available for the given request.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return array
      */
     public static function groupedResources(Request $request)
@@ -384,7 +384,7 @@ class Nova
 
         $resources = [];
 
-        foreach ((new Finder)->in($directory)->files() as $resource) {
+        foreach ((new Finder())->in($directory)->files() as $resource) {
             $resource = $namespace.str_replace(
                 ['/', '.php'],
                 ['\\', ''],
@@ -516,7 +516,7 @@ class Nova
         static::$createUserCallback = $createUserCallback ??
                   static::defaultCreateUserCallback();
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -549,7 +549,7 @@ class Nova
 
             $model = config("auth.providers.{$provider}.model");
 
-            return tap((new $model)->forceFill([
+            return tap((new $model())->forceFill([
                 'name' => $name,
                 'email' => $email,
                 'password' => Hash::make($password),
@@ -567,7 +567,7 @@ class Nova
     {
         static::$userTimezoneCallback = $userTimezoneCallback;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -596,7 +596,7 @@ class Nova
             $tools
         );
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -644,7 +644,7 @@ class Nova
             $cards
         );
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -677,7 +677,7 @@ class Nova
     {
         static::$defaultDashboardCards = static::$cards;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -701,7 +701,7 @@ class Nova
     {
         static::$dashboards = array_merge(static::$dashboards, $dashboards);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -820,7 +820,7 @@ class Nova
     {
         static::$scripts[$name] = $path;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -845,7 +845,7 @@ class Nova
     {
         static::$styles[$name] = $path;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -862,7 +862,7 @@ class Nova
     /**
      * Register the given theme CSS file with Nova.
      *
-     * @param string $publicPath
+     * @param  string  $publicPath
      * @return static
      */
     public static function theme($publicPath)
@@ -880,7 +880,7 @@ class Nova
     {
         if (is_string($translations)) {
             if (! is_readable($translations)) {
-                return new static;
+                return new static();
             }
 
             $translations = json_decode(file_get_contents($translations), true);
@@ -888,7 +888,7 @@ class Nova
 
         static::$translations = array_merge(static::$translations, $translations);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -934,7 +934,7 @@ class Nova
 
         static::$jsonVariables = array_merge(static::$jsonVariables, $variables);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -946,7 +946,7 @@ class Nova
     {
         static::$runsMigrations = false;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -974,7 +974,7 @@ class Nova
     {
         static::$reportCallback = $callback;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -986,7 +986,7 @@ class Nova
     {
         static::provideToScript(['themingClasses' => true]);
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -1035,7 +1035,7 @@ class Nova
     {
         static::$sortCallback = $callback;
 
-        return new static;
+        return new static();
     }
 
     /**
@@ -1060,6 +1060,6 @@ class Nova
     {
         static::$debounce = $debounce;
 
-        return new static;
+        return new static();
     }
 }

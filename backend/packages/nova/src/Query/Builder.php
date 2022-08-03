@@ -86,9 +86,14 @@ class Builder implements QueryBuilder
      * @param  string  $withTrashed
      * @return $this
      */
-    public function search(NovaRequest $request, $query, $search = null,
-                                      array $filters = [], array $orderings = [],
-                                      $withTrashed = TrashedStatus::DEFAULT)
+    public function search(
+        NovaRequest $request,
+        $query,
+        $search = null,
+        array $filters = [],
+        array $orderings = [],
+        $withTrashed = TrashedStatus::DEFAULT
+    )
     {
         $this->setOriginalQueryBuilder($query);
 
@@ -114,7 +119,12 @@ class Builder implements QueryBuilder
 
         $this->tap(function ($query) use ($request, $search, $filters, $orderings, $withTrashed) {
             $this->resource::buildIndexQuery(
-                $request, $query, $search, $filters, $orderings, $withTrashed
+                $request,
+                $query,
+                $search,
+                $filters,
+                $orderings,
+                $withTrashed
             );
         });
 

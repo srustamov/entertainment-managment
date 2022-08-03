@@ -30,11 +30,14 @@ class FieldDestroyController extends Controller
                     });
 
         DeleteField::forRequest(
-            $request, $field, $resource->resource
+            $request,
+            $field,
+            $resource->resource
         )->save();
 
         Nova::actionEvent()->forResourceUpdate(
-            $request->user(), $resource->resource
+            $request->user(),
+            $resource->resource
         )->save();
     }
 }

@@ -10,33 +10,28 @@ use Illuminate\Http\Request;
 
 class ActivityItemController extends Controller
 {
-
     public function index(Request $request): Api
     {
-        return api(ActivityItem::filter($request->getFilters())
+        return api($this->useFilter(ActivityItem::class, $request)
             ->paginate($request->get('itemsPerPage', 10)));
     }
 
-
     public function store(ActivityItemCreateRequest $request)
     {
-
     }
-
 
     public function show($id, Request $request): Api
     {
-        return api(ActivityItem::filter($request->getFilters())
+        return api($this->useFilter(ActivityItem::class, $request)
             ->where('id', $id)
-            ->firstOrFail());
+            ->firstOrFail()
+        );
     }
-
 
     public function update(Request $request, $id)
     {
         //
     }
-
 
     public function destroy($id)
     {

@@ -15,11 +15,11 @@ use Laravel\Nova\TrashedStatus;
 
 class BelongsToMany extends Field implements DeletableContract, ListableField, PivotableField, RelatableField
 {
-    use Deletable,
-        DetachesPivotModels,
-        FormatsRelatableDisplayValues,
-        ManyToManyCreationRules,
-        Searchable;
+    use Deletable;
+    use DetachesPivotModels;
+    use FormatsRelatableDisplayValues;
+    use ManyToManyCreationRules;
+    use Searchable;
 
     /**
      * The field's component.
@@ -123,7 +123,8 @@ class BelongsToMany extends Field implements DeletableContract, ListableField, P
     public function authorize(Request $request)
     {
         return call_user_func(
-            [$this->resourceClass, 'authorizedToViewAny'], $request
+            [$this->resourceClass, 'authorizedToViewAny'],
+            $request
         ) && parent::authorize($request);
     }
 
@@ -148,7 +149,8 @@ class BelongsToMany extends Field implements DeletableContract, ListableField, P
     public function getRules(NovaRequest $request)
     {
         $query = $this->buildAttachableQuery(
-            $request, $request->{$this->attribute.'_trashed'} === 'true'
+            $request,
+            $request->{$this->attribute.'_trashed'} === 'true'
         )->toBase();
 
         return array_merge_recursive(parent::getRules($request), [
@@ -185,9 +187,13 @@ class BelongsToMany extends Field implements DeletableContract, ListableField, P
         $request->first === 'true'
                         ? $query->whereKey($model->newQueryWithoutScopes(), $request->current)
                         : $query->search(
-                                $request, $model->newQuery(), $request->search,
-                                [], [], TrashedStatus::fromBoolean($withTrashed)
-                          );
+                            $request,
+                            $model->newQuery(),
+                            $request->search,
+                            [],
+                            [],
+                            TrashedStatus::fromBoolean($withTrashed)
+                        );
 
         return $query->tap(function ($query) use ($request, $model) {
             forward_static_call($this->attachableQueryCallable($request, $model), $request, $query, $this);
@@ -315,7 +321,7 @@ class BelongsToMany extends Field implements DeletableContract, ListableField, P
             'belongsToManyRelationship' => $this->manyToManyRelationship,
             'debounce' => $this->debounce,
             'listable' => true,
-            'perPage'=> $this->resourceClass::$perPageViaRelationship,
+            'perPage' => $this->resourceClass::$perPageViaRelationship,
             'validationKey' => $this->validationKey(),
             'resourceName' => $this->resourceName,
             'searchable' => $this->searchable,

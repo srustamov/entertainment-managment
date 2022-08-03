@@ -64,8 +64,8 @@ trait ResolvesReverseRelation
                         $relation = $viaModel->{$field->attribute}();
 
                         return $this->getRelationForeignKeyName($relation) === $this->getRelationForeignKeyName(
-                                $resource->model()->{$this->attribute}()
-                            );
+                            $resource->model()->{$this->attribute}()
+                        );
                     })->attribute ?? '';
         }
 
@@ -75,7 +75,7 @@ trait ResolvesReverseRelation
     /**
      * Get foreign key name for relation.
      *
-     * @param  \Illuminate\Database\Eloquent\Relations\Relation $relation
+     * @param  \Illuminate\Database\Eloquent\Relations\Relation  $relation
      * @return string
      */
     protected function getRelationForeignKeyName(Relation $relation)

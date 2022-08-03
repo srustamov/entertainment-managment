@@ -8,24 +8,11 @@ use Laravel\Nova\Filters\Filter;
 
 class AreaFilter extends Filter
 {
-    /**
-     * The filter's component.
-     *
-     * @var string
-     */
     public $component = 'select-filter';
 
-    /**
-     * Apply the filter to the given query.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  mixed  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function apply(Request $request, $query, $value)
     {
-        return $query->where('area_id',$value);
+        return $query->where('area_id', $value);
     }
 
     /**
@@ -36,6 +23,6 @@ class AreaFilter extends Filter
      */
     public function options(Request $request)
     {
-        return Area::all()->pluck('id','name')->toArray();
+        return Area::all()->pluck('id', 'name')->toArray();
     }
 }

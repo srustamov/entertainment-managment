@@ -10,7 +10,8 @@ use Symfony\Component\Process\Process;
 
 class ThemeCommand extends Command
 {
-    use AcceptsNameAndVendor, RenamesStubs;
+    use AcceptsNameAndVendor;
+    use RenamesStubs;
 
     /**
      * The name and signature of the console command.
@@ -37,7 +38,7 @@ class ThemeCommand extends Command
             return;
         }
 
-        (new Filesystem)->copyDirectory(__DIR__.'/theme-stubs', $this->themePath());
+        (new Filesystem())->copyDirectory(__DIR__.'/theme-stubs', $this->themePath());
 
         // ThemeServiceProvider.php replacements...
         $this->replace('{{ namespace }}', $this->themeNamespace(), $this->themePath().'/src/ThemeServiceProvider.stub');

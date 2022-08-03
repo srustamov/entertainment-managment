@@ -21,7 +21,8 @@ class AttachableController extends Controller
                     ->firstWhere('resourceName', $request->field);
 
         $withTrashed = $this->shouldIncludeTrashed(
-            $request, $associatedResource = $field->resourceClass
+            $request,
+            $associatedResource = $field->resourceClass
         );
 
         $parentResource = $request->findResourceOrFail();

@@ -10,7 +10,8 @@ use Symfony\Component\Process\Process;
 
 class ResourceToolCommand extends Command
 {
-    use AcceptsNameAndVendor, RenamesStubs;
+    use AcceptsNameAndVendor;
+    use RenamesStubs;
 
     /**
      * The name and signature of the console command.
@@ -37,7 +38,7 @@ class ResourceToolCommand extends Command
             return;
         }
 
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/resource-tool-stubs',
             $this->toolPath()
         );
@@ -54,7 +55,7 @@ class ResourceToolCommand extends Command
         $this->replace('{{ component }}', $this->toolName(), $this->toolPath().'/src/Tool.stub');
         $this->replace('{{ title }}', $this->toolTitle(), $this->toolPath().'/src/Tool.stub');
 
-        (new Filesystem)->move(
+        (new Filesystem())->move(
             $this->toolPath().'/src/Tool.stub',
             $this->toolPath().'/src/'.$this->toolClass().'.php'
         );

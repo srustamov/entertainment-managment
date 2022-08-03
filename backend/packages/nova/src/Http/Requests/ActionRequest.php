@@ -115,7 +115,8 @@ class ActionRequest extends NovaRequest
                         $resource = $this->resource();
 
                         $resource::indexQuery(
-                            $this, $query->with($resource::$with)
+                            $this,
+                            $query->with($resource::$with)
                         );
                     });
     }
@@ -177,7 +178,7 @@ class ActionRequest extends NovaRequest
     public function resolveFields()
     {
         return once(function () {
-            $fields = new Fluent;
+            $fields = new Fluent();
 
             $results = collect($this->action()->fields())->mapWithKeys(function ($field) use ($fields) {
                 return [$field->attribute => $field->fillForAction($this, $fields)];

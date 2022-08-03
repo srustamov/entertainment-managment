@@ -10,6 +10,7 @@ class Create extends Page
     use HasSearchableRelations;
 
     public $resourceName;
+
     public $queryParams;
 
     /**

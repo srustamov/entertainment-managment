@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property mixed $id
+ *
  * @method static Log find($id)
  * @method static Log findOrFail($id)
  */
